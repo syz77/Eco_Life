@@ -3,6 +3,7 @@ package com.laguna.sergio.ecolife;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
                                                                int r=con.objJson(res);
 
                                                                if (r>0){
-                                                                   Intent i= new Intent(Login.this,Menu.class);
+                                                                   Intent i= new Intent(Login.this,NavegacionMenu.class);
                                                                    startActivity(i);
                                                                    Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
                                                                }else{
@@ -54,5 +55,12 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            //Acción
+        }
+        return false;
+    }
 
 }

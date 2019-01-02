@@ -24,10 +24,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
-        <activity
-            android:name=".Menu"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RegUser" />
         <activity android:name=".GestionarUser" />
         <activity android:name=".EditarUser" />
@@ -47,7 +43,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".VentaCredito"></activity>
+        <activity android:name=".VentaCredito" />
+        <activity
+            android:name=".NavegacionMenu"
+            android:label="@string/title_activity_navegacion_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -12,4 +12,5 @@
     <string name="login_nombre">Usuario</string>
     <string name="login_pass">Contraseña</string>
     <string name="login_ini">Iniciar</string>
+    <string name="title_activity_navegacion_menu">NavegacionMenu</string>
 </resources>
