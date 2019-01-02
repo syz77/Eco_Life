@@ -6,4 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/login_nombre"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="169dp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/login_pass"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="83dp"
+        tools:layout_editor_absoluteY="232dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_ini"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteY="310dp" />
 </android.support.constraint.ConstraintLayout>

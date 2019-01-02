@@ -8,4 +8,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="login_nombre">Usuario</string>
+    <string name="login_pass">Contraseña</string>
+    <string name="login_ini">Iniciar</string>
 </resources>
