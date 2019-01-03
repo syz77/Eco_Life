@@ -7,10 +7,10 @@
     tools:context=".Login">
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editText3"
+        android:layout_alignStart="@+id/editPass"
         android:layout_alignParentTop="true"
         android:layout_marginTop="205dp"
         android:ems="10"
@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteY="169dp" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

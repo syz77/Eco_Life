@@ -8,12 +8,12 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class Conexion {
-    public String enviarPost(String cor, String pas){
-        String parametros="cor="+cor+"&pas="+pas;
-        HttpURLConnection connection=null;
+    public String enviarPost(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
         String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/val.php?user="+cor+"&pwd="+pas);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass);
             //"https://localhostproyectowebandroid000webhostapp.xyz/Consultas/valida.php");
             //"http://u209922277.hostingerapp.com/val.php?user="+u+"&pwd="+pa
             //"https://u209922277.hostingerapp.com/api/v1/usuario"
@@ -34,12 +34,13 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
-    public String enviarPostR(String name, String cor, String pas, String date){
-        String parametros="name="+name+"&pwd="+pas+"&email="+cor+"&fecha="+date;
+    public String enviarPostR(String nombre, String email,String pass,String telefono, String fecha, String cargo, String ci){
+        String parametros="nombre="+nombre+"&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+cargo+"&ci="+ci;
         HttpURLConnection connection=null;
         String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/servicio/registro.php?name="+name+"&pwd="+pas+"&email="+cor+"&fecha="+date);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/registro.php?nombre="+nombre+"&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+cargo
+                    +"&ci="+ci);
             //"http://u209922277.hostingerapp.com/servicio/registro.php?name="+name+"&pwd="+pas+"&email="+cor+"&fecha="+date
             //http://u209922277.hostingerapp.com/servicio/registro.php?name=juanp&pwd=123456&email=juanpi@gmail.com&fecha=2000-11-12
             //"https://localhostproyectowebandroid000webhostapp.xyz/Consultas/valida.php");
