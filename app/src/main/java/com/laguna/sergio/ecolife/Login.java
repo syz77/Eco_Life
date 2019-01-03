@@ -5,20 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
-    EditText txtCor, txtPass;
+    EditText txtUser, txtPass;
     TextView btnIngresar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        txtCor=(EditText)findViewById(R.id.editText2);
-        txtPass=(EditText)findViewById(R.id.editText3);
+        txtUser=(EditText)findViewById(R.id.editUser);
+        txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
 
         btnIngresar.setOnClickListener(new View.OnClickListener(){
@@ -30,7 +29,7 @@ public class Login extends AppCompatActivity {
                                                    @Override
                                                    public void run() {
                                                        final Conexion con=new Conexion();
-                                                       final String res= con.enviarPost(txtCor.getText().toString(),txtPass.getText().toString());
+                                                       final String res= con.enviarPost(txtUser.getText().toString(),txtPass.getText().toString());
                                                        runOnUiThread(new Runnable() {
                                                            @Override
                                                            public void run() {
