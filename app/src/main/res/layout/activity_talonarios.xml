@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_talonarios"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_talonarios"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Talonarios"
+    android:visibility="invisible"
+    tools:context=".NavegacionMenu"
     tools:showIn="@layout/app_bar_navegacion_menu">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="204dp"
-        tools:layout_editor_absoluteY="318dp"
-        tools:srcCompat="@tools:sample/avatars" />
-</android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+    </RelativeLayout>
+</FrameLayout>

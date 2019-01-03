@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".NavegacionMenu">
 
     <android.support.design.widget.AppBarLayout
@@ -22,6 +23,10 @@
 
     <include layout="@layout/content_navegacion_menu" />
     <include layout="@layout/activity_venta_credito" />
+    <include layout="@layout/inicio" />
+    <include layout="@layout/activity_talonarios" />
+    <include layout="@layout/activity_ventas" />
+    <include layout="@layout/activity_gestionar_user" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

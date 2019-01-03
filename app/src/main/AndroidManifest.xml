@@ -47,7 +47,8 @@
         <activity
             android:name=".NavegacionMenu"
             android:label="@string/title_activity_navegacion_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Ventas"></activity>
     </application>
 
 </manifest>
