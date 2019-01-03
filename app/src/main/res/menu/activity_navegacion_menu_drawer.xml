@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:icon="@drawable/almacen"
+            android:title="@string/lateral_ini" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:icon="@drawable/entrega"
+            android:title="@string/lateral_ven" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:icon="?android:attr/actionModePasteDrawable"
+            android:title="@string/lateral_tal" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:icon="@drawable/obrero"
+            android:title="@string/lateral_usu" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/lateral_info">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -30,8 +30,8 @@
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:icon="@android:drawable/ic_menu_view"
+                android:title="@string/lateral_com" />
         </menu>
     </item>
 
