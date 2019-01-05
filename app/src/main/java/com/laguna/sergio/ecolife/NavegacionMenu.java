@@ -6,6 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,12 +22,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.view.View.VISIBLE;
 
 public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas;
+    ////////////////////Para historial talonarios///////////////////////////////
+    List<DataAdapterTalo> DataAdapterClassListT;
+    RecyclerView recyclerViewT;
+    RecyclerView.Adapter recyclerViewadapterT;
+    RecyclerView.LayoutManager recyclerViewlayoutManagerT;
+    ////////////////////Para Gestionar usuarios///////////////////////////////////
+    List<DataAdapterGesU> DataAdapterClassListG;
+    RecyclerView recyclerViewG;
+    RecyclerView.Adapter recyclerViewadapterG;
+    RecyclerView.LayoutManager recyclerViewlayoutManagerG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +53,22 @@ public class NavegacionMenu extends AppCompatActivity
         Historial= (FrameLayout) findViewById(R.id.activity_talonarios);
         GesUsuario= (FrameLayout) findViewById(R.id.activity_gestionar_user);
         setSupportActionBar(toolbar);
+
+        DataAdapterClassListT = new ArrayList<>();
+        DataAdapterClassListT.clear();
+        recyclerViewT = (RecyclerView) findViewById(R.id.recicladorT);
+        recyclerViewT.setHasFixedSize(true);
+        recyclerViewlayoutManagerT = new LinearLayoutManager(this);
+        recyclerViewT.setLayoutManager(recyclerViewlayoutManagerT);
+
+        DataAdapterClassListG = new ArrayList<>();
+        DataAdapterClassListG.clear();
+        recyclerViewG = (RecyclerView) findViewById(R.id.recicladorG);
+        recyclerViewG.setHasFixedSize(true);
+        recyclerViewlayoutManagerG = new LinearLayoutManager(this);
+        recyclerViewG.setLayoutManager(recyclerViewlayoutManagerG);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +144,12 @@ public class NavegacionMenu extends AppCompatActivity
             Ventas.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_slideshow) {
+            generarHistorialTalo();
             Historial.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_manage) {
+            generarGestionarUser();
             GesUsuario.setVisibility(View.VISIBLE);
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -136,5 +171,24 @@ public class NavegacionMenu extends AppCompatActivity
             //Acción
         }
         return false;
+    }
+
+    ////////////////////////////Generamos la lista del historial de los talonarios//////////////////
+    public void generarHistorialTalo(){
+
+        Talonarios b = new Talonarios();
+        DataAdapterClassListT=(b.generar());
+
+        recyclerViewadapterT = new RecyclerAdapTalo(DataAdapterClassListT, this);
+        recyclerViewT.setAdapter(recyclerViewadapterT);
+    }
+    ///////////////////////////Generamos la lista de los usuarios///////////////////////////////////
+    public void generarGestionarUser(){
+
+        GestionarUser b = new GestionarUser();
+        DataAdapterClassListG=(b.generar());
+
+        recyclerViewadapterG = new RecyclerAdapGesU(DataAdapterClassListG, this);
+        recyclerViewG.setAdapter(recyclerViewadapterG);
     }
 }

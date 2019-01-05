@@ -63,6 +63,10 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
+
+
+
+
     public int objJson(String r) {
         int res=0;
         try{

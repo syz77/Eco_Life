@@ -5,15 +5,25 @@
     android:id="@+id/activity_talonarios"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:background="?android:attr/colorBackground"
     android:visibility="invisible"
     tools:context=".NavegacionMenu"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_navegacion_menu">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorVerde"
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recicladorT"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp" />
+    </LinearLayout>
 </FrameLayout>

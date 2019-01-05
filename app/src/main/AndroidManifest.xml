@@ -23,11 +23,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login" />
-        <activity android:name=".RegUser" />
-        <activity android:name=".GestionarUser" />
-        <activity android:name=".EditarUser" />
-        <activity android:name=".Talonarios" />
+        <activity android:name=".Login"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegUser"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".GestionarUser"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".EditarUser"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Talonarios"
+            android:screenOrientation="portrait"
+            />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -47,8 +53,10 @@
         <activity
             android:name=".NavegacionMenu"
             android:label="@string/title_activity_navegacion_menu"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Ventas"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Ventas"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
