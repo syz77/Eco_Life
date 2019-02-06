@@ -22,10 +22,48 @@
     <string name="lateral_option">Opciones</string>
     <string name="lateral_info">Información</string>
 
-    <string name="GestUsu_supervisor">Supervisor</string>
+    <string name="ini_ventacont">VENTA AL CONTADO</string>
+    <string name="ini_ventacred">VENTA AL CREDITO</string>
+    <string name="ini_talonario">Talonario actual</string>
+    <string name="ini_talonro">Nro talonario: </string>
+    <string name="ini_talofecha">Fecha creacion: </string>
+    <string name="ini_talocred">Creditos actuales: </string>
+    <string name="ini_nuevotalo">CREAR NUEVO TALONARIO</string>
+
+    <string name="GestUsu_cargo">Cargo</string>
+    <string name="GestUsu_reg">REGISTRAR USUARIO</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="reg_nom">Nombre Completo</string>
+    <string name="reg_ci">Carnet de Identidad</string>
+    <string name="reg_telf">Telefono</string>
+    <string name="reg_fech_nac">Fecha de nacimiento</string>
+    <string name="reg_fecha"> -- / -- / ---- </string>
+    <string name="reg_email">E-mail</string>
+    <string name="reg_pass">Password</string>
+    <string name="reg_guardar">Guardar</string>
+
+    <string name="edit_titulo">Editar usuario</string>
+    <string name="edit_email">E-mail</string>
+    <string name="edit_telf">telefono</string>
+    <string name="edit_cargo">Cargo del usuario</string>
+    <string name="edit_estado">Estado del usuario</string>
+    <string name="edit_guardar">Guardar</string>
+
+    <string name="vc_titulo">CREDITO</string>
+    <string name="vc_hf">FECHA:</string>
+    <string name="vc_nombre">Nombre del cliente</string>
+    <string name="vc_direccion">Dirección</string>
+    <string name="vc_zona">Zona: </string>
+    <string name="vc_telf">Telefono</string>
+    <string name="vc_prod">Producto:</string>
+    <string name="vc_vendedor">Nombre del promotor</string>
+    <string name="vc_confirmar">CONFIRMAR</string>
+
+    <string name="vcont_titulo">CONTADO</string>
+    <string name="vcont_agregar">AGREGAR</string>
 
 
 </resources>

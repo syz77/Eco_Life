@@ -3,9 +3,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="81dp"
-    card_view:cardCornerRadius="5dp"
+    card_view:cardCornerRadius="1dp"
     card_view:cardBackgroundColor="#FFFFFF"
-    card_view:cardElevation="3dp"
+    card_view:cardElevation="1dp"
     card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -26,7 +26,7 @@
                     android:id="@+id/cargoGU"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/GestUsu_supervisor"
+                    android:text="@string/GestUsu_cargo"
                     android:textAllCaps="false"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
                     android:textSize="18sp" />
@@ -63,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="editarUsuario"
                 card_view:srcCompat="@drawable/pluma" />
 
         </LinearLayout>

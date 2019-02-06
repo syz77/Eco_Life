@@ -5,13 +5,168 @@
     android:id="@+id/activity_venta_credito"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
-    tools:context=".VentaCredito"
+    android:scrollbars="vertical"
+    android:visibility="visible"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".NavegacionMenu"
     tools:showIn="@layout/app_bar_navegacion_menu">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/vctitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/vc_titulo"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/vcfecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:drawableLeft="@drawable/reloj"
+            android:text="@string/vc_hf"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/lineavc"
+            android:layout_width="wrap_content"
+            android:layout_height="7dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="32dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+
+        <EditText
+            android:id="@+id/vcnombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/lineavc"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:hint="@string/vc_nombre"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/vctelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vcnombre"
+            android:hint="@string/vc_telf"
+            android:layout_alignParentStart="true"
+            android:ems="10"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/vcdireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vctelefono"
+            android:layout_alignParentStart="true"
+            android:hint="@string/vc_direccion"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/vczona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="181dp"
+            android:text="@string/vc_zona"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/vcnrozona"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vcdireccion"
+            android:layout_toEndOf="@+id/vczona"
+            android:ems="10"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/vcvendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:hint="@string/vc_vendedor"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="230dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/lineavcd"
+            android:layout_width="wrap_content"
+            android:layout_height="7dp"
+            android:layout_alignTop="@+id/vcvendedor"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="48dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+
+        <TextView
+            android:id="@+id/vcprod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lineavcd"
+            android:layout_alignParentStart="true"
+            android:text="@string/vc_prod"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/spinnervc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vcprod"
+            android:layout_alignParentStart="true" />
+
+        <View
+            android:id="@+id/lineavct"
+            android:layout_width="wrap_content"
+            android:layout_height="7dp"
+            android:layout_alignTop="@+id/spinnervc"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="35dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+
+        <ImageView
+            android:id="@+id/vccamara"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/lineavct"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/camarados" />
+
+        <Button
+            android:id="@+id/vcconfirmar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/vccamara"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/fondo_color"
+            android:text="@string/vc_confirmar"
+            android:textSize="24sp" />
+
 
     </RelativeLayout>
 </FrameLayout>
