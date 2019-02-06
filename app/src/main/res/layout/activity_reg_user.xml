@@ -76,7 +76,9 @@
             android:layout_marginRight="50dp"
             android:ems="10"
             android:focusable="false"
-            android:hint="@string/reg_fecha"
+
+            android:hint="Año/Mes/Dia"
+
             android:inputType="date" />
 
         <EditText

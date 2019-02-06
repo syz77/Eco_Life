@@ -8,7 +8,12 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -36,6 +41,33 @@
         <activity android:name=".Talonarios"
             android:screenOrientation="portrait"
             />
+
+        <provider
+            android:name=".Datos.EcoLifeProvider"
+            android:authorities="com.laguna.sergio.ecolife"
+            android:exported="false"
+            android:syncable="true"/>
+        <service
+            android:name=".Datos.Sync.ELAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".Datos.Sync.EcoLifeSyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -54,6 +86,7 @@
         <activity android:name=".VentaCredito"
             android:screenOrientation="portrait"/>
         <activity
+
             android:name=".NavegacionMenu"
             android:label="@string/title_activity_navegacion_menu"
             android:theme="@style/AppTheme.NoActionBar"

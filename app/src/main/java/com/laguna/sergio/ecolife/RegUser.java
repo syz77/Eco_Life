@@ -85,8 +85,8 @@ public class RegUser extends AppCompatActivity {
                                                   @Override
                                                   public void run() {
                                                       final Conexion con=new Conexion();
-                                                      final String res= con.enviarPostR(txtnombre.getText().toString(),txtemail.getText().toString(),txtpass.getText().toString(),txttelefono.getText().toString(),
-                                                              txtfecha.getText().toString(), cargoT(txtcargo), txtci.getText().toString());
+                                                      final String res= con.InsertRegistro(txtnombre.getText().toString(),txtemail.getText().toString(),txtpass.getText().toString(),txttelefono.getText().toString(),
+                                                              txtfecha.getText().toString(), cargoT(txtcargo), txtci.getText().toString(),"activo");
                                                       runOnUiThread(new Runnable() {
                                                           @Override
                                                           public void run() {
