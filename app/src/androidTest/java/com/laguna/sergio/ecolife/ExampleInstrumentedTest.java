@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.laguna.sergio.ecolife", appContext.getPackageName());
+        assertEquals("com.laguna.sergio.ecolifedb", appContext.getPackageName());
     }
 }
