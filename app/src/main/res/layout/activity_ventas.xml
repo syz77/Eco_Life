@@ -2,33 +2,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_venta_credito"
+    android:id="@+id/activity_ventas_contado"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:visibility="visible"
+    android:visibility="invisible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NavegacionMenu"
     tools:showIn="@layout/app_bar_navegacion_menu">
 
 
     <RelativeLayout
+        android:id="@+id/relativevcont"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/vctitulo"
+            android:id="@+id/vconttitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="6dp"
             android:layout_marginTop="3dp"
-            android:text="@string/vc_titulo"
+            android:text="@string/vcont_titulo"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/vcfecha"
+            android:id="@+id/vcontfecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -38,7 +39,7 @@
             android:textSize="18sp" />
 
         <View
-            android:id="@+id/lineavc"
+            android:id="@+id/lineavcont"
             android:layout_width="wrap_content"
             android:layout_height="7dp"
             android:layout_alignParentStart="true"
@@ -48,37 +49,37 @@
         </View>
 
         <EditText
-            android:id="@+id/vcnombre"
+            android:id="@+id/vcontnombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/lineavc"
+            android:layout_alignTop="@+id/lineavcont"
             android:layout_marginTop="15dp"
             android:ems="10"
             android:hint="@string/vc_nombre"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/vctelefono"
+            android:id="@+id/vconttelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vcnombre"
+            android:layout_below="@+id/vcontnombre"
             android:hint="@string/vc_telf"
             android:layout_alignParentStart="true"
             android:ems="10"
             android:inputType="phone" />
 
         <EditText
-            android:id="@+id/vcdireccion"
+            android:id="@+id/vcontdireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vctelefono"
+            android:layout_below="@+id/vconttelefono"
             android:layout_alignParentStart="true"
             android:hint="@string/vc_direccion"
             android:ems="10"
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/vczona"
+            android:id="@+id/vcontzona"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -89,16 +90,16 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/vcnrozona"
+            android:id="@+id/vcontnrozona"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vcdireccion"
-            android:layout_toEndOf="@+id/vczona"
+            android:layout_below="@+id/vcontdireccion"
+            android:layout_toEndOf="@+id/vcontzona"
             android:ems="10"
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/vcvendedor"
+            android:id="@+id/vcontvendedor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -110,10 +111,10 @@
             android:inputType="textPersonName" />
 
         <View
-            android:id="@+id/lineavcd"
+            android:id="@+id/lineavcontd"
             android:layout_width="wrap_content"
             android:layout_height="7dp"
-            android:layout_alignTop="@+id/vcvendedor"
+            android:layout_alignTop="@+id/vcontvendedor"
             android:layout_alignParentStart="true"
             android:layout_marginTop="48dp"
             android:background="@color/colorPrimaryDark">
@@ -121,49 +122,63 @@
         </View>
 
         <TextView
-            android:id="@+id/vcprod"
+            android:id="@+id/vcontprod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lineavcd"
+            android:layout_below="@+id/lineavcontd"
             android:layout_alignParentStart="true"
             android:text="@string/vc_prod"
             android:textSize="18sp" />
 
-        <Spinner
-            android:id="@+id/spinnervc"
+        <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/linearvcont"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vcprod"
-            android:layout_alignParentStart="true" />
+            android:layout_alignTop="@+id/vcontprod"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/fondo_color"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnervcont"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_alignParentRight="@+id/button" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/transparent"
+                android:text="@string/vcont_agregar"
+                android:textColor="@color/colorBlanco"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+        </RelativeLayout>
 
         <View
-            android:id="@+id/lineavct"
+            android:id="@+id/lineavcontt"
             android:layout_width="wrap_content"
             android:layout_height="7dp"
-            android:layout_alignTop="@+id/spinnervc"
+            android:layout_alignTop="@+id/linearvcont"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="50dp"
             android:background="@color/colorPrimaryDark">
 
         </View>
 
-        <ImageView
-            android:id="@+id/vccamara"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/lineavct"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            app:srcCompat="@drawable/camarados" />
-
         <Button
-            android:id="@+id/vcconfirmar"
+            android:id="@+id/vcontconfirmar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vccamara"
+            android:layout_alignTop="@+id/lineavcontt"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
             android:background="@drawable/fondo_color"
+            android:textColor="@color/colorBlanco"
             android:text="@string/vc_confirmar"
             android:textSize="24sp" />
 
