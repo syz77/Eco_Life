@@ -344,7 +344,7 @@ public class NavegacionMenu extends AppCompatActivity
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
-            //para la fecha
+            //para la fecha parpara
 
             return currentTimeStamp;
         } catch (Exception e) {
