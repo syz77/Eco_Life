@@ -2,9 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_reg_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegUser">
+    android:scrollbars="vertical"
+    android:visibility="visible"
+    tools:context=".RegUser"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +25,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
             android:ems="10"
-            android:hint="Nombre Completo"
+            android:hint="@string/reg_nom"
             android:inputType="textPersonName"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
@@ -33,7 +37,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
             android:ems="10"
-            android:hint="Carnet de Identidad"
+            android:hint="@string/reg_ci"
             android:inputType="textPersonName"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
@@ -46,7 +50,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
             android:ems="10"
-            android:hint="Telefono"
+            android:hint="@string/reg_telf"
             android:inputType="textPersonName|phone"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
@@ -56,10 +60,10 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="50dp"
-            android:text="Fecha de nacimiento"
+            android:text="@string/reg_fech_nac"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="0.143" />
@@ -69,11 +73,12 @@
             android:layout_width="174dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
             android:ems="10"
             android:focusable="false"
+
             android:hint="Año/Mes/Dia"
+
             android:inputType="date" />
 
         <EditText
@@ -81,10 +86,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="50dp"
             android:ems="10"
-            android:hint="E-mail"
+            android:hint="@string/reg_email"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -95,18 +100,24 @@
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/reg_pass"
             android:inputType="textPassword" />
 
-        <Spinner
-            android:id="@+id/spinner"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp" />
+        </LinearLayout>
 
 
         <Space
@@ -118,10 +129,13 @@
             android:id="@+id/btnregistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="70dp"
-            android:text="Guardar" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_launcher_background"
+            android:text="@string/reg_guardar"
+            android:textSize="32dp"
+            android:textColor="@color/colorBlanco" />
     </LinearLayout>
 
 </RelativeLayout>

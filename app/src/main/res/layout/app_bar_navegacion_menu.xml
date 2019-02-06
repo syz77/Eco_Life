@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".NavegacionMenu">
 
     <android.support.design.widget.AppBarLayout
@@ -21,6 +22,13 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_navegacion_menu" />
+    <include layout="@layout/activity_venta_credito" />
+    <include layout="@layout/inicio" />
+    <include layout="@layout/activity_talonarios" />
+    <include layout="@layout/activity_ventas" />
+    <include layout="@layout/activity_gestionar_user" />
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -28,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:backgroundTint="@color/design_default_color_primary"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>

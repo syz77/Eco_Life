@@ -1,9 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditarUser">
+    tools:context=".EditarUser"
+    android:id="@+id/activity_editar_user"
+    android:background="@color/colorBlanco"
+    >
 
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/edit_titulo"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_email"
+            android:ems="10"
+            android:layout_marginTop="30dp"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/editTelf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_telf"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/textCargo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/edit_cargo" />
+
+        <TextView
+            android:id="@+id/textEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/edit_estado" />
+
+        <TextView
+            android:id="@+id/textGuardaruno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/edit_guardar"
+            android:textAlignment="center" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary">
+        </View>
+
+        <Spinner
+            android:id="@+id/spinnerCargo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textGuardardos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/edit_guardar"
+            android:textAlignment="center" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary">
+        </View>
+
+        <Spinner
+            android:id="@+id/spinnerEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textGuardartres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/edit_guardar"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+</FrameLayout>
