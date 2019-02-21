@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -40,7 +41,7 @@ public class Conexion {
         return respuesta;
     }
     public String InsertRegistro(String nombre, String email,String pass,String telefono, String fecha, String rolid, String ci
-    ,String estado){
+            ,String estado){
         String parametros="nombre="+nombre+"&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+rolid+"&ci="+ci;
         HttpURLConnection connection=null;
         String respuesta="";
@@ -115,6 +116,8 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
+
+
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
                                        String vendedor, String id_sup, String id_prod){
@@ -296,7 +299,6 @@ public class Conexion {
             DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(parametros);
             wr.close();
-
             Scanner inStream= new Scanner(connection.getInputStream());
 
             while(inStream.hasNextLine()){
