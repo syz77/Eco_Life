@@ -35,6 +35,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -103,7 +104,8 @@ public class NavegacionMenu extends AppCompatActivity
     ImageView vcCamara;
     Button vcSacarFoto, vcConfirmar;
     TextView vcTitulo;
-    String imageFileName,gpsVC,fechaVC,fotoVC;
+    Spinner SpinnerVcred;
+    String imageFileName,gpsVC,fechaVC,fotoVC,idTalo,talolocal,talonube;
     EditText nombreCVC,telefonoVC,direccionVC,zonaVC,nombrePVC,productoVC;
 
     ProgressDialog progressDialog;
@@ -161,41 +163,60 @@ public class NavegacionMenu extends AppCompatActivity
         vcConfirmar= findViewById(R.id.vcconfirmar);
         vcTitulo= findViewById(R.id.vctitulo);
 
-        /*vcConfirmar.setOnClickListener(new View.OnClickListener(){
+        SpinnerVcred=findViewById(R.id.spinnervc);
+        nombreCVC= findViewById(R.id.vcnombre);
+        telefonoVC= findViewById(R.id.vctelefono);
+        direccionVC= findViewById(R.id.vcdireccion);
+        zonaVC= findViewById(R.id.vcnrozona);
+        nombrePVC= findViewById(R.id.vcvendedor);
+
+        vcConfirmar.setOnClickListener(new View.OnClickListener(){
                                             @Override
                                             public void onClick(View v){
 
-                                                final VentaCredito vc = new VentaCredito();
-                                                fechaVC= getCurrentTimeStamp();
-                                                fotoVC = convertirImgString(imagen);
-                                                ConseguirGPS();
-                                                //Thread tr=new Thread(){
-                                                    @Override
-                                                    public void run() {
-                                                        if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
-                                                                ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),fotoVC,
-                                                                productoVC.getText().toString(),gpsVC)) {
+                                                if (TextUtils.isEmpty(imageFileName)) {
+                                                    Toast.makeText(getApplicationContext(), "debe tomar una foto", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else{
+                                                    fotoVC = convertirImgString(imagen);
+                                                    final VentaCredito vc = new VentaCredito();
+                                                    fechaVC = getCurrentTimeStamp();
+                                                    ConseguirGPS();
 
-                                                            vc.EnviarRegistrar(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
-                                                                    ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),imageFileName,fotoVC,
-                                                                    productoVC.getText().toString(),gpsVC);
-                                                            //final Conexion con = new Conexion();
-                                                            //final String res = con.InsertarFoto(imageFileName, img);
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    //Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
-                                                        }else{
-                                                            Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                //};
-                                                //tr.start();
+                                                    Cursor Talo = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                                                            ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + "=1", null, null);
+                                                    Talo.moveToFirst();
+                                                    talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                                                    talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE));
+
+
+                                                    //Thread tr = new Thread() {
+                                                    //    @Override
+                                                    //    public void run() {
+                                                            if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(), telefonoVC.getText().toString(), direccionVC.getText().toString(), zonaVC.getText().toString(), fechaVC, nombrePVC.getText().toString(), vcontprod, gpsVC, talolocal, talonube)) {
+
+                                                                //vc.EnviarRegistrar(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
+                                                                //      ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),imageFileName,fotoVC,
+                                                                //    productoVC.getText().toString(),idTalo);
+                                                                //final Conexion con = new Conexion();
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
+                                                                //final String res = con.InsertarFoto(imageFileName, img);
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        //Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                       // }
+                                                    //};
+                                                    //tr.start();
+                                                }
                                             }
                                         }
-        );*/
+        );
 ////////////////////////////////////////////////////////////////////////////////////////////
         RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
@@ -206,9 +227,10 @@ public class NavegacionMenu extends AppCompatActivity
             ActivityCompat.requestPermissions(NavegacionMenu.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1000);
         }
 
-
-        String[] pokemon = {"MEGA JUNIOR","NONI ENERGY","FIBRA PLUS","MEGA FAMILY"};
-        SpinnerVcont.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pokemon));
+/////////////////////////////////////////////Spinner para productos en ventas al credito y contado/////////////////////////////////////////////////////////////
+        String[] producto = {"MEGA JUNIOR","NONI ENERGY","FIBRA PLUS","MEGA FAMILY"};
+        SpinnerVcont.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, producto));
+        SpinnerVcred.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, producto));
         SpinnerVcont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -226,9 +248,28 @@ public class NavegacionMenu extends AppCompatActivity
             }
         });
 
+        SpinnerVcred.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+            {
+                //Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+                vcontprod= adapterView.getItemAtPosition(position).toString();//adapterView.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                // vacio
+
+            }
+        });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
-        btn_hacerfoto = findViewById(R.id.vccamara);
+        //btn_hacerfoto = findViewById(R.id.vccamara);
 
         DataAdapterClassListT = new ArrayList<>();
         DataAdapterClassListT.clear();
@@ -683,6 +724,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     public void ventCred(View v){
         String Sfecha = getCurrentTimeStamp();
+        fotoVC="";
         Vcfecha.setText(Sfecha);
         Ventas.setVisibility(View.INVISIBLE);
         Inicio.setVisibility(View.INVISIBLE);
@@ -705,11 +747,8 @@ public class NavegacionMenu extends AppCompatActivity
                 Toast.makeText(NavegacionMenu.this, "No encontrado GPS", Toast.LENGTH_SHORT).show();
             }
             //String img= convertirImgString(imagen);
-
         }
-
     }
-
 
     private String convertirImgString(Bitmap bitmap){
         ByteArrayOutputStream array = new ByteArrayOutputStream();

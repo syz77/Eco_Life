@@ -66,28 +66,7 @@ public class Login extends AppCompatActivity {
                 if (r>0){
                     persona p=new persona();
                     p.login(res,mContentResolver);
-                    /*String nom="";
-                    String corr="";
-                    String pass="";
-                    String telf="";
-                    String fec="";
-                    String carnet="";
-                    String est="";
-                    String rolid="";
-                    Cursor cx=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,null,
-                            null,null);
-                    while (cx.moveToNext()){
-                        nom=nom+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE));
-                        corr=corr+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
-                        pass=pass+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
-                        telf=telf+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO));
-                        fec=fec+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA));
-                        carnet=carnet+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI));
-                        est=est+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
-                        rolid=rolid+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
-                    }
-                    Toast.makeText(getApplicationContext(),nom+" "+corr+" "+pass+" "+telf+" "+fec+" "+
-                            carnet+" "+est+" "+rolid+" ", Toast.LENGTH_SHORT).show();*/
+
 
                     SincroT(tal);
                     SincroGPS(gps);
