@@ -200,7 +200,7 @@ public class NavegacionMenu extends AppCompatActivity
                                                                 //    productoVC.getText().toString(),idTalo);
                                                                 //final Conexion con = new Conexion();
                                                                 Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
-                                                                //final String res = con.InsertarFoto(imageFileName, img);
+                                                                //final String res = con.InsertarFoto(imageFileName, img);/dsadas
                                                                 runOnUiThread(new Runnable() {
                                                                     @Override
                                                                     public void run() {
