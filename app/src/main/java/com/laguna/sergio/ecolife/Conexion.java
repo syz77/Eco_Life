@@ -3,6 +3,7 @@ package com.laguna.sergio.ecolife;
 import org.json.JSONArray;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class Conexion {
         return respuesta;
     }
     public String InsertRegistro(String nombre, String email,String pass,String telefono, String fecha, String rolid, String ci
-    ,String estado){
+            ,String estado){
         String parametros="nombre="+nombre+"&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+rolid+"&ci="+ci;
         HttpURLConnection connection=null;
         String respuesta="";
@@ -116,6 +117,8 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
+
+
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
                                        String vendedor, String id_sup, String id_prod){
@@ -216,7 +219,29 @@ public class Conexion {
         return respuesta;
     }
 
+    public String InsertarFoto(String nombre, String foto){
+        String parametros="nombre="+nombre+"&foto="+foto;
+        HttpURLConnection connection=null;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/insertarimagen.php?"+parametros);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
 
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
 
 
 

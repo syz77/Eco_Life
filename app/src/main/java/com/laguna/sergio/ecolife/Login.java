@@ -286,7 +286,6 @@ public class Login extends AppCompatActivity {
         pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID,rolid);
         pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE,online);
         mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,pers);
-
     }
 
     @Override

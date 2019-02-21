@@ -149,23 +149,48 @@
 
         <ImageView
             android:id="@+id/vccamara"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
             android:layout_alignTop="@+id/lineavct"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/camarados" />
+
+        <View
+            android:id="@+id/lineavcI"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignBottom="@+id/vccamara"
+
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="35dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
 
         <Button
             android:id="@+id/vcconfirmar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vccamara"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="150dp"
             android:background="@drawable/fondo_color"
             android:text="@string/vc_confirmar"
             android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/vcsacarfoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="72dp"
+            android:contentDescription="@string/app_name"
+            android:onClick="tomarfoto"
+            android:text="@string/vc_sacarfoto" />
 
 
     </RelativeLayout>

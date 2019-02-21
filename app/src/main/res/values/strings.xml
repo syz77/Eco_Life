@@ -61,6 +61,7 @@
     <string name="vc_prod">Producto:</string>
     <string name="vc_vendedor">Nombre del promotor</string>
     <string name="vc_confirmar">CONFIRMAR</string>
+    <string name="vc_sacarfoto">CAMARA</string>
 
     <string name="vcont_titulo">CONTADO</string>
     <string name="vcont_agregar">AGREGAR</string>
