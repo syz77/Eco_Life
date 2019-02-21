@@ -112,6 +112,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO + " TEXT NOT NULL," +
+                ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO_NOMBRE + " TEXT," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE + " TEXT" + ");";
 
