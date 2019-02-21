@@ -1,6 +1,14 @@
 package com.laguna.sergio.ecolife;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.laguna.sergio.ecolife.Datos.ecolifedb;
+
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,10 +23,6 @@ public class Conexion {
         String respuesta="";
         try{
             URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass);
-            //"https://localhostproyectowebandroid000webhostapp.xyz/Consultas/valida.php");
-            //"http://u209922277.hostingerapp.com/val.php?user="+u+"&pwd="+pa
-            //"https://u209922277.hostingerapp.com/api/v1/usuario"
-            //"http://u209922277.hostingerapp.com/val.php"
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
@@ -44,12 +48,7 @@ public class Conexion {
         try{
             URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/registro.php?nombre="+nombre+
                     "&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+rolid+"&ci="+ci+"&estado="+estado);
-            //"http://u209922277.hostingerapp.com/servicio/registro.php?name="+name+"&pwd="+pas+"&email="+cor+"&fecha="+date
-            //http://u209922277.hostingerapp.com/servicio/registro.php?name=juanp&pwd=123456&email=juanpi@gmail.com&fecha=2000-11-12
-            //"https://localhostproyectowebandroid000webhostapp.xyz/Consultas/valida.php");
-            //"http://u209922277.hostingerapp.com/val.php?user="+u+"&pwd="+pa
-            //"https://u209922277.hostingerapp.com/api/v1/usuario"
-            //"http://u209922277.hostingerapp.com/val.php"
+
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
@@ -218,13 +217,12 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
-
-    public String InsertarFoto(String nombre, String foto){
-        String parametros="nombre="+nombre+"&foto="+foto;
-        HttpURLConnection connection=null;
+    public String todoTalonario(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
         String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/insertarimagen.php?"+parametros);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todotalonario.php?email="+user+"&pass="+pass);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
@@ -242,8 +240,121 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
+    public String todoVentaCredito(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todoventacredito.php?email="+user+"&pass="+pass);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
 
+            Scanner inStream= new Scanner(connection.getInputStream());
 
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String todoCobro(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todocobro.php?email="+user+"&pass="+pass);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String todoGPS(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todogps.php?email="+user+"&pass="+pass);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+
+    public String CambiarPass(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/updatePass.php?email="+user+"&pass="+pass);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String CambiarTelf(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/updateTelf.php?email="+user+"&pass="+pass);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
 
     public int objJson(String r) {
         int res=0;

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -63,18 +64,34 @@ public class MainActivity extends AppCompatActivity {
         gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
         mResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);
         EcoLifeSyncAdapter.syncImmediately(this);*/
+        Cursor persona = mResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null );
+
+        if(persona.getCount()!=0){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+                    Intent intent = new Intent(MainActivity.this, NavegacionMenu.class);
+
+                    startActivity(intent);
+                }
+            }, 2000);
+        }else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
 
-                Intent intent = new Intent(MainActivity.this, NavegacionMenu.class);
+                    Intent intent = new Intent(MainActivity.this, Login.class);
 
-                startActivity(intent);
-            }
-        }, 2000);
+                    startActivity(intent);
+                }
+            }, 2000);
+
+        }
+
     }
     protected void onDestroy(){
         super.onDestroy();

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+
 public class EcoLifeDBHelper extends SQLiteOpenHelper {
     private static final String TAG = EcoLifeDBHelper.class.getSimpleName();
 
@@ -41,7 +42,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA + " DATE NOT NULL, " +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID + " INTEGER, " +
-                ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID +"INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID +" INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID + " INTEGER," +
@@ -55,9 +56,10 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO + " TEXT NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA + " DATE NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI + " INTEGER," +
-                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO + " INTEGER NOT NULL, " +
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID + " INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + " TEXT," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + " TEXT" + ");";
 
         final String SQL_CREATE_TALONARIO_TABLE = "CREATE TABLE " + ecolifedb.EcoLifeEntry.TALONARIO_TABLE + " (" +
@@ -65,7 +67,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C + " DATE NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORID + " INTEGER," +
-                ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORNUBEID + "INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORNUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE + " TEXT" + ");";
 
@@ -86,7 +88,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_FECHA + " DATE NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_PRODID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPID + " INTEGER," +
-                ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID + "INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE + " TEXT" + ");";
 
@@ -108,7 +110,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FECHA + " DATE NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_PRODID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID + " INTEGER NOT NULL," +
-                ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID + "INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO + " TEXT NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE + " TEXT" + ");";
@@ -148,4 +150,5 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ecolifedb.EcoLifeEntry.GPS_TABLE);
         onCreate(db);
     }
+
 }
