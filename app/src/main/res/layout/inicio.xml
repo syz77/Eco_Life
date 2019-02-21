@@ -110,7 +110,7 @@
             </View>
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnCrear_Talonario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"

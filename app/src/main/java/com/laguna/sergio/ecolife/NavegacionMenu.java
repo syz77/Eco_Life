@@ -1,6 +1,7 @@
 package com.laguna.sergio.ecolife;
 
 
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -53,16 +54,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import net.gotev.uploadservice.MultipartUploadRequest;
-import net.gotev.uploadservice.ServerResponse;
-import net.gotev.uploadservice.UploadInfo;
-import net.gotev.uploadservice.UploadStatusDelegate;
 import com.google.android.gms.common.api.Response;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -70,10 +68,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
+import com.laguna.sergio.ecolife.Datos.persona;
+import com.laguna.sergio.ecolife.Datos.talonario;
+
 import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
@@ -87,7 +89,7 @@ import static java.security.AccessController.getContext;
 public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf;
+    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario;
     ////////////////////Para historial talonarios///////////////////////////////
     List<DataAdapterTalo> DataAdapterClassListT;
     RecyclerView recyclerViewT;
@@ -125,8 +127,10 @@ public class NavegacionMenu extends AppCompatActivity
     Button RegUser;
     ContentResolver mContentResolver;
     TextView nombre,usuario,ci,cargo,telefono;
-    EditText oldpass,newpass,newphone;
-    Button Cpass,Ctelf,CambiarC,CambiarT;
+    EditText oldpass,newpass,newphone,txtfecha;
+    Button Cpass,Ctelf,CambiarC,CambiarT,CrearTalonario,creartalo;
+    Calendar c;
+    DatePickerDialog dpd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +144,7 @@ public class NavegacionMenu extends AppCompatActivity
         Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
         CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
         CambiarTelf=(FrameLayout) findViewById(R.id.cambiar_telf);
+        FrameCrearTalonario=findViewById(R.id.crear_talonario);
         setSupportActionBar(toolbar);
         mContentResolver=this.getContentResolver();
         nombre=(TextView) findViewById(R.id.textView10);
@@ -154,6 +159,9 @@ public class NavegacionMenu extends AppCompatActivity
         newphone=findViewById(R.id.EditPhone);
         CambiarC=findViewById(R.id.button5);
         CambiarT=findViewById(R.id.button6);
+        CrearTalonario=findViewById(R.id.btnCrear_Talonario);
+        creartalo=findViewById(R.id.btncrear_talo);
+        txtfecha=findViewById(R.id.editTextDate);
 
         ///////////////////////////////Para ventas al contado y credito/////////////////////////////////////
         Vcontfecha=findViewById(R.id.vcontfecha);
@@ -436,6 +444,74 @@ public class NavegacionMenu extends AppCompatActivity
                     tr.start();
             }
         });
+
+        txtfecha.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                c=Calendar.getInstance();
+                int day=c.get(Calendar.DAY_OF_MONTH);
+                int month1=c.get(Calendar.MONTH);
+                int year1=c.get(Calendar.YEAR);
+
+                dpd=new DatePickerDialog(NavegacionMenu.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        txtfecha.setText(year+"-"+(month+1)+"-"+dayOfMonth);
+                    }
+                },year1,month1,day);
+                dpd.show();
+            }
+        });
+
+        CrearTalonario.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                deinicioacreartalo();
+            }
+        });
+        creartalo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Thread tr=new Thread(){
+                    @Override
+                    public void run() {
+                        final String estado="1";
+                        final Conexion con=new Conexion();
+                        final String fecha=txtfecha.getText().toString();
+                        Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+                        t.moveToFirst();
+                        final String idsup=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+                        final String idsupnube=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+                        //talonario talo=new talonario(estado,fecha,idsup,idsupnube);
+                        //talo.insert(talo,mContentResolver);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() { //int r=con.objJson(res);
+                              //if (r>0){
+                                  //Intent i= new Intent(Login.this,NavegacionMenu.class);
+                                  //startActivity(i);
+                                Cursor prueba=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                                        null,null,null);
+                                String m="";
+                                while(prueba.moveToNext()) {
+                                    m=m+prueba.getString(prueba.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE))+",";
+                                }
+
+                                  Toast.makeText(getApplicationContext(),m, Toast.LENGTH_LONG).show();
+                              //}else{
+                               //   Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
+                               //   }
+
+                                  }
+                                  });
+                        }
+                        };
+                tr.start();
+                }
+                }
+        );
     }
 
     ////////////////////////////////////////PERMISOS PARA CAMARA//////////////////////////
@@ -576,6 +652,11 @@ public class NavegacionMenu extends AppCompatActivity
         newphone.setText("");
         CambiarTelf.setVisibility(View.INVISIBLE);
         Perfil.setVisibility(View.VISIBLE);
+    }
+    public void deinicioacreartalo(){
+        txtfecha.setText("");
+        Inicio.setVisibility(View.INVISIBLE);
+        FrameCrearTalonario.setVisibility(View.VISIBLE);
     }
 
     public void pantallas(){

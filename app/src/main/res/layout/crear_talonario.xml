@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:visibility="visible"
+    android:visibility="invisible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NavegacionMenu">
 
@@ -36,81 +36,22 @@
         </View>
 
         <EditText
-            android:id="@+id/edit"
-            android:layout_width="match_parent"
+            android:id="@+id/editTextDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/lineavc1"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
+            android:ems="10"
             android:layout_marginTop="60dp"
-            android:layout_marginEnd="0dp"
-            android:ems="10"
-            android:text="Nombre:"
-            android:textSize="24dp" />
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView10"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="100dp"
-            android:ems="10"
-            android:text="Usuario:"
-            android:textSize="24dp" />
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView11"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="140dp"
-            android:ems="10"
-            android:text="CI:"
-            android:textSize="24dp" />
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView12"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="180dp"
-            android:ems="10"
-            android:text="Cargo:"
-            android:textSize="24dp" />
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView13"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="220dp"
-            android:ems="10"
-            android:text="Telefono:"
-            android:textSize="24dp" />
+            android:clickable="true"
+            android:hint="yyyy-mm-dd"
+            android:inputType="date" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btncrear_talo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="260dp"
+            android:layout_marginTop="100dp"
             android:onClick="pass"
-            android:text="Cambiar contraseña" />
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="telff"
-            android:text="Cambiar telefono"
-            android:layout_marginTop="300dp"/>
+            android:text="Crear Talonario" />
 
     </RelativeLayout>
 </FrameLayout>

@@ -146,6 +146,7 @@ public class ecolifedb {
         public final static String COLUMN_VENTACRED_PRODID = "id_prod";
         public final static String COLUMN_VENTACRED_TALONARIOPID = "id_talonario";
         public final static String COLUMN_VENTACRED_TALONARIONUBEID="talonarionube_id";
+        public final static String COLUMN_VENTACRED_FOTO_NOMBRE="foto_nombre";
         public final static String COLUMN_VENTACRED_FOTO = "foto";
         public final static String COLUMN_VENTACRED_NUBEID="ventacrednube_id";
         public final static String COLUMN_VENTACRED_ONLINE="ventacred_online";
