@@ -1,6 +1,9 @@
 package com.laguna.sergio.ecolife;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -28,6 +31,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -39,13 +43,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import com.laguna.sergio.ecolife.Datos.ecolifedb;
 import static android.view.View.VISIBLE;
 
 public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas;
+    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf;
     ////////////////////Para historial talonarios///////////////////////////////
     List<DataAdapterTalo> DataAdapterClassListT;
     RecyclerView recyclerViewT;
@@ -67,6 +71,10 @@ public class NavegacionMenu extends AppCompatActivity
     /////////////////////Para seleccionar la lista de gestion de usuario///////////////////////////
     View ChildViewG ;
     Button RegUser;
+    ContentResolver mContentResolver;
+    TextView nombre,usuario,ci,cargo,telefono;
+    EditText oldpass,newpass,newphone;
+    Button Cpass,Ctelf,CambiarC,CambiarT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,23 @@ public class NavegacionMenu extends AppCompatActivity
         Ventas= (FrameLayout) findViewById(R.id.activity_ventas_contado);
         Historial= (FrameLayout) findViewById(R.id.activity_talonarios);
         GesUsuario= (FrameLayout) findViewById(R.id.activity_gestionar_user);
+        Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
+        CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
+        CambiarTelf=(FrameLayout) findViewById(R.id.cambiar_telf);
         setSupportActionBar(toolbar);
+        mContentResolver=this.getContentResolver();
+        nombre=(TextView) findViewById(R.id.textView10);
+        usuario=(TextView)findViewById(R.id.textView11);
+        ci=(TextView)findViewById(R.id.textView12);
+        cargo=(TextView)findViewById(R.id.textView13);
+        telefono=(TextView)findViewById(R.id.textView14);
+        Cpass=(Button)findViewById(R.id.button3);
+        Ctelf=findViewById(R.id.button4);
+        oldpass=findViewById(R.id.EditPass);
+        newpass=findViewById(R.id.EditNewPass);
+        newphone=findViewById(R.id.EditPhone);
+        CambiarC=findViewById(R.id.button5);
+        CambiarT=findViewById(R.id.button6);
 
         ///////////////////////////////Para ventas al contado y credito/////////////////////////////////////
         Vcontfecha=findViewById(R.id.vcontfecha);
@@ -107,7 +131,6 @@ public class NavegacionMenu extends AppCompatActivity
         RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
         btn_hacerfoto = findViewById(R.id.vccamara);
-        img = findViewById(R.id.img);
 
         DataAdapterClassListT = new ArrayList<>();
         DataAdapterClassListT.clear();
@@ -210,7 +233,90 @@ public class NavegacionMenu extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        CambiarC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread tr=new Thread() {
+                    @Override
+                    public void run() {
+                        Cursor ck = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+                        ck.moveToNext();
+                        final String User = ck.getString(ck.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+                        final String PassActualLocal = ck.getString(ck.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+                        final String PassActualUser = oldpass.getText().toString();
+                        final String PassNewUser = newpass.getText().toString();
+                        //final String res=con.login(User,PassActualLocal);
+                        if (PassActualLocal.equals(PassActualUser)) {
+                            final Conexion con = new Conexion();
+                            final String res = con.CambiarPass(User, PassNewUser);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    int i = con.objJson(res);
+                                    if (i > 0) {
+                                        ContentValues val = new ContentValues();
+                                        val.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD, PassNewUser);
+                                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, val,
+                                                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null);
+                                        Toast.makeText(getApplicationContext(), "La contraseña se modifico exitosamente", Toast.LENGTH_SHORT).show();
+                                        depassaperfil();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Error de conexion a internet", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "La contraseña no coincide", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                };
+                tr.start();
+            }
+        });
+        CambiarT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cursor ck=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+                ck.moveToNext();
+                final String User=ck.getString(ck.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+                final String phone=newphone.getText().toString();
+                    Thread tr=new Thread(){
+                        @Override
+                        public void run() {
+                            final Conexion con2=new Conexion();
+                            final String r = con2.CambiarTelf(User, phone);
+                            final int i = con2.objJson(r);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (i>0) {
+                                        ContentValues val = new ContentValues();
+                                        val.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD, phone);
+                                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, val,
+                                                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null);
+                                        Toast.makeText(getApplicationContext(), "El telefono se modifico exitosamente", Toast.LENGTH_SHORT).show();
+                                        detelefonoaperfil();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Error de conexion a internet", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }};
+                    tr.start();
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -254,6 +360,11 @@ public class NavegacionMenu extends AppCompatActivity
         Ventas.setVisibility(View.INVISIBLE);
         Historial.setVisibility(View.INVISIBLE);
         GesUsuario.setVisibility(View.INVISIBLE);
+        Perfil.setVisibility(View.INVISIBLE);
+        CambiarPass.setVisibility(View.INVISIBLE);
+        CambiarTelf.setVisibility(View.INVISIBLE);
+       // CambiarPass.setVisibility(View.INVISIBLE);
+       // CambiarTelf.setVisibility(View.INVISIBLE);
         if (id == R.id.nav_camera) {
             String Sfecha = getCurrentTimeStamp();
             Vcontfecha.setText(Sfecha);
@@ -268,8 +379,20 @@ public class NavegacionMenu extends AppCompatActivity
             Historial.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_manage) {
-            generarGestionarUser();
-            GesUsuario.setVisibility(View.VISIBLE);
+            Cursor cargo=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+            cargo.moveToFirst();
+            String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
+
+            if (c.equals("2")) {
+                generarGestionarUser();
+                GesUsuario.setVisibility(View.VISIBLE);
+            }else{
+                if (c.equals("1")){
+                    cargarperfil();
+                    Perfil.setVisibility(View.VISIBLE);
+                }
+            }
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -279,6 +402,53 @@ public class NavegacionMenu extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void cargarperfil(){
+        nombre.setText("Nombre:");
+        usuario.setText("Usuario:");
+        ci.setText("CI:");
+        cargo.setText("Cargo:");
+        telefono.setText("Telefono:");
+        Cursor perf=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+            perf.moveToNext();
+            String nom, usu, carnet, carg, telf;
+            nom = nombre.getText()+" "+ perf.getString(perf.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE));
+            usu = usuario.getText()+" "+ perf.getString(perf.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+            carnet = ci.getText()+" "+ perf.getString(perf.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI));
+            carg = perf.getString(perf.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
+            telf = telefono.getText()+" "+ perf.getString(perf.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO));
+            nombre.setText(nom);
+            usuario.setText(usu);
+            ci.setText(carnet);
+            if(carg.equals("1")) {
+                cargo.setText("Cargo: Administrador");
+            }else{
+                if(carg.equals("2")) {
+                    cargo.setText("Cargo: Supervisor");
+                }
+            }
+            telefono.setText(telf);
+    }
+
+    public void pass(View v){
+        Perfil.setVisibility(View.INVISIBLE);
+        CambiarPass.setVisibility(View.VISIBLE);
+    }
+    public void telff(View v){
+        Perfil.setVisibility(View.INVISIBLE);
+        CambiarTelf.setVisibility(View.VISIBLE);
+    }
+    public void depassaperfil(){
+        oldpass.setText("");
+        newpass.setText("");
+        CambiarPass.setVisibility(View.INVISIBLE);
+        Perfil.setVisibility(View.VISIBLE);
+    }
+    public void detelefonoaperfil(){
+        newphone.setText("");
+        CambiarTelf.setVisibility(View.INVISIBLE);
+        Perfil.setVisibility(View.VISIBLE);
     }
 
     public void pantallas(){

@@ -2,6 +2,11 @@ package com.laguna.sergio.ecolife.Datos;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class persona {
     private String Nombre,Correo,Password,Telefono,Fecha,Ci,Estado,Rol,Online;
@@ -29,5 +34,57 @@ public class persona {
         c.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID,p.Rol);
         c.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE,p.Online);
         r.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,c);
+    }
+
+    public void insertar(String id,String nombre,String correo, String password, String telefono, String fecha
+            ,String id_rol,String ci,String estado,ContentResolver r){
+        String online="1";
+        String token="1";
+        ContentValues values=new ContentValues();
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID,id);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE,nombre);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO,correo);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD,password);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO,telefono);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA,fecha);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI,ci);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO,estado);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID,id_rol);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE,online);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN,token);
+        r.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,values);
+    }
+    public void login(String s,ContentResolver r){
+        String cad="";
+        try {
+            JSONArray json = new JSONArray(s);
+            //for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(0);
+
+                String id = c.getString("id");
+                String nombre = c.getString("nombre");
+                String correo = c.getString("correo");
+                String password = c.getString("password");
+                String telefono = c.getString("telefono");
+                String fecha = c.getString("fecha");
+                String id_rol=c.getString("id_rol");
+                String ci=c.getString("ci");
+                String estado=c.getString("estado");
+                insertar(id,nombre,correo,password,telefono,fecha,id_rol,ci,estado,r);
+            //}
+
+        }catch( final JSONException e){
+                /*Log.e(TAG, "Json parsing error: " + e.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Json parsing error: " + e.getMessage(),
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });*/
+        }
+
     }
 }

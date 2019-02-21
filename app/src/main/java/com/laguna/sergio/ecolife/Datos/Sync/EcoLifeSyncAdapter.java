@@ -14,19 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Switch;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
+import com.laguna.sergio.ecolife.Datos.persona;
 
 import com.laguna.sergio.ecolife.Conexion;
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
@@ -34,6 +22,10 @@ import com.laguna.sergio.ecolife.R;
 
 
 import com.laguna.sergio.ecolife.Datos.EcoLifeDBHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -55,55 +47,57 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
-        //khkjkhgk
+        //verificacion de token, que el usuario no haya sido eliminado del servidor
+        if(tokenverification()==true) {
 
 
-        try{
-            Cursor talonario = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE+"=0",null,null);
-            Cursor ventacredito = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE+"=0",null,null);
-            Cursor ventacontado = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE+"=0",null,null);
-            Cursor detallecontado = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE+"=0",null,null);
-            Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE+"=0",null,null);
-            Cursor cobro = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE+"=0",null,null);
-            Cursor persona = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
-                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE+"=0",null,null );
+            try {
+                Cursor talonario = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE + "=0", null, null);
+                Cursor ventacredito = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE + "=0", null, null);
+                Cursor ventacontado = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE + "=0", null, null);
+                Cursor detallecontado = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE + "=0", null, null);
+                Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE + "=0", null, null);
+                Cursor cobro = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE + "=0", null, null);
+                Cursor people = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + "=0", null, null);
 
-            if(persona != null){
-                insertData(persona,"persona");
-            }
-            if(gps != null){
-                insertData(gps,"gps");
-            }
-            if(ventacontado != null){
-                insertData(ventacontado,"ventacontado");
-            }
-            if (detallecontado !=null){
-                insertData(detallecontado,"detallecontado");
-            }
-            if(gps != null){
-                insertData(gps,"gps");
-            }
-            if(talonario != null){
-                insertData(talonario,"talonario");
-            }
-            if (ventacredito !=null){
-                insertData(ventacredito,"ventacredito");
-            }
-            if (cobro !=null){
-                insertData(cobro,"cobro");
-            }
+                if (people != null) {
+                    insertData(people, "persona");
+                }
+                if (gps != null) {
+                    insertData(gps, "gps");
+                }
+                if (ventacontado != null) {
+                    insertData(ventacontado, "ventacontado");
+                }
+                if (detallecontado != null) {
+                    insertData(detallecontado, "detallecontado");
+                }
+                if (gps != null) {
+                    insertData(gps, "gps");
+                }
+                if (talonario != null) {
+                    insertData(talonario, "talonario");
+                }
+                if (ventacredito != null) {
+                    insertData(ventacredito, "ventacredito");
+                }
+                if (cobro != null) {
+                    insertData(cobro, "cobro");
+                }
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error passing data ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
-                }
+            }
+        }
     }
 
     private void insertData(Cursor c, String b){
@@ -205,13 +199,25 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCprodid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_PRODID));
                     VCfoto=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO));
                     VCtalonarioidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID));
-                    respuesta=con.InsertarVentaCredito(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfoto,VCprodid,
-                            VCtalonarioidnube);
-                    respuesta=cortar(respuesta);
-                    args=new String[]{VCid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,Integer.parseInt(respuesta));
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
-                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content,where,args);
+                    if (VCtalonarioidnube != null){
+                        respuesta=con.InsertarVentaCredito(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfoto,VCprodid,
+                                VCtalonarioidnube);
+                        respuesta=cortar(respuesta);
+                        args=new String[]{VCid};
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,Integer.parseInt(respuesta));
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content,where,args);
+                    }else{
+                        String talonarioid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID));
+                        ContentValues content2=new ContentValues();
+                        args=new String[]{VCid};
+                        String[] args2=new String[]{talonarioid};
+                        Cursor talonario = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                                ecolifedb.EcoLifeEntry._TALONARIOID +"=?", args2, null);
+                        String talonarionubeid=talonario.getString(talonario.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+                        content2.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID,talonarionubeid);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content2,where,args);
+                    }
                 }
 
                 break;
@@ -222,14 +228,26 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     DCid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._DETALLE_CONTADOID));
                     DCprod_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_PRODID));
                     DCventa_nubeid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID));
-                    respuesta=con.InsertarDetalleContado(DCventa_nubeid,DCprod_id);
-                    respuesta=cortar(respuesta);
-                    args=new String[]{DCid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,Integer.parseInt(respuesta));
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
-                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content,where,args);
-                }
+                    if (DCventa_nubeid != null){
+                        respuesta=con.InsertarDetalleContado(DCventa_nubeid,DCprod_id);
+                        respuesta=cortar(respuesta);
+                        args=new String[]{DCid};
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,Integer.parseInt(respuesta));
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content,where,args);
+                    }else{
+                        String ventacontadoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTAID));
+                        ContentValues content2=new ContentValues();
+                        args=new String[]{DCid};
+                        String[] args2=new String[]{ventacontadoid};
+                        Cursor ventacont = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO, null,
+                                ecolifedb.EcoLifeEntry._VENTA_CONTADOID +"=?", args2, null);
+                        String ventacontadonubeid=ventacont.getString(ventacont.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID));
+                        content2.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID,ventacontadonubeid);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content2,where,args);
+                    }
 
+                }
 
                 break;
             case "cobro":
@@ -243,19 +261,70 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     Cfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA));
                     Ccreditonube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID));
                     Cgpsnube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID));
-                    respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
-                    respuesta=cortar(respuesta);
-                    args=new String[]{Cid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID,Integer.parseInt(respuesta));
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
-                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content,where,args);
+                    if (Ccreditonube_id != null && Cgpsnube_id!=null){
+                        respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
+                        respuesta=cortar(respuesta);
+                        args=new String[]{Cid};
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID,Integer.parseInt(respuesta));
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content,where,args);
+                    }else{
+                        String creditoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID));
+                        String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));
+                        ContentValues content2=new ContentValues();
+                        ContentValues content3=new ContentValues();
+                        args=new String[]{Cid};
+                        String[] args2=new String[]{creditoid};
+                        String[] args3=new String[]{gpsid};
+                        Cursor credito = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                                ecolifedb.EcoLifeEntry._VENTA_CREDITOID +"=?", args2, null);
+                        Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                                ecolifedb.EcoLifeEntry._GPSID +"=?", args3, null);
+                        String creditonubeid=credito.getString(credito.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID));
+                        String gpsnubeid=gps.getString(gps.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                        content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,creditonubeid);
+                        content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,gpsnubeid);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content2,where,args);
+                    }
                 }
-
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown table " + b);
 
         }
+    }
+    public boolean tokenverification(){
+        boolean b=false;
+        String token;
+        String email="";
+        String password="";
+        String y;
+        String idl="";
+        Cursor pers = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null );
+        if (pers.getCount()!=0) {
+            pers.moveToNext();
+            email = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+            password = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+            idl = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+
+            Conexion con = new Conexion();
+            y = con.login(email, password);
+            if (con.objJson(y)>0) {
+                b=true;
+            }else{
+                token = null;
+                String where = ecolifedb.EcoLifeEntry._PERSONAID + "=?";
+                String[] args = new String[]{idl};
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN, token);
+                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, values, where, args);
+            }
+        }
+
+
+
+        return b;
     }
 
     public String cortar(String s){

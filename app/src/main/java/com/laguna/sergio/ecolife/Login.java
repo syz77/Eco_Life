@@ -23,11 +23,15 @@ import com.laguna.sergio.ecolife.Datos.ecolifedb;
 
 import com.laguna.sergio.ecolife.Datos.EcoLifeDBHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Login extends AppCompatActivity {
     EditText txtUser, txtPass;
     TextView btnIngresar;
-    Button prueba;
     ContentResolver mContentResolver;
+    String email,pass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,257 +40,215 @@ public class Login extends AppCompatActivity {
         txtUser=(EditText)findViewById(R.id.editUser);
         txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
-        prueba=(Button)findViewById(R.id.button);
         mContentResolver=this.getContentResolver();
         //final EcoLifeDBHelper admin = new EcoLifeDBHelper(this);
         //SQLiteDatabase bd = admin.getWritableDatabase();
-        /*String latitud = "1";
-        String longitud = "1";
-        String latitud2 = "2";
-        String longitud2 = "2";
-        String latitud3 = "0";
-        String longitud3 = "0";
-        String latitud4 = "9";
-        String longitud4 = "9";
-        String latitud5 = "6";
-        String longitud5 = "6";
-        String online0="0";
-        String online1="1";
-        ContentValues  gps = new ContentValues();
-        ContentValues  gps2 = new ContentValues();
-        ContentValues  gps3 = new ContentValues();
-        ContentValues  gps4 = new ContentValues();
-        ContentValues  gps5 = new ContentValues();
 
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-        gps2.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud2);
-        gps2.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud2);
-        gps2.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-        gps3.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud3);
-        gps3.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud3);
-        gps3.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online0);
-        gps4.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud4);
-        gps4.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud4);
-        gps4.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online0);
-        gps5.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud5);
-        gps5.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud5);
-        gps5.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online0);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps2);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps3);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps4);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps5);
-       // bd.insert(ecolifedb.EcoLifeEntry.GPS_TABLE, null, gps);
-        //bd.close();
-        String latitud, longitud, online1;
-        latitud="661";
-        longitud="616";
-        online1="0";
-        ContentValues  gps = new ContentValues();
-        ContentValues  gps2 = new ContentValues();
-        ContentValues  gps3 = new ContentValues();
-        ContentValues  gps4 = new ContentValues();
-        ContentValues  gps5 = new ContentValues();
-
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);*/
 
         btnIngresar.setOnClickListener(new View.OnClickListener(){
-                                           @Override
-                                           public void onClick(View v){
-                                               /*Thread tr=new Thread(){
-                                                   @Override
-                                                   public void run() {
-                                               String nombre,correo,password,telefono,fecha,ci,estado,rolid,online;
-                                               nombre="Many";correo="rivera";password="eltigre";telefono="666";
-                                               fecha="1000-10-21";ci="123";estado="0";rolid="1";online="0";
-                                               insertPersona(nombre,correo,password,telefono,fecha,ci,estado,rolid,online);}};
-                                               tr.start();*/
-                                               String nombre,correo,password,telefono,fecha,ci,estado,rolid,online;
-                                               nombre="Many";correo="riveraE2";password="eltigre";telefono="666";
-                                               fecha="1000-10-21";ci="123456";estado="0";rolid="1";online="0";
-                                               persona p=new persona(nombre,correo,password,telefono,fecha,ci,estado,rolid);
-                                               p.insertar(p,mContentResolver);
-                                               String nubeid="";
-                                               String lat = "";
-                                               String lon = "";
-                                               String id = "";
-                                               String ol = "";
-                                               Cursor d = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
-                                                       null, null, null);
-                                               while(d.moveToNext()) {
-                                                   id = id + d.getString((d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID)));
-                                                   lat = lat + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE));
-                                                   lon = lon + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
-                                                   ol = ol + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE));
-                                                   nubeid = nubeid+ d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
-
-                                               }
-                                               Toast.makeText(getApplicationContext(), id + " " + lat + " " + lon + " " + ol+" "+nubeid, Toast.LENGTH_SHORT).show();
-                                               /*Thread tr=new Thread(){
-                                                   @Override
-                                                   public void run() {
-                                                       final Conexion con=new Conexion();
-                                                       final String res= con.login(txtUser.getText().toString(),txtPass.getText().toString());
-                                                       runOnUiThread(new Runnable() {
-                                                           @Override
-                                                           public void run() {
-                                                               int r=con.objJson(res);
-
-                                                               if (r>0){
-                                                                   Intent i= new Intent(Login.this,NavegacionMenu.class);
-                                                                   startActivity(i);
-                                                                   Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
-                                                               }else{
-                                                                   Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
-                                                               }
-
-                                                           }
-                                                       });
-                                                   }
-                                               };
-                                               tr.start();*/
-                                           }
-                                       }
-        );
-        prueba.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+             public void onClick(View v){
+             Thread tr=new Thread(){
+                @Override
+                public void run() {
+                final Conexion con=new Conexion();
+                email=txtUser.getText().toString();
+                pass=txtPass.getText().toString();
+                final String res= con.login(email,pass);
+                final String tal=con.todoTalonario(email,pass);
+                final String gps=con.todoGPS(email,pass);
+                final String vc=con.todoVentaCredito(email,pass);
+                final String c=con.todoCobro(email,pass);
+                runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                int r=con.objJson(res);
+                if (r>0){
+                    persona p=new persona();
+                    p.login(res,mContentResolver);
+                    /*String nom="";
+                    String corr="";
+                    String pass="";
+                    String telf="";
+                    String fec="";
+                    String carnet="";
+                    String est="";
+                    String rolid="";
+                    Cursor cx=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,null,
+                            null,null);
+                    while (cx.moveToNext()){
+                        nom=nom+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE));
+                        corr=corr+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+                        pass=pass+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+                        telf=telf+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO));
+                        fec=fec+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA));
+                        carnet=carnet+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI));
+                        est=est+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+                        rolid=rolid+cx.getString(cx.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
+                    }
+                    Toast.makeText(getApplicationContext(),nom+" "+corr+" "+pass+" "+telf+" "+fec+" "+
+                            carnet+" "+est+" "+rolid+" ", Toast.LENGTH_SHORT).show();*/
 
-                String latitud, longitud;
-                latitud="661666";
-                longitud="616777";
-                gps g=new gps(latitud,longitud);
-                g.insert(g,mContentResolver);
-                String nubeid="";
-                String lat = "";
-                String lon = "";
-                String id = "";
-                String ol = "";
-                Cursor d = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
-                        null, null, null);
-                while(d.moveToNext()) {
-                    id = id + d.getString((d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID)));
-                    lat = lat + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD));
-                    lon = lon + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD));
-                    ol = ol + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE));
-                    nubeid = nubeid+ d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                    SincroT(tal);
+                    SincroGPS(gps);
+                    SincroVC(vc);
+                    SincroC(c);
+                    Intent i= new Intent(Login.this,NavegacionMenu.class);
+                    startActivity(i);
+                    //Toast.makeText(getApplicationContext(),Integer.toString(x), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
+                }
 
                 }
-                Toast.makeText(getApplicationContext(), id + " " + lat + " " + lon + " " + ol+" "+nubeid, Toast.LENGTH_SHORT).show();
-                /*Thread tr=new Thread() {
-                    @Override
-                    public void run() {
-                String latitud, longitud, online1;
-                latitud="123";
-                longitud="321";
-                online1="0";
-                ContentValues  gps = new ContentValues();
-                ContentValues  gps2 = new ContentValues();
-                ContentValues  gps3 = new ContentValues();
-                ContentValues  gps4 = new ContentValues();
-                ContentValues  gps5 = new ContentValues();
-
-                gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
-                gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud);
-                gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);
-               /* Thread tr=new Thread(){
-                    @Override
-                    public void run() {
-                        final Conexion con=new Conexion();
-                        String la="1";
-                        String lo="2";
-                        final String res= con.InsertarGPS(la,lo);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int r=con.objJson(res);
-                                String cut=cortar(res);
-
-                                //if (r>0){
-                                   // Intent i= new Intent(Login.this,NavegacionMenu.class);
-                                    //startActivity(i);
-                                    txtUser.setText(cut);
-                                    Toast.makeText(getApplicationContext(),res+" "+res.length(), Toast.LENGTH_SHORT).show();
-                                //}else{
-                                //    Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
-                                //}
-
-                            }
-                        });
-                    }
+                });
+                }
                 };
                 tr.start();
-
-
-                        //SQLiteDatabase bd = admin.getWritableDatabase();
-                        //Cursor prueba = bd.rawQuery("select * from gps", null);
-                        String[] args;
-                        //};
-                        String w = "1";
-                        //ContentValues cont=new ContentValues();
-                        //cont.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE,w);
-                        //String wher = ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE + "=?";
-                        //mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,cont,wher,whereArgs);
-                        //Cursor c = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
-                         //       ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE + "=0", null, null);
-
-
-                        //if (test.moveToFirst()) {
-                        //test.moveToFirst();
-                        // } else
-                        //     Toast.makeText(getApplicationContext(), "No existe una persona con dicho dni",
-                        //            Toast.LENGTH_SHORT).show();
-                        //bd.close();
-                        //}
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Cursor d = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
-                                        null, null, null);
-                                while(d.moveToNext()) {
-                                    id = id + d.getString((d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID)));
-                                    lat = lat + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD));
-                                    lon = lon + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD));
-                                    ol = ol + d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE));
-
-                                }
-                                Toast.makeText(getApplicationContext(), id + " " + lat + " " + lon + " " + ol, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                };
-            tr.start();*/}
-        });
-
-
+                }
+                }
+        );
     }
-    public void insertGps(String latitud, String longitud,String online1){
-        ContentValues  gps = new ContentValues();
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);
-    }
-    public void insertPersona(String nombre, String correo, String password, String telefono,String fecha,String ci,
-                              String estado, String rolid, String online){
-        ContentValues pers=new ContentValues();
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE,nombre);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO,correo);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD,password);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO, telefono);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA,fecha);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI,ci);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO,estado);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID,rolid);
-        pers.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE,online);
-        mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,pers);
+    /*public void Sincro(String email, String pass)
+    {
+        SincroT(email,pass);
+        SincroGPS(email,pass);
+        SincroVC(email,pass);
+        SincroC(email,pass);
+    }*/
+    public void SincroT(String s){
+        try {
+            JSONArray json = new JSONArray(s);
+            Cursor pers=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+            pers.moveToNext();
+            String online="1";
+            String idp,idn;
+            idp=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+            idn=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                String id = c.getString("id");
+                String estado=c.getString("estado");
+                String fecha_c=c.getString("fecha_c");
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID, id);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO, estado);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C,fecha_c);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORID,idp);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORNUBEID,idn);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, values);
+            }
+            pers.close();
+        }catch (JSONException e){
 
+        }
+    }
+    public void SincroVC(String s){
+        String id,nombre,telefono,direccion,zona,fecha,vendedor,foto,id_prod,id_talonario,online;
+        try {
+            JSONArray json = new JSONArray(s);
+            online="1";
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                id = c.getString("id");
+                nombre=c.getString("nombre");
+                telefono=c.getString("telefono");
+                direccion=c.getString("direccion");
+                zona=c.getString("zona");
+                fecha=c.getString("fecha");
+                vendedor=c.getString("vendedor");
+                foto=c.getString("foto");
+                id_prod=c.getString("id_prod");
+                id_talonario=c.getString("id_talonario");
+                String[] args= new String[]{id_talonario};
+                Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID + "=?", args, null);
+                v.moveToNext();
+                String localid=v.getString(v.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID, id);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NOMBRE, nombre);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TELEFONO,telefono);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_DIRECCION, direccion);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ZONA, zona);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FECHA,fecha);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_VENDEDOR, vendedor);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO, foto);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_PRODID,id_prod);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID,id_talonario);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID,localid);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, values);
+                v.close();
+            }
+        }catch (JSONException e){
+
+        }
+    }
+    public void SincroGPS(String s){
+        String online="1";
+        try {
+            JSONArray json = new JSONArray(s);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                String id = c.getString("id");
+                String latitud=c.getString("latitud");
+                String longitud=c.getString("longitud");
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID, id);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD,longitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, values);
+            }
+        }catch (JSONException e){
+
+        }
+    }
+    public void SincroC(String s){
+        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,idgpsnube,idcreditolocal,idgpslocal;
+        String online="1";
+        try {
+            JSONArray json = new JSONArray(s);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                idnube = c.getString("id");
+                monto=c.getString("monto");
+                nro_cuota=c.getString("nro_cuota");
+                subtotal=c.getString("subtotal");
+                fecha=c.getString("fecha");
+                idcreditonube=c.getString("id_credito");
+                idgpsnube=c.getString("id_gps");
+                String[] args= new String[]{idcreditonube};
+                String[] args2=new String[]{idgpsnube};
+                Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + "=?", args, null);
+                v.moveToNext();
+                idcreditolocal=v.getString(v.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
+                Cursor g = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID + "=?", args2, null);
+                g.moveToNext();
+                idgpslocal=g.getString(g.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, idnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO, monto);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NRO_CUOTA,nro_cuota);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL,subtotal);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA,fecha);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,idcreditonube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,idgpsnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,idcreditolocal);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID,idgpslocal);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values);
+                v.close();
+                g.close();
+            }
+        }catch (JSONException e){
+
+        }
     }
 
     @Override

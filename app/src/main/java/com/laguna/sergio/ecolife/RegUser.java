@@ -1,7 +1,9 @@
 package com.laguna.sergio.ecolife;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.laguna.sergio.ecolife.Datos.ecolifedb;
 
 import java.util.Calendar;
 
@@ -28,10 +32,12 @@ public class RegUser extends AppCompatActivity {
     EditText txtemail;
     EditText txtpass;
     EditText txtci;
+    ContentResolver mContentResolver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg_user);
+        mContentResolver=this.getContentResolver();
         //Dialogo para fecha
         txtfecha=(EditText) findViewById(R.id.editDate);
         txtfecha.setOnClickListener(new View.OnClickListener(){
@@ -51,6 +57,38 @@ public class RegUser extends AppCompatActivity {
                 dpd.show();
             }
         });
+        /*Cursor talonario = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                null, null, null);
+        Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                null, null, null);
+        Cursor ventacred = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                null, null, null);
+        Cursor cobro = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
+                null, null, null);
+        String todo="";
+        if(talonario.getCount()>0) {
+            todo=todo+Integer.toString(talonario.getCount())+" ";
+            if(gps.getCount()>0) {
+                todo=todo+Integer.toString(gps.getCount())+" ";
+                if (ventacred.getCount()>0) {
+                    todo=todo+Integer.toString(ventacred.getCount())+" ";
+                    if(cobro.getCount()>0) {
+                        todo=todo+Integer.toString(cobro.getCount());
+                    }
+                }
+            }
+        }
+        Toast.makeText(getApplicationContext(),todo, Toast.LENGTH_LONG).show();
+        Cursor pers=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                null,null,null);
+        while (pers.moveToNext()){
+            txtnombre.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE)));
+            txttelefono.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO)));
+            txtemail.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO)));
+            txtpass.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD)));
+            txtci.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CI)));
+            txtfecha.setText(pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_FECHA)));
+        }*/
 
         //Lista desplegable de cargos
         CargoS=(Spinner) findViewById(R.id.spinner);

@@ -9,11 +9,10 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,28 +30,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegUser"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".GestionarUser"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".EditarUser"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Talonarios"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegUser"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GestionarUser"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditarUser"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Talonarios"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".Datos.EcoLifeProvider"
             android:authorities="com.laguna.sergio.ecolife"
             android:exported="false"
-            android:syncable="true"/>
-        <service
-            android:name=".Datos.Sync.ELAuthenticatorService">
+            android:syncable="true" />
+
+        <service android:name=".Datos.Sync.ELAuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
@@ -63,6 +68,7 @@
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
@@ -83,16 +89,18 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".VentaCredito"
-            android:screenOrientation="portrait"/>
         <activity
-
+            android:name=".VentaCredito"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".NavegacionMenu"
             android:label="@string/title_activity_navegacion_menu"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Ventas"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Ventas"
+            android:screenOrientation="portrait" />
+        <activity android:name=".perfil"></activity>
     </application>
 
 </manifest>
