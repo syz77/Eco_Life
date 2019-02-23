@@ -49,21 +49,6 @@ public class MainActivity extends AppCompatActivity {
         mResolver.registerContentObserver(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,true,detalleContado_obs);
         mResolver.registerContentObserver(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,true,cobro_obs);
 
-        /*String latitud, longitud, online1;
-        latitud="123";
-        longitud="321";
-        online1="0";
-        ContentValues gps = new ContentValues();
-        ContentValues  gps2 = new ContentValues();
-        ContentValues  gps3 = new ContentValues();
-        ContentValues  gps4 = new ContentValues();
-        ContentValues  gps5 = new ContentValues();
-
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD, longitud);
-        gps.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online1);
-        mResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,gps);
-        EcoLifeSyncAdapter.syncImmediately(this);*/
         Cursor persona = mResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null );
 

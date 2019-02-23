@@ -355,6 +355,52 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
+    public String UpdateUser(String user, String nuser,String pass, String estado, String cargo){
+        String parametros="email="+user+"&ncorreo="+nuser+"&pass="+pass+"&estado="+estado+"&cargo="+cargo;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/updateTelf.php?"+parametros);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String AllUser(String correo,String pass){
+        String parametros="email="+correo+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todoPersona.php?"+parametros);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
 
     public int objJson(String r) {
         int res=0;
