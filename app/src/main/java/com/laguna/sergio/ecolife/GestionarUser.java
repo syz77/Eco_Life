@@ -56,4 +56,7 @@ public class GestionarUser extends AppCompatActivity {
         //recyclerViewadapterR = new RecyclerAdapTalo(DataAdapterClassListR, this);
         //recyclerViewR.setAdapter(recyclerViewadapterR);
     }
+
+
+
 }

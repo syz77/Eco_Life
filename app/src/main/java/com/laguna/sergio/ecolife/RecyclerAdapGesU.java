@@ -40,8 +40,15 @@ public class RecyclerAdapGesU extends RecyclerView.Adapter<RecyclerAdapGesU.View
 
         DataAdapterGesU dataAdapter =  dataAdapters.get(position);
 
-        viewHolder.TextViewCargo.setText("Cargo: "+dataAdapter.getCargo());//raidlvl
+        //viewHolder.TextViewCargo.setText("Cargo: "+dataAdapter.getCargo());//raidlvl
+        if (dataAdapter.getCargo().equals("1")){
+            //viewHolder.ImaViewEstado.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.smiley));
+            viewHolder.TextViewCargo.setText("Cargo: Supervisor");//raidlvl
+        }else if (dataAdapter.getCargo().equals("2")){
+            //viewHolder.ImaViewEstado.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.candado));
+            viewHolder.TextViewCargo.setText("Cargo: Administrador");//raidlvl
 
+        }
         viewHolder.TextViewNombre.setText("Nombre: "+dataAdapter.getNombre());//gym
 
         if (dataAdapter.getEstado().equals("1")){
