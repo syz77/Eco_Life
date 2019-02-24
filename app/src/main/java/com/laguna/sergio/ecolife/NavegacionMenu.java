@@ -147,8 +147,8 @@ public class NavegacionMenu extends AppCompatActivity
     Button Cpass,Ctelf,CambiarC,CambiarT,CrearTalonario,creartalo;
     Calendar c;
     DatePickerDialog dpd;
-    EditText oldpass,newpass,newphone;
-    Button Cpass,Ctelf,CambiarC,CambiarT;
+    //EditText oldpass,newpass,newphone;
+    //Button Cpass,Ctelf,CambiarC,CambiarT;
 
     JSONArray jsonArray = null;
     List<DataAdapterGesU> DataAdapterClassList;
