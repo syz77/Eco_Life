@@ -1,6 +1,7 @@
 package com.laguna.sergio.ecolife;
 
 
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -53,6 +54,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -76,10 +78,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
+import com.laguna.sergio.ecolife.Datos.persona;
+import com.laguna.sergio.ecolife.Datos.talonario;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,7 +104,7 @@ import static java.security.AccessController.getContext;
 public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf;
+    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario;
     ////////////////////Para historial talonarios///////////////////////////////
     List<DataAdapterTalo> DataAdapterClassListT;
     RecyclerView recyclerViewT;
@@ -137,6 +143,10 @@ public class NavegacionMenu extends AppCompatActivity
     Button RegUser;
     ContentResolver mContentResolver;
     TextView nombre,usuario,ci,cargo,telefono;
+    EditText oldpass,newpass,newphone,txtfecha;
+    Button Cpass,Ctelf,CambiarC,CambiarT,CrearTalonario,creartalo;
+    Calendar c;
+    DatePickerDialog dpd;
     EditText oldpass,newpass,newphone;
     Button Cpass,Ctelf,CambiarC,CambiarT;
 
@@ -168,6 +178,7 @@ public class NavegacionMenu extends AppCompatActivity
         Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
         CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
         CambiarTelf=(FrameLayout) findViewById(R.id.cambiar_telf);
+        FrameCrearTalonario=findViewById(R.id.crear_talonario);
         setSupportActionBar(toolbar);
         mContentResolver=this.getContentResolver();
         nombre=(TextView) findViewById(R.id.textView10);
@@ -182,6 +193,9 @@ public class NavegacionMenu extends AppCompatActivity
         newphone=findViewById(R.id.EditPhone);
         CambiarC=findViewById(R.id.button5);
         CambiarT=findViewById(R.id.button6);
+        CrearTalonario=findViewById(R.id.btnCrear_Talonario);
+        creartalo=findViewById(R.id.btncrear_talo);
+        txtfecha=findViewById(R.id.editTextDate);
 
         ///////////////////////////////Para ventas al contado y credito/////////////////////////////////////
         Vcontfecha=findViewById(R.id.vcontfecha);
@@ -209,7 +223,53 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewlayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerViewlayoutManager);
 
+        vcConfirmar.setOnClickListener(new View.OnClickListener(){
+                                            @Override
+                                            public void onClick(View v){
 
+                                                if (TextUtils.isEmpty(imageFileName)) {
+                                                    Toast.makeText(getApplicationContext(), "debe tomar una foto", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else{
+                                                    fotoVC = convertirImgString(imagen);
+                                                    final VentaCredito vc = new VentaCredito();
+                                                    fechaVC = getCurrentTimeStamp();
+                                                    ConseguirGPS();
+
+                                                    Cursor Talo = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                                                            ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + "=1", null, null);
+                                                    Talo.moveToFirst();
+                                                    talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                                                    talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE));
+
+
+                                                    //Thread tr = new Thread() {
+                                                    //    @Override
+                                                    //    public void run() {
+                                                            if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(), telefonoVC.getText().toString(), direccionVC.getText().toString(), zonaVC.getText().toString(), fechaVC, nombrePVC.getText().toString(), vcontprod, gpsVC, talolocal, talonube)) {
+
+                                                                //vc.EnviarRegistrar(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
+                                                                //      ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),imageFileName,fotoVC,
+                                                                //    productoVC.getText().toString(),idTalo);
+                                                                //final Conexion con = new Conexion();
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
+                                                                //final String res = con.InsertarFoto(imageFileName, img);/dsadas
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        //Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                       // }
+                                                    //};
+                                                    //tr.start();
+                                                }
+                                            }
+                                        }
+        );
 ////////////////////////////////////////////////////////////////////////////////////////////
         RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
@@ -379,7 +439,6 @@ public class NavegacionMenu extends AppCompatActivity
                                         depassaperfil();
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Error de conexion a internet", Toast.LENGTH_SHORT).show();
-
                                     }
                                 }
                             });
@@ -430,66 +489,76 @@ public class NavegacionMenu extends AppCompatActivity
             }
         });
 
-        vcConfirmar.setOnClickListener(new View.OnClickListener(){
-                                           @Override
-                                           public void onClick(View v){
 
-                                               if (TextUtils.isEmpty(imageFileName)) {
-                                                   Toast.makeText(getApplicationContext(), "debe tomar una foto", Toast.LENGTH_SHORT).show();
-                                               }
-                                               else{
-                                                   fotoVC = convertirImgString(imagen);
-                                                   //final VentaCredito vc = new VentaCredito();
-                                                   fechaVC = getCurrentTimeStamp();
-                                                   ConseguirGPS();
+    txtfecha.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View view){
+            c=Calendar.getInstance();
+            int day=c.get(Calendar.DAY_OF_MONTH);
+            int month1=c.get(Calendar.MONTH);
+            int year1=c.get(Calendar.YEAR);
 
-                                                   NOMBRECVC=nombreCVC.getText().toString();
-                                                   TELEFONOVC=telefonoVC.getText().toString();
-                                                   DIRECCIONVC=direccionVC.getText().toString();
-                                                   ZONAVC=zonaVC.getText().toString();
-                                                   NOMBREPVC=nombrePVC.getText().toString();
+            dpd=new DatePickerDialog(NavegacionMenu.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    txtfecha.setText(year+"-"+(month+1)+"-"+dayOfMonth);
+                }
+            },year1,month1,day);
+            dpd.show();
+        }
+    });
 
-                                                   Cursor Talo = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
-                                                           ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + "=1", null, null);
-                                                   Talo.moveToFirst();
-                                                   talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
-                                                   talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE));
+        CrearTalonario.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View view){
+            deinicioacreartalo();
+        }
+    });
+        creartalo.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+            Thread tr=new Thread(){
+                @Override
+                public void run() {
+                    final String estado="1";
+                    final Conexion con=new Conexion();
+                    final String fecha=txtfecha.getText().toString();
+                    Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                            ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+                    t.moveToFirst();
+                    final String idsup=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+                    final String idsupnube=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+                    //talonario talo=new talonario(estado,fecha,idsup,idsupnube);
+                    //talo.insert(talo,mContentResolver);
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() { //int r=con.objJson(res);
+                            //if (r>0){
+                            //Intent i= new Intent(Login.this,NavegacionMenu.class);
+                            //startActivity(i);
+                            Cursor prueba=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                                    null,null,null);
+                            String m="";
+                            while(prueba.moveToNext()) {
+                                m=m+prueba.getString(prueba.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE))+",";
+                            }
 
-                                                   //Thread tr = new Thread() {
-                                                   //    @Override
-                                                   //    public void run() {
-                                                   if (CheckEditTextIsEmptyOrNot(NOMBRECVC, TELEFONOVC, DIRECCIONVC,
-                                                           ZONAVC, fechaVC, NOMBREPVC, vcontprod, gpsVC, talolocal, talonube)!=true) {
+                            Toast.makeText(getApplicationContext(),m, Toast.LENGTH_LONG).show();
+                            //}else{
+                            //   Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
+                            //   }
 
-
-                                                       //if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(), telefonoVC.getText().toString(), direccionVC.getText().toString(),
-                                                           //zonaVC.getText().toString(), fechaVC, nombrePVC.getText().toString(), vcontprod, gpsVC, talolocal, talonube)) {
-
-                                                       //vc.EnviarRegistrar(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
-                                                       //      ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),imageFileName,fotoVC,
-                                                       //    productoVC.getText().toString(),idTalo);
-                                                       //final Conexion con = new Conexion();
-                                                       Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
-                                                       //final String res = con.InsertarFoto(imageFileName, img);/dsadas
-                                                       //runOnUiThread(new Runnable() {
-                                                       //@Override
-                                                       //public void run() {
-                                                       //Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT).show();
-                                                       //}
-                                                       //});
-                                                   } else {
-                                                       Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
-                                                   }
-                                                   // }
-                                                   //};
-                                                   //tr.start();
-                                               }
-                                           }
-                                       }
-        );
+                        }
+                    });
+                }
+            };
+            tr.start();
+        }
     }
+        );
 
+    }
     ////////////////////////////////////////PERMISOS PARA CAMARA//////////////////////////
 
 
@@ -632,6 +701,11 @@ public class NavegacionMenu extends AppCompatActivity
         newphone.setText("");
         CambiarTelf.setVisibility(View.INVISIBLE);
         Perfil.setVisibility(View.VISIBLE);
+    }
+    public void deinicioacreartalo(){
+        txtfecha.setText("");
+        Inicio.setVisibility(View.INVISIBLE);
+        FrameCrearTalonario.setVisibility(View.VISIBLE);
     }
 
     public void pantallas(){

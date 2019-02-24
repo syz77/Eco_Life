@@ -29,7 +29,8 @@
     <include layout="@layout/activity_gestionar_user" />
     <include layout="@layout/activity_perfil" />
     <include layout="@layout/cambiarpass"/>
-    <include layout="@layout/cambiar_telf"/>
+    <include layout="@layout/cambiar_telf" />
+    <include layout="@layout/crear_talonario"/>
 
 
 

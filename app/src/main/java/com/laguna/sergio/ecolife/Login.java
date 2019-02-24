@@ -66,8 +66,6 @@ public class Login extends AppCompatActivity {
                 if (r>0){
                     persona p=new persona();
                     p.login(res,mContentResolver);
-
-
                     SincroT(tal);
                     SincroGPS(gps);
                     SincroVC(vc);

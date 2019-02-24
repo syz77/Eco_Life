@@ -114,7 +114,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     Tid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
                     Testado=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO));
                     Tfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C));
-                    Tid_sup=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORID));
+                    Tid_sup=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORNUBEID));
                     respuesta=con.InsertarTalonario(Testado,Tfecha,Tid_sup);
                     respuesta=cortar(respuesta);
                     args=new String[]{Tid};
@@ -186,7 +186,8 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 break;
             case "venta_credito":
-                String VCid, VCnombre, VCtelefono, VCzona, VCvendedor, VCdireccion,VCfecha,VCprodid,VCfoto,VCtalonarioidnube;
+                String VCid, VCnombre, VCtelefono, VCzona, VCvendedor, VCdireccion,VCfecha,VCprodid,VCfoto,VCtalonarioidnube
+                        ,VCfotonombre;
                 where=ecolifedb.EcoLifeEntry._VENTA_CREDITOID+"=?";
                 while (c.moveToNext()){
                     VCid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
@@ -198,10 +199,11 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FECHA));
                     VCprodid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_PRODID));
                     VCfoto=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO));
+                    VCfotonombre=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO_NOMBRE));
                     VCtalonarioidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID));
                     if (VCtalonarioidnube != null){
-                        respuesta=con.InsertarVentaCredito(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfoto,VCprodid,
-                                VCtalonarioidnube);
+                        respuesta=con.InsertarVentaCredito(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfoto
+                                ,VCprodid, VCtalonarioidnube);
                         respuesta=cortar(respuesta);
                         args=new String[]{VCid};
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,Integer.parseInt(respuesta));
