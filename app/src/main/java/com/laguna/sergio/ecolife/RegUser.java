@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
+import com.laguna.sergio.ecolife.Datos.persona;
 
 import java.util.Calendar;
 
@@ -103,7 +104,7 @@ public class RegUser extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                txtcargo="0";
             }
         });
         //registro
@@ -117,52 +118,63 @@ public class RegUser extends AppCompatActivity {
         btnRegistrar.setOnClickListener(new View.OnClickListener(){
                                           @Override
                                           public void onClick(View v){
-                                              //txtCor.setText("hola");
-                                              //txtPass.setText("noo");
                                               Thread tr=new Thread(){
                                                   @Override
                                                   public void run() {
+
                                                       final Conexion con=new Conexion();
+                                                      String estado="1";
                                                       final String res= con.InsertRegistro(txtnombre.getText().toString(),txtemail.getText().toString(),txtpass.getText().toString(),txttelefono.getText().toString(),
-                                                              txtfecha.getText().toString(), cargoT(txtcargo), txtci.getText().toString(),"activo");
+                                                              txtfecha.getText().toString(), cargoT(txtcargo), txtci.getText().toString(),estado);
                                                       runOnUiThread(new Runnable() {
                                                           @Override
                                                           public void run() {
-                                                              Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
-                                                              if(res=="El EMAIL ya esta registrado por favor utilice otro"){
+                                                              if(res=="El usuario ya esta registrado por favor utilice otro"){
                                                                   Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
                                                               }else{
                                                                   Toast.makeText(getApplicationContext(),"Registrado correctamente", Toast.LENGTH_SHORT).show();
                                                                   //Intent i= new Intent(registro.this,MainActivity.class);
                                                                   //startActivity(i);
                                                               }
-                                /*int r=con.objJson(res);
-                                if (r>0){
-                                    Intent i= new Intent(registro.this,MainActivity.class);
-                                    startActivity(i);
-                                    Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
-                                    }else{
-                                    Toast.makeText(getApplicationContext(),"Error", Toast.LENGTH_SHORT).show();
-                                    }*/
+
                                                           }
                                                       });
                                                   }
                                               };
-                                              tr.start();
+                                              if (verificarRegistrarUser()==true) {
+                                                  tr.start();
+                                              }else{
+                                                  runOnUiThread(new Runnable() {
+                                                      @Override
+                                                      public void run() {
+                                                          Toast.makeText(getApplicationContext(),"Rellene todos los campos",Toast.LENGTH_SHORT).show();
+                                                      }
+                                                  });
+                                              }
                                           }
                                       }
         );
 
     }
+    public Boolean verificarRegistrarUser(){
+        boolean b=false;
+        if(txtfecha.getText().toString().isEmpty()==false && txtnombre.getText().toString().isEmpty()==false
+                &&txtemail.getText().toString().isEmpty()==false && txtpass.getText().toString().isEmpty()==false
+                &&txttelefono.getText().toString().isEmpty()==false && txtci.getText().toString().isEmpty()==false
+                && txtcargo.equals("0")==false){
+            b=true;
+        }
+        return b;
+    }
     String cargoT(String c)
     {
-        int a;
+        String a;
         if(c=="supervisor"){
-            a=1;
+            a="1";
         }else{
-            a=2;
+            a="2";
         }
-        return Integer.toString(a);
+        return a;
     }
 
 

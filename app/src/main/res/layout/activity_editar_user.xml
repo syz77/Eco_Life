@@ -13,6 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <TextView
@@ -20,88 +22,130 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/edit_titulo"
-            android:textAlignment="center" />
+            android:text="EDITAR USUARIO"
+            android:textAlignment="center"
+            android:textSize="20dp"/>
+        <TextView
+            android:id="@+id/UserTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Usuario"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
 
         <EditText
-            android:id="@+id/editEmail"
+            android:id="@+id/editUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_email"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
             android:ems="10"
-            android:layout_marginTop="30dp"
-            android:inputType="textEmailAddress" />
+            android:hint="Usuario"
+            android:inputType="textPersonName"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
+
+        <TextView
+            android:id="@+id/PassTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Contraseña"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
 
         <EditText
-            android:id="@+id/editTelf"
+            android:id="@+id/editContrase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_telf"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
             android:ems="10"
-            android:inputType="phone" />
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
 
         <TextView
-            android:id="@+id/textCargo"
+            android:id="@+id/EditviewEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/edit_cargo" />
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Estado"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerEstado"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="50dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textEstado"
+            android:id="@+id/EditviewCargo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/edit_estado" />
-
-        <TextView
-            android:id="@+id/textGuardaruno"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Cargo"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/edit_guardar"
-            android:textAlignment="center" />
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorPrimary">
-        </View>
+            <Spinner
+                android:id="@+id/spinnerCargo"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="50dp" />
+        </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinnerCargo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textGuardardos"
+        <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/edit_guardar"
-            android:textAlignment="center" />
+            android:layout_marginTop="5dp"/>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorPrimary">
-        </View>
-
-        <Spinner
-            android:id="@+id/spinnerEstado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/textGuardartres"
+        <Button
+            android:id="@+id/btnEdituser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/edit_guardar"
-            android:textAlignment="center" />
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/ic_launcher_background"
+            android:text="@string/reg_guardar"
+            android:textSize="32dp"
+            android:textColor="@color/colorBlanco" />
 
     </LinearLayout>
 </FrameLayout>

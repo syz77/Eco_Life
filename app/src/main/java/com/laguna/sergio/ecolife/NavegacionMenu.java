@@ -327,7 +327,6 @@ public class NavegacionMenu extends AppCompatActivity
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
         //btn_hacerfoto = findViewById(R.id.vccamara);
 
@@ -459,7 +458,16 @@ public class NavegacionMenu extends AppCompatActivity
                         }
                     }
                 };
-                tr.start();
+                if(verificacionCP()==true) {
+                    tr.start();
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"Rellene todos los datos", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
         CambiarT.setOnClickListener(new View.OnClickListener() {
@@ -481,7 +489,7 @@ public class NavegacionMenu extends AppCompatActivity
                                 public void run() {
                                     if (i>0) {
                                         ContentValues val = new ContentValues();
-                                        val.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD, phone);
+                                        val.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TELEFONO, phone);
                                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, val,
                                                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null);
                                         Toast.makeText(getApplicationContext(), "El telefono se modifico exitosamente", Toast.LENGTH_SHORT).show();
@@ -492,7 +500,16 @@ public class NavegacionMenu extends AppCompatActivity
                                 }
                             });
                         }};
-                    tr.start();
+                    if(verificacionCT()==true) {
+                        tr.start();
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"Rellene todos los campos", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
             }
         });
 
@@ -522,52 +539,83 @@ public class NavegacionMenu extends AppCompatActivity
         }
     });
         creartalo.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-            Thread tr=new Thread(){
-                @Override
-                public void run() {
-                    final String estado="1";
-                    final Conexion con=new Conexion();
-                    final String fecha=txtfecha.getText().toString();
-                    Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
-                            ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
-                    t.moveToFirst();
-                    final String idsup=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
-                    final String idsupnube=t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
-                    //talonario talo=new talonario(estado,fecha,idsup,idsupnube);
-                    //talo.insert(talo,mContentResolver);
+            @Override
+            public void onClick(View v) {
+                if (verificacionCrearTalonario() == true) {
+                    Thread tr = new Thread() {
+                        @Override
+                        public void run() {
+                            final String estado = "1";
+                            final Conexion con = new Conexion();
+                            final String fecha = txtfecha.getText().toString();
+                            Cursor t = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+                            t.moveToFirst();
+                            final String idsup = t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+                            final String idsupnube = t.getString(t.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+                            talonario talo = new talonario(estado, fecha, idsup, idsupnube);
+                            talo.insert(talo, mContentResolver);
 
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() { //int r=con.objJson(res);
+                                    //if (r>0){
+                                    //Intent i= new Intent(Login.this,NavegacionMenu.class);
+                                    //startActivity(i);
+                                    Cursor prueba = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                                            null, null, null);
+                                    String m = "";
+                                    String n = "";
+                                    while (prueba.moveToNext()) {
+                                        m = m + prueba.getString(prueba.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID)) + ",";
+                                        n = n + prueba.getString(prueba.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID)) + ",";
+                                    }
+
+                                    Toast.makeText(getApplicationContext(), n + " " + m, Toast.LENGTH_LONG).show();
+                                    //}else{
+                                    //   Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
+                                    //   }
+
+                                }
+                            });
+                        }
+                    };
+                    tr.start();
+                }else{
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run() { //int r=con.objJson(res);
-                            //if (r>0){
-                            //Intent i= new Intent(Login.this,NavegacionMenu.class);
-                            //startActivity(i);
-                            Cursor prueba=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
-                                    null,null,null);
-                            String m="";
-                            while(prueba.moveToNext()) {
-                                m=m+prueba.getString(prueba.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE))+",";
-                            }
-
-                            Toast.makeText(getApplicationContext(),m, Toast.LENGTH_LONG).show();
-                            //}else{
-                            //   Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
-                            //   }
-
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"Rellene todos los campos",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
-            };
-            tr.start();
-        }
-    }
-        );
+            }
+                }
 
+        );
+    }
+    public boolean verificacionCP(){
+        boolean b=false;
+        if(oldpass.getText().toString().isEmpty()==false && newpass.getText().toString().isEmpty()==false){
+            b=true;
+        }
+        return b;
+    }
+    public boolean verificacionCT(){
+        boolean b=false;
+        if(newphone.getText().toString().isEmpty()==false){
+            b=true;
+        }
+        return b;
     }
     ////////////////////////////////////////PERMISOS PARA CAMARA//////////////////////////
-
+    public boolean verificacionCrearTalonario(){
+        boolean b=false;
+        if(txtfecha.getText().toString().isEmpty()==false){
+            b=true;
+        }
+        return b;
+    }
 
 
     @Override
@@ -618,8 +666,7 @@ public class NavegacionMenu extends AppCompatActivity
         Perfil.setVisibility(View.INVISIBLE);
         CambiarPass.setVisibility(View.INVISIBLE);
         CambiarTelf.setVisibility(View.INVISIBLE);
-       // CambiarPass.setVisibility(View.INVISIBLE);
-       // CambiarTelf.setVisibility(View.INVISIBLE);
+        FrameCrearTalonario.setVisibility(View.INVISIBLE);
         if (id == R.id.nav_camera) {
             String Sfecha = getCurrentTimeStamp();
             Vcontfecha.setText(Sfecha);
@@ -639,8 +686,9 @@ public class NavegacionMenu extends AppCompatActivity
             cargo.moveToFirst();
             String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
 
+
             if (c.equals("2")) {
-                //generarGestionarUser();
+                generarGestionarUser();
                 SubjectNames.clear();// = new ArrayList<>();
                 DataAdapterClassList.clear();
                 recyclerView.setAdapter(recyclerViewadapter);

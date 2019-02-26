@@ -16,17 +16,50 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/editName"
+        <TextView
+            android:id="@+id/Editview0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
             android:ems="10"
+            android:text="REGISTRAR NUEVO USUARIO"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp"
+            android:textAlignment="center"/>
+        <TextView
+            android:id="@+id/Editview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Nombre completo"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
             android:hint="@string/reg_nom"
             android:inputType="textPersonName"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
+        <TextView
+            android:id="@+id/Editview2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Carnet de identidad"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
         <EditText
@@ -34,20 +67,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="50dp"
             android:ems="10"
             android:hint="@string/reg_ci"
             android:inputType="textPersonName"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
-
+        <TextView
+            android:id="@+id/Editview3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Telefono"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
         <EditText
             android:id="@+id/editTelf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="50dp"
             android:ems="10"
             android:hint="@string/reg_telf"
@@ -55,13 +98,12 @@
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
 
-
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:layout_marginBottom="8dp"
             android:text="@string/reg_fech_nac"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -80,17 +122,38 @@
             android:hint="Año/Mes/Dia"
 
             android:inputType="date" />
-
+        <TextView
+            android:id="@+id/Editview5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Usuario"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="50dp"
             android:ems="10"
-            android:hint="@string/reg_email"
-            android:inputType="textEmailAddress" />
+            android:hint="Usuario" />
+
+        <TextView
+            android:id="@+id/Editview6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Contraseña"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
 
         <EditText
             android:id="@+id/editPass"
@@ -98,11 +161,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:ems="10"
-            android:hint="@string/reg_pass"
+            android:hint="Contraseña"
             android:inputType="textPassword" />
-
+        <TextView
+            android:id="@+id/Editview7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:text="Cargo"
+            tools:layout_editor_absoluteX="139dp"
+            tools:layout_editor_absoluteY="63dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,7 +188,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginRight="50dp" />
         </LinearLayout>
 

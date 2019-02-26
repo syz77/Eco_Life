@@ -59,7 +59,8 @@
             android:layout_marginTop="100dp"
             android:ems="10"
             android:hint="Contraseña"
-            android:textSize="24dp" />
+            android:textSize="24dp"
+            android:inputType="textPassword"/>
         <TextView
             android:id="@+id/textView17"
             android:layout_width="match_parent"
@@ -83,7 +84,8 @@
             android:layout_marginTop="220dp"
             android:hint="Nueva Contraseña"
             android:ems="10"
-            android:textSize="24dp" />
+            android:textSize="24dp"
+            android:inputType="textPassword"/>
 
         <Button
             android:id="@+id/button5"

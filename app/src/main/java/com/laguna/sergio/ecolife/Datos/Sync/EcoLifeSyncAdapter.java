@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.laguna.sergio.ecolife.Datos.persona;
 
 import com.laguna.sergio.ecolife.Conexion;
@@ -66,7 +68,6 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE + "=0", null, null);
                 Cursor people = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                         ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + "=0", null, null);
-
                 if (people != null) {
                     insertData(people, "persona");
                 }
@@ -74,10 +75,10 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     insertData(gps, "gps");
                 }
                 if (ventacontado != null) {
-                    insertData(ventacontado, "ventacontado");
+                    insertData(ventacontado, "venta_contado");
                 }
                 if (detallecontado != null) {
-                    insertData(detallecontado, "detallecontado");
+                    insertData(detallecontado, "detalle_contado");
                 }
                 if (gps != null) {
                     insertData(gps, "gps");
@@ -86,7 +87,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     insertData(talonario, "talonario");
                 }
                 if (ventacredito != null) {
-                    insertData(ventacredito, "ventacredito");
+                    insertData(ventacredito, "venta_credito");
                 }
                 if (cobro != null) {
                     insertData(cobro, "cobro");
@@ -106,10 +107,12 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentValues content=new ContentValues();
         String respuesta,where;
         String[] args;
+        Log.d(LOG_TAG, "Starting sync insertData");
         switch (b){
             case "talonario":
                 String Testado,Tfecha,Tid_sup,Tid;
                 where=ecolifedb.EcoLifeEntry._TALONARIOID+"=?";
+                Log.d(LOG_TAG, "Starting sync Talonario");
                 while (c.moveToNext()){
                     Tid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
                     Testado=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO));
@@ -121,12 +124,14 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID,Integer.parseInt(respuesta));
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,content,where,args);
+                    Log.d(LOG_TAG, "Talonario sync successfull");
                 }
 
                 break;
             case "gps":
                 String Glatitud,Glongitud,Gid;
                 where=ecolifedb.EcoLifeEntry._GPSID+"=?";
+                Log.d(LOG_TAG, "Starting sync GPS");
                 while (c.moveToNext()){
                     Gid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
                     Glatitud=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD));
@@ -137,12 +142,14 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID,Integer.parseInt(respuesta));
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,content,where,args);
+                    Log.d(LOG_TAG, "GPS sync successfull");
                 }
 
                 break;
             case "persona":
                 String Pid,Pnombre,Ppassword,Pcorreo,Ptelefono,Pfecha,Pci,Pestado,Prolid;
                 where=ecolifedb.EcoLifeEntry._PERSONAID+"=?";
+                Log.d(LOG_TAG, "Starting sync persona");
                 while (c.moveToNext()){
                     Pid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
                     Pnombre=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NOMBRE));
@@ -159,12 +166,14 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID,Integer.parseInt(respuesta));
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,content,where,args);
+                    Log.d(LOG_TAG, "Persona sync successfull");
                 }
 
                 break;
             case "venta_contado":
                 String VCTid, VCTnombre, VCTtelefono, VCTzona, VCTvendedor, VCTdireccion,VCTfecha,VCTprodid,VCTsupidnube;
                 where=ecolifedb.EcoLifeEntry._VENTA_CONTADOID+"=?";
+                Log.d(LOG_TAG, "Starting sync venta contado");
                 while (c.moveToNext()){
                     VCTid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CONTADOID));
                     VCTnombre=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NOMBRE));
@@ -182,6 +191,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID,Integer.parseInt(respuesta));
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO,content,where,args);
+                    Log.d(LOG_TAG, "Venta contado sync successfull");
                 }
 
                 break;
@@ -189,6 +199,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 String VCid, VCnombre, VCtelefono, VCzona, VCvendedor, VCdireccion,VCfecha,VCprodid,VCfoto,VCtalonarioidnube
                         ,VCfotonombre;
                 where=ecolifedb.EcoLifeEntry._VENTA_CREDITOID+"=?";
+                Log.d(LOG_TAG, "Starting sync venta credito");
                 while (c.moveToNext()){
                     VCid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
                     VCnombre=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NOMBRE));
@@ -209,6 +220,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,Integer.parseInt(respuesta));
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content,where,args);
+                        Log.d(LOG_TAG, "Venta credito sync successfull");
                     }else{
                         String talonarioid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID));
                         ContentValues content2=new ContentValues();
@@ -226,6 +238,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             case "detalle_contado":
                 String DCid,DCprod_id,DCventa_nubeid;
                 where=ecolifedb.EcoLifeEntry._DETALLE_CONTADOID+"=?";
+                Log.d(LOG_TAG, "Starting sync detalle contado");
                 while (c.moveToNext()){
                     DCid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._DETALLE_CONTADOID));
                     DCprod_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_PRODID));
@@ -237,6 +250,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,Integer.parseInt(respuesta));
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content,where,args);
+                        Log.d(LOG_TAG, "Detalle contado sync successfull");
                     }else{
                         String ventacontadoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTAID));
                         ContentValues content2=new ContentValues();
@@ -255,6 +269,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             case "cobro":
                 String Cid, Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id, Cgpsnube_id;
                 where=ecolifedb.EcoLifeEntry._COBROID+"=?";
+                Log.d(LOG_TAG, "Starting sync cobro");
                 while (c.moveToNext()){
                     Cid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._COBROID));
                     Cmonto=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO));
@@ -270,6 +285,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID,Integer.parseInt(respuesta));
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content,where,args);
+                        Log.d(LOG_TAG, "Cobro sync successfull");
                     }else{
                         String creditoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID));
                         String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));
