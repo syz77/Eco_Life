@@ -279,7 +279,6 @@ public class NavegacionMenu extends AppCompatActivity
         });
 ////////////////////////////////////////////////////////////////////////////////////////////
         RegUser= findViewById(R.id.button_reg_user);
-        ImgEditUser= findViewById(R.id.editarGU);
         //btn_hacerfoto = findViewById(R.id.vccamara);
         vcSacarFoto= findViewById(R.id.vcsacarfoto);
         //img = findViewById(R.id.img);
@@ -368,8 +367,7 @@ public class NavegacionMenu extends AppCompatActivity
 
 
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)) {
-                    Intent intent = new Intent(NavegacionMenu.this, RegUser.class);
-                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -380,8 +378,8 @@ public class NavegacionMenu extends AppCompatActivity
                 ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (ChildViewG != null && ImgEditUser.onTouchEvent(motionEvent)){
-                    Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
-                    startActivity(intent);
+                    //Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
+                    //startActivity(intent);
 
                 }
             }
@@ -678,6 +676,10 @@ public class NavegacionMenu extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
             generarHistorialTalo();
+            SubjectNames.clear();// = new ArrayList<>();
+            DataAdapterClassList.clear();
+            recyclerView.setAdapter(recyclerViewadapter);
+            JSON_WEB_CALL();
             Historial.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_manage) {
@@ -687,7 +689,7 @@ public class NavegacionMenu extends AppCompatActivity
             String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
 
 
-            if (c.equals("2")) {
+            if (c.equals("1")) {
                 generarGestionarUser();
                 SubjectNames.clear();// = new ArrayList<>();
                 DataAdapterClassList.clear();
@@ -695,7 +697,7 @@ public class NavegacionMenu extends AppCompatActivity
                 JSON_WEB_CALL();
                 GesUsuario.setVisibility(View.VISIBLE);
             }else{
-                if (c.equals("1")){
+                if (c.equals("2")){
                     cargarperfil();
                     Perfil.setVisibility(View.VISIBLE);
                 }
@@ -774,7 +776,6 @@ public class NavegacionMenu extends AppCompatActivity
         }
         return false;
     }
-
     ////////////////////////////Generamos la lista del historial de los talonarios//////////////////
     public void generarHistorialTalo(){
 
@@ -799,10 +800,16 @@ public class NavegacionMenu extends AppCompatActivity
         startActivity(intent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
+    public void TalonarioUsuario(View v){
+        Intent intent = new Intent(NavegacionMenu.this, RegUser.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
 
     public void editarUsuario(View v){
         Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
         startActivity(intent);
+        Toast.makeText(getApplicationContext(),"si",Toast.LENGTH_SHORT).show();
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
@@ -881,8 +888,6 @@ public class NavegacionMenu extends AppCompatActivity
         }else{
             return bitmap;
         }
-
-
     }
 
     public static String getCurrentTimeStamp(){

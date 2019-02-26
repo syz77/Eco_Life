@@ -39,7 +39,7 @@ public class GestionarUser extends AppCompatActivity {
         DataAdapterClassListG = new ArrayList<>();
         DataAdapterClassListG.clear();
         //recyclerViewR.setAdapter(recyclerViewadapterR);
-        final Conexion con = new Conexion();
+        /*final Conexion con = new Conexion();
         final String correo="sdfasdf";
         final String pass="sdfsad";
 
@@ -72,7 +72,7 @@ public class GestionarUser extends AppCompatActivity {
 
             DataAdapterClassListG.add(GetDataAdapter3);
 
-        }
+        }*/
 
         return DataAdapterClassListG;
         //recyclerViewadapterR = new RecyclerAdapTalo(DataAdapterClassListR, this);
