@@ -22,7 +22,7 @@ import com.laguna.sergio.ecolife.Datos.ecolifedb;
 
 public class EditarUser extends AppCompatActivity {
 
-    Spinner SCargo,SEstado;
+    Spinner SEstado;
     String txtCargo, txtEstado;
     ContentResolver mContentResolver;
     Button btnEditUser;
@@ -37,24 +37,7 @@ public class EditarUser extends AppCompatActivity {
         edituser=findViewById(R.id.editUsuario);
         editpass=findViewById(R.id.editContrase);
         p=new persona();
-        SCargo=(Spinner) findViewById(R.id.spinnerCargo);
-        String[] cargo = {"Supervisor","Administrador"};
-        SCargo.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,cargo));
-        int a=Integer.parseInt(p.Rol);
-        SCargo.setSelection(a);
-        SCargo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(parent.getContext(), (String) parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
-                txtCargo = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        int b=Integer.parseInt(p.Estado);
+        int b=0;//Integer.parseInt(p.Estado);
         SEstado=(Spinner) findViewById(R.id.spinnerEstado);
         String[] estado = {"Habilitado","Vacaciones","Bloqueado"};
         SEstado.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,estado));
@@ -125,36 +108,27 @@ public class EditarUser extends AppCompatActivity {
 
     public String conver(String a){
         String b="";
-        if(a.equals("Supervisor")){
-            b="2";
+        if(a.equals("Habilitado")){
+            b="1";
         }else{
-            if(a.equals("Administrador")){
-                b="1";
-            }else{
-                if(a.equals("Habilitado")){
-                    b="1";
-                }else{
-                    if(a.equals("Vacaciones")){
-                        b="2";
-                    }
-                    else{
-                        if(a.equals("Bloqueado")){
-                            b="0";
-                        }
-                    }
+            if(a.equals("Vacaciones")){
+                b="2";
+                }
+                else{
+                if(a.equals("Bloqueado")){
+                    b="0";
                 }
             }
-
         }
         return b;
     }
 
-    @Override
+    /*@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Intent intent = new Intent(EditarUser.this, NavegacionMenu.class);
             startActivity(intent);
         }
         return false;
-    }
+    }*/
 }
