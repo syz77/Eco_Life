@@ -85,6 +85,7 @@ import java.util.List;
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
 import com.laguna.sergio.ecolife.Datos.persona;
 import com.laguna.sergio.ecolife.Datos.talonario;
+import com.laguna.sergio.ecolife.Datos.venta_credito;
 
 
 import org.json.JSONArray;
@@ -163,7 +164,7 @@ public class NavegacionMenu extends AppCompatActivity
     View ChildView ;
     int RecyclerViewClickedItemPOS;
 
-
+    String HTTP_SERVER_URLT = "http://u209922277.hostingerapp.com/servicios_ecolife/CargarListaTalo.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,18 +243,18 @@ public class NavegacionMenu extends AppCompatActivity
                                                     talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
                                                     talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE));
 
+                                                    //Toast.makeText(getApplicationContext(), nombreCVC.getText().toString(), Toast.LENGTH_SHORT).show();
 
                                                     //Thread tr = new Thread() {
                                                     //    @Override
                                                     //    public void run() {
-                                                            if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(), telefonoVC.getText().toString(), direccionVC.getText().toString(), zonaVC.getText().toString(), fechaVC, nombrePVC.getText().toString(), vcontprod, gpsVC, talolocal, talonube)) {
-
-                                                                //vc.EnviarRegistrar(nombreCVC.getText().toString(),telefonoVC.getText().toString(),direccionVC.getText().toString()
-                                                                //      ,zonaVC.getText().toString(),fechaVC,nombrePVC.getText().toString(),imageFileName,fotoVC,
-                                                                //    productoVC.getText().toString(),idTalo);
-                                                                //final Conexion con = new Conexion();
-                                                                Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
-                                                                //final String res = con.InsertarFoto(imageFileName, img);/dsadas
+                                                            //if (vc.CheckEditTextIsEmptyOrNot(nombreCVC.getText().toString(), telefonoVC.getText().toString(), direccionVC.getText().toString(), zonaVC.getText().toString(), fechaVC, nombrePVC.getText().toString(), vcontprod, gpsVC, talolocal, talonube))
+                                                            //if(TextUtils.isEmpty(nombreCVC.getText().toString())&&TextUtils.isEmpty(telefonoVC.getText().toString())&&TextUtils.isEmpty(direccionVC.getText().toString())&&TextUtils.isEmpty(zonaVC.getText().toString())&&TextUtils.isEmpty(fechaVC)&&TextUtils.isEmpty(nombrePVC.getText().toString())
+                                                            //&&TextUtils.isEmpty(vcontprod)&&TextUtils.isEmpty(gpsVC)&&TextUtils.isEmpty(talolocal)&&TextUtils.isEmpty(talonube))
+                                                            if(nombreCVC.getText().toString().equals("")||telefonoVC.getText().toString().equals("")||direccionVC.getText().toString().equals("")||zonaVC.getText().toString().equals("")||fechaVC.equals("")||nombrePVC.getText().toString().equals("")
+                                                                    ||vcontprod.equals("")||gpsVC.equals("")||talolocal.equals("")||talonube.equals(""))
+                                                            {
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
                                                                 runOnUiThread(new Runnable() {
                                                                     @Override
                                                                     public void run() {
@@ -261,15 +262,21 @@ public class NavegacionMenu extends AppCompatActivity
                                                                     }
                                                                 });
                                                             } else {
-                                                                Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(getApplicationContext(), "Todos los datos correctos", Toast.LENGTH_SHORT).show();
+
+                                                                final venta_credito vcred= new venta_credito(nombreCVC.getText().toString(),telefonoVC.getText().toString(),zonaVC.getText().toString(),nombrePVC.getText().toString(),direccionVC.getText().toString(),
+                                                                        fechaVC,vcontprod,talolocal,talonube,fotoVC,imageFileName);
+                                                                //vcred.insert(vcred,);
+
+                                                                }
                                                             }
                                                        // }
                                                     //};
                                                     //tr.start();
-                                                }
+
                                             }
-                                        }
-        );
+
+        });
 ////////////////////////////////////////////////////////////////////////////////////////////
         RegUser= findViewById(R.id.button_reg_user);
         ImgEditUser= findViewById(R.id.editarGU);
@@ -954,6 +961,76 @@ public class NavegacionMenu extends AppCompatActivity
                 GetDataAdapter2.setEstado(json.getString("estado"));
 
 
+            }
+            catch (JSONException e)
+            {
+
+                e.printStackTrace();
+
+            }
+
+            DataAdapterClassList.add(GetDataAdapter2);
+
+        }
+
+        //progressBar.setVisibility(View.GONE);
+        //List<SolicitudRecycle> items = new ArrayList<>();
+
+
+        recyclerViewadapter = new RecyclerAdapGesU(DataAdapterClassList, this);
+
+        recyclerView.setAdapter(recyclerViewadapter);
+    }
+
+    /////////////////////////////////////////////////Cargar las listas de talonario//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void JSON_WEB_CALL_TALO(){
+
+        SubjectNames.clear();// = new ArrayList<>();
+        DataAdapterClassList.clear();
+        recyclerView.setAdapter(recyclerViewadapter);
+
+        jsonArrayRequest = new JsonArrayRequest(HTTP_SERVER_URLT,
+
+                new com.android.volley.Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        JSON_PARSE_DATA_AFTER_WEBCALL(response);
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALL_TALO(JSONArray array){
+
+        for(int i = 0; i<array.length(); i++) {
+
+            DataAdapterGesU GetDataAdapter2 = new DataAdapterGesU();
+
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                GetDataAdapter2.setNombre(json.getString("id"));
+
+                GetDataAdapter2.setCargo(json.getString("estado"));
+
+                //Adding subject name here to show on click event.
+                //SubjectNames.add(json.getString("gym"));
+
+                GetDataAdapter2.setEstado(json.getString("fecha_c"));
+
+                GetDataAdapter2.setEstado(json.getString("id_supervisor"));
             }
             catch (JSONException e)
             {
