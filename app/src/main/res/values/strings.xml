@@ -66,5 +66,14 @@
     <string name="vcont_titulo">CONTADO</string>
     <string name="vcont_agregar">AGREGAR</string>
 
+    <string name="htvcred_atras">Volver</string>
+
+    <string name="gutalo_expirado">Expirados</string>
+
+    <string name="nav_header_ecolife">ECOLIFE S.R.L.</string>
+    <string name="nav_header_telfverde">75522112</string>
+
+
+
 
 </resources>

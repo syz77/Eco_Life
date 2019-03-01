@@ -54,10 +54,10 @@ public class RecyclerAdapGesU extends RecyclerView.Adapter<RecyclerAdapGesU.View
         if (dataAdapter.getEstado().equals("1")){
             viewHolder.ImaViewEstado.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.smiley));
             viewHolder.TextViewEstado.setText("Estado: Activo");
-        }else if (dataAdapter.getEstado().equals("2")){
+        }else if (dataAdapter.getEstado().equals("0")){
             viewHolder.ImaViewEstado.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.candado));
             viewHolder.TextViewEstado.setText("Estado: Bloqueado");
-        }else if (dataAdapter.getEstado().equals("3")) {
+        }else if (dataAdapter.getEstado().equals("2")) {
             viewHolder.ImaViewEstado.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.parque));
             viewHolder.TextViewEstado.setText("Estado: Vacaciones");
         }

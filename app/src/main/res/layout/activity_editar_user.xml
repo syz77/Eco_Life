@@ -44,6 +44,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="0dp"
             android:layout_marginRight="50dp"
+            android:clickable="false"
             android:ems="10"
             android:hint="Usuario"
             android:inputType="textPersonName"
@@ -80,10 +81,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
             android:ems="10"
             android:text="Estado"
+            android:textSize="18sp"
             tools:layout_editor_absoluteX="139dp"
             tools:layout_editor_absoluteY="63dp" />
         <LinearLayout
@@ -120,12 +122,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
-            android:layout_marginTop="60dp"
             android:layout_marginRight="60dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/ic_launcher_background"
+            android:onClick="buttonEditarUser"
             android:text="@string/reg_guardar"
-            android:textSize="32dp"
-            android:textColor="@color/colorBlanco" />
+            android:textColor="@color/colorBlanco"
+            android:textSize="32dp" />
 
     </LinearLayout>
 </FrameLayout>
