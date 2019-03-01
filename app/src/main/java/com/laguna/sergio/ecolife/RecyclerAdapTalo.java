@@ -42,6 +42,7 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
         viewHolder.TextViewNroTalo.setText("Nro de talonario: "+dataAdapter.getNroTalo());//raidlvl
 
         viewHolder.TextViewFecha.setText("Fecha: "+dataAdapter.getFechaTalo());//gym
+        viewHolder.TextEstado.setText("Estado: "+dataAdapter.getEstado());
 
     }
 
@@ -60,6 +61,7 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
 
         public TextView TextViewNroTalo;
         public TextView TextViewFecha;
+        public TextView TextEstado;
 
 
         public ViewHolder(View itemView) {
@@ -68,6 +70,7 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
 
             TextViewNroTalo = itemView.findViewById(R.id.nroTalonario) ;
             TextViewFecha = itemView.findViewById(R.id.fechaTalonario) ;
+            TextEstado=itemView.findViewById(R.id.estadoTalonario);
 
 
         }

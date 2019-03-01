@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 
 public class talonario {
-    private String Estado,FechaC,Supervisorid,Supervisornubeid,Online;
+    public String Estado,FechaC,Supervisorid,Supervisornubeid,Online,Id;
 
     public talonario(){
         Estado=null;FechaC=null;Supervisorid=null;Supervisornubeid=null; Online="0";

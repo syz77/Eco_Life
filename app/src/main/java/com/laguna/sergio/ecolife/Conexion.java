@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
 
@@ -26,6 +27,7 @@ public class Conexion {
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
+    String s;
 
     public String login(String user, String pass){
         String parametros="email="+user+"&pass="+pass;
@@ -104,7 +106,7 @@ public class Conexion {
     public String InsertarVentaCredito(String nombre, String telefono,String direccion, String zona, String fecha,
                                        String vendedor, String foto, String id_prod, String id_talonario){
         String parametros="nombre="+nombre+"&telefono="+telefono+"&direccion="+direccion+"&zona="+zona+
-                "&fecha="+fecha+"&vendedor="+vendedor+"&foto="+foto+"&id_sup="+id_prod+"&id_talonario="+id_talonario;
+                "&fecha="+fecha+"&vendedor="+vendedor+"&foto="+foto+"&id_prod="+id_prod+"&id_talonario="+id_talonario;
         HttpURLConnection connection=null;
         String respuesta="";
         try{
@@ -129,8 +131,8 @@ public class Conexion {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void InsertarVentaCreditoFoto(final String nombre,final String telefono,final String direccion,final String zona,final String fecha,
-                                         final String vendedor,final String foto,final String id_prod,final String id_talonario){
-
+                                         final String vendedor,final String fotonombre,final String foto,final String id_prod,final String id_talonario
+                                            ,final String id,final ContentResolver mContentResolver){
         class SolicitudFunctionClass extends AsyncTask<String,Void,String> {
 
             @Override
@@ -144,22 +146,22 @@ public class Conexion {
             public void onPostExecute(String httpResponseMsg) {
 
                 super.onPostExecute(httpResponseMsg);
+                String[] args=new String[]{id};
+                ContentValues values=new ContentValues();
+                String nubeid=convert(httpResponseMsg);
+                String online="1";
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,nubeid);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE,online);
+                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,values,
+                        ecolifedb.EcoLifeEntry._VENTA_CREDITOID+"=?",args);
 
-                progressDialog.dismiss();
-                if (httpResponseMsg.toString().equals("Registration Successfully")) {
-
-                    //Toast.makeText(Menu_principal.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
-                    //JSON_WEB_CALL();
-
-                }
-                //Toast.makeText(Menu_principal.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
 
             }
 
             @Override
             protected String doInBackground(String... params) {
 
-                hashMap.put("nombre",params[0]);
+                hashMap.put("nombreC",params[0]);
 
                 hashMap.put("telefono",params[1]);
 
@@ -171,20 +173,36 @@ public class Conexion {
 
                 hashMap.put("vendedor",params[5]);
 
-                hashMap.put("foto",params[6]);
+                hashMap.put("fotonombre",params[6]);
 
-                hashMap.put("producto",params[7]);
+                hashMap.put("foto",params[7]);
 
-                hashMap.put("id_talonario",params[8]);
+                hashMap.put("id_prod",params[8]);
+
+                hashMap.put("id_talonario",params[9]);
 
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
 
                 return finalResult;
             }
+            public String convert(String s){
+                String id="";
+                try {
+                    JSONArray json = new JSONArray(s);
+                    //for (int i = 0; i < json.length(); i++) {
+                    JSONObject c = json.getJSONObject(0);
+
+                    id = c.getString("MAX(id)");
+                    //}
+
+                }catch( final JSONException e){
+
+                }
+                return id;
+            }
         }
         SolicitudFunctionClass userRegisterFunctionClass = new SolicitudFunctionClass();
-        userRegisterFunctionClass.execute(nombre,telefono,direccion,zona,fecha,vendedor,foto,id_prod,id_talonario);
-
+        userRegisterFunctionClass.execute(nombre,telefono,direccion,zona,fecha,vendedor,fotonombre,foto,id_prod,id_talonario);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -453,6 +471,29 @@ public class Conexion {
         String respuesta="";
         try{
             URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todoPersona.php?"+parametros);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String estadoverf(String user, String pass){
+        String parametros="email="+user+"&pass="+pass;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/estadoverif.php?email="+user+"&pass="+pass);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));

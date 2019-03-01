@@ -35,6 +35,8 @@
     <include layout="@layout/cambiarpass"/>
     <include layout="@layout/cambiar_telf" />
     <include layout="@layout/crear_talonario"/>
+    <include layout="@layout/venta_cred_list"/>
+    <include layout="@layout/cobro_list"/>
 
 
 
