@@ -25,8 +25,12 @@
     <include layout="@layout/activity_venta_credito" />
     <include layout="@layout/inicio" />
     <include layout="@layout/activity_talonarios" />
+    <include layout="@layout/activity_historial_talo"/>
+    <include layout="@layout/activity_htvc_info" />
     <include layout="@layout/activity_ventas" />
+    <include layout="@layout/activity_ht_ventcred" />
     <include layout="@layout/activity_gestionar_user" />
+    <include layout="@layout/activity_gestuser_talo" />
     <include layout="@layout/activity_perfil" />
     <include layout="@layout/cambiarpass"/>
     <include layout="@layout/cambiar_telf" />

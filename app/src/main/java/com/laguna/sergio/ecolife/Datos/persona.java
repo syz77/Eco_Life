@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class persona implements Serializable {
-    public String Nombre,Correo,Password,Telefono,Fecha,Ci,Estado,Rol,Online;
+    public String Nombre,Correo,Password,Telefono,Fecha,Ci,Estado,Rol,Online,IdUsuario;
     public final String TAG = persona.class.getSimpleName();
 
     public persona(){

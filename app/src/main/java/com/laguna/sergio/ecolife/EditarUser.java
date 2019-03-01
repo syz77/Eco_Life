@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.server.converter.StringToIntConverter;
@@ -20,14 +22,25 @@ import com.laguna.sergio.ecolife.Datos.persona;
 
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.HashMap;
+
 public class EditarUser extends AppCompatActivity {
 
     Spinner SEstado;
-    String txtCargo, txtEstado;
+    String txtCargo, txtEstado,IDusuario;
     ContentResolver mContentResolver;
     Button btnEditUser;
-    persona p;
+    //DataAdapterGesU dataAdapterGesU;
     EditText edituser,editpass;
+    TextView TextEstado;
+
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
+    String finalResult;
+    String HttpURLGUEdit = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarUsuario.php";// Verificacion de Imei en la nube
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +49,13 @@ public class EditarUser extends AppCompatActivity {
         btnEditUser=findViewById(R.id.btnEdituser);
         edituser=findViewById(R.id.editUsuario);
         editpass=findViewById(R.id.editContrase);
-        p=new persona();
+        DataAdapterGesU dataAdapterGu=new DataAdapterGesU();
+        TextEstado=findViewById(R.id.EditviewEstado);
         int b=0;//Integer.parseInt(p.Estado);
+        persona personaGUEdit = (persona) getIntent().getExtras().getSerializable("Persona");
+
+
+
         SEstado=(Spinner) findViewById(R.id.spinnerEstado);
         String[] estado = {"Habilitado","Vacaciones","Bloqueado"};
         SEstado.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,estado));
@@ -55,49 +73,33 @@ public class EditarUser extends AppCompatActivity {
             }
         });
 
-        edituser.setText(p.Correo);
-        editpass.setText(p.Password);
+        edituser.setText(personaGUEdit.Nombre);
+        editpass.setText(personaGUEdit.Password);
+        IDusuario=personaGUEdit.IdUsuario;
+        if (personaGUEdit.Estado.equals("0")){
+            TextEstado.setText("Estado actual: Bloqueado");
+        }else if (personaGUEdit.Estado.equals("1")){
+            TextEstado.setText("Estado actual: Activo");
+        }else if (personaGUEdit.Estado.equals("2")){
+            TextEstado.setText("Estado actual: Vacaciones");
+        }
 
-
-        btnEditUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String user=p.Correo;
-                final String newuser = edituser.getText().toString();
-                final String pass = editpass.getText().toString();
-                final String estado=conver(txtEstado);
-                final String cargo=conver(txtCargo);
-                Thread tr = new Thread() {
-                    @Override
-                    public void run() {
-                        final Conexion con2 = new Conexion();
-                        final String r = con2.UpdateUser(user,newuser, pass,estado,cargo);
-                        final int i = con2.objJson(r);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (i > 0) {
-                                    Toast.makeText(getApplicationContext(), "El telefono se modifico exitosamente", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Error de conexion a internet", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                };
-                if(verif()) {
-                    tr.start();
-                }else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),"Rellene todos los campos", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
     }
+
+    public void buttonEditarUser(View v){
+        String estado = conver(txtEstado);
+        String pass = editpass.getText().toString();
+        if(editpass.getText().toString().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Debe llenar la contraseña", Toast.LENGTH_SHORT).show();
+            //EnviarEditUser(IDusuario, editpass.toString(), estado);
+        }
+        else{
+            //Toast.makeText(getApplicationContext(), "Todo correcto "+estado, Toast.LENGTH_SHORT).show();
+            //String estado = conver(txtEstado);
+            EnviarEditUser(IDusuario, pass, estado);
+            }
+    }
+
     public boolean verif(){
         boolean b=false;
         if(edituser.getText().toString().isEmpty()==false &&editpass.getText().toString().isEmpty()==false){
@@ -123,12 +125,41 @@ public class EditarUser extends AppCompatActivity {
         return b;
     }
 
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent intent = new Intent(EditarUser.this, NavegacionMenu.class);
-            startActivity(intent);
+    public void EnviarEditUser(final String Id,final String Password, final String Estado){
+
+        class HTVentCredCobroFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+                //progressDialog.dismiss();
+                if (httpResponseMsg.toString().equals("Registration Successfully")) {
+                }
+                Toast.makeText(EditarUser.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("id",params[0]);
+                hashMap.put("password",params[1]);
+                hashMap.put("estado",params[2]);
+
+
+                finalResult = httpParse.postRequest(hashMap, HttpURLGUEdit);
+
+                return finalResult;
+            }
         }
-        return false;
-    }*/
+        HTVentCredCobroFunctionClass RegisterFunctionClass = new HTVentCredCobroFunctionClass();
+        RegisterFunctionClass.execute(Id,Password,Estado);
+    }
 }

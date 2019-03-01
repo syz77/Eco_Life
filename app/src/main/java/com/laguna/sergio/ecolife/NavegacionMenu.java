@@ -41,6 +41,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ViewDebug;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.view.KeyEvent;
@@ -54,6 +55,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -87,14 +89,9 @@ import com.laguna.sergio.ecolife.Datos.persona;
 import com.laguna.sergio.ecolife.Datos.talonario;
 import com.laguna.sergio.ecolife.Datos.venta_credito;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URI;
-import java.util.Map;
-import java.util.UUID;
 
 import static android.view.View.VISIBLE;
 import static android.Manifest.permission.CAMERA;
@@ -103,20 +100,54 @@ import static android.support.v4.content.FileProvider.getUriForFile;
 import static java.security.AccessController.getContext;
 
 public class NavegacionMenu extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario;
+    FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo;
     ////////////////////Para historial talonarios///////////////////////////////
     List<DataAdapterTalo> DataAdapterClassListT;
     RecyclerView recyclerViewT;
     RecyclerView.Adapter recyclerViewadapterT;
     RecyclerView.LayoutManager recyclerViewlayoutManagerT;
+
+    JSONArray jsonArray = null;
+    String FinalJSonObject = "";
+    List<DataAdapterHT> DataAdapterClassListHT;
+    RecyclerView recyclerViewHT;
+    RecyclerView.Adapter recyclerViewadapterHT;
+    ArrayList<String> SubjectNamesHTid,SubjectNamesHTfech,SubjectNamesHTestado;
+    View ChildViewHT;
+    ////////////////////Para historial talonarios venta credito///////////////////////////////
+    Button bottomHTVC;
+    List<DataAdapterHTVC> DataAdapterClassListHTVC;
+    RecyclerView.LayoutManager recyclerViewlayoutManagerHTVC;
+    RecyclerView recyclerViewHTVC;
+    RecyclerView.Adapter recyclerViewadapterHTVC;
+    JSONArray jsonArrayHTCV = null;
+    String FinalJSonObjectHTVC = "";
+    TextView tcardhtvcid,tcardhtvcfech;
+    ArrayList<String> SubjectNamesHTVCid, SubjectNamesHTVCnombre,SubjectNamesHTVCtelf,SubjectNamesHTVCdir,SubjectNamesHTVCzona
+            ,SubjectNamesHTVCfech,SubjectNamesHTVCvendedor,SubjectNamesHTVCfoto;
+
+    //////////////////////////////Para informacion de la venta al credito en historial talonario////////////////////////////////////////////
+    TextView nombreHTVCinfo,telefonoHTVCinfo,zonaHTVCinfo,vendedorHTVCinfo,direccionHTVCinfo,fechaHTVCinfo;
+    RecyclerView recyclerViewHTVCinfo;
+    RecyclerView.Adapter recyclerViewadapterHTVCinfo;
+    List<DataAdapterHTVCinfo> DataAdapterClassListHTVCinfo;
+    JSONArray jsonArrayHTCVinfo = null;
+    ArrayList<String> SubjectNamesHTVCGPS;
     ////////////////////Para Gestionar usuarios///////////////////////////////////
     List<DataAdapterGesU> DataAdapterClassListG;
     RecyclerView recyclerViewG;
     RecyclerView.Adapter recyclerViewadapterG;
     RecyclerView.LayoutManager recyclerViewlayoutManagerG;
     ImageView ImgEditUser;
+    View ChildViewHTVC ;
+    View ChildViewR ;//para enviar los datos de recyclerview tocado
+    int RecyclerViewClickedItemPOSR ;
+
+    DataAdapterGesU dataAdapterGesU;
+    persona personaGU;
+    ArrayList<String> SubjectGUid, SubjectGUnombre, SubjectGUcargo, SubjectGUpass, SubjectGUestado;
 
     /////////////////////////Para ventas al credito/////////////////////////////////////////////////
     ImageView vcCamara;
@@ -140,7 +171,7 @@ public class NavegacionMenu extends AppCompatActivity
     TextView Vcontfecha,Vcfecha;
     String vcontprod;
     /////////////////////Para seleccionar la lista de gestion de usuario///////////////////////////
-    View ChildViewG ;
+    View ChildViewG;
     Button RegUser;
     ContentResolver mContentResolver;
     TextView nombre,usuario,ci,cargo,telefono;
@@ -151,7 +182,7 @@ public class NavegacionMenu extends AppCompatActivity
     //EditText oldpass,newpass,newphone;
     //Button Cpass,Ctelf,CambiarC,CambiarT;
 
-    JSONArray jsonArray = null;
+///////////////////////////////////Para cargar lista de usuarios/////////////////////////////////////////
     List<DataAdapterGesU> DataAdapterClassList;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recyclerViewlayoutManager;
@@ -164,18 +195,36 @@ public class NavegacionMenu extends AppCompatActivity
     View ChildView ;
     int RecyclerViewClickedItemPOS;
 
-    String HTTP_SERVER_URLT = "http://u209922277.hostingerapp.com/servicios_ecolife/CargarListaTalo.php";
+    ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
+    CheckBox CheckPasivo, CheckExpirado;
+    JSONArray jsonArrayGUtalo = null;
+    //String FinalJSonObject = "";
+    List<DataAdapterGesUTalo> DataAdapterClassListGUTalo;
+    RecyclerView recyclerViewGUTalo;
+    RecyclerView.Adapter recyclerViewadapterGUTalo;
+    ArrayList<String> SubjectNamesGUTid,SubjectNamesGUTfech,SubjectNamesGUTestado;
+
+    String HTTP_SERVER_URLHT = "http://u209922277.hostingerapp.com/servicios_ecolife/CargarListaHTalo.php";
+    String HTTP_SERVER_URLHTVC = "http://u209922277.hostingerapp.com/servicios_ecolife/CargarListaHTVentaCred.php";
+    String HTTP_SERVER_URLHTVCinfo = "http://u209922277.hostingerapp.com/servicios_ecolife/CargarListaHTVCinfo.php";
+    //////////////////////////////////ARRAY LIST//////////////////////////////////////////////////
+    ArrayList<String> SubjectIdHT;
+    String subjIdHT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navegacion_menu);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         VentaC= (FrameLayout) findViewById(R.id.activity_venta_credito);
         Inicio= (FrameLayout) findViewById(R.id.inicio);
         Ventas= (FrameLayout) findViewById(R.id.activity_ventas_contado);
-        Historial= (FrameLayout) findViewById(R.id.activity_talonarios);
+        Historial= (FrameLayout) findViewById(R.id.activity_historial_talo);
+        HTVentasCredito= (FrameLayout) findViewById(R.id.activity_ht_ventcred);
+        HTVCinfo= (FrameLayout) findViewById(R.id.activity_htvc_info);
         GesUsuario= (FrameLayout) findViewById(R.id.activity_gestionar_user);
+        GesUsuarioTalo= findViewById(R.id.activity_gestuser_talo);
         Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
         CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
         CambiarTelf=(FrameLayout) findViewById(R.id.cambiar_telf);
@@ -197,6 +246,17 @@ public class NavegacionMenu extends AppCompatActivity
         CrearTalonario=findViewById(R.id.btnCrear_Talonario);
         creartalo=findViewById(R.id.btncrear_talo);
         txtfecha=findViewById(R.id.editTextDate);
+        tcardhtvcid=findViewById(R.id.textidHTvc);
+        tcardhtvcfech=findViewById(R.id.textfechHTvc);
+        bottomHTVC=findViewById(R.id.bottomhtvc);
+        /////////Textviews para info historial talonario venta credito///////////////////////////
+        nombreHTVCinfo=findViewById(R.id.NombreHTVCinfo);
+        telefonoHTVCinfo=findViewById(R.id.TelefonoHTVCinfo);
+        zonaHTVCinfo=findViewById(R.id.ZonaHTVCinfo);
+        vendedorHTVCinfo=findViewById(R.id.VendedorHTVCinfo);
+        direccionHTVCinfo=findViewById(R.id.DireccionHTVCinfo);
+        fechaHTVCinfo=findViewById(R.id.FechaHTVCinfo);
+
 
         ///////////////////////////////Para ventas al contado y credito/////////////////////////////////////
         Vcontfecha=findViewById(R.id.vcontfecha);
@@ -218,11 +278,78 @@ public class NavegacionMenu extends AppCompatActivity
         DataAdapterClassList.clear();
         //JSON_WEB_CALL();
         SubjectNames = new ArrayList<>();
+        SubjectIdHT = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recicladorG);
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         recyclerView.setHasFixedSize(true);
         recyclerViewlayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerViewlayoutManager);
+
+//////////////////////////////////Para Gestionar Usuario Talonario/////////////////////////////////////////
+        CheckPasivo = (CheckBox) findViewById(R.id.checkBoxPasivo);
+        CheckPasivo.setOnClickListener(this);
+        CheckExpirado = (CheckBox) findViewById(R.id.checkBoxExpirado);
+        CheckExpirado.setOnClickListener(this);
+/////////////////////////////////para historial talonarios/////////////////////////////////
+        jsonArray = new JSONArray();
+        DataAdapterClassListHT = new ArrayList<>();
+        DataAdapterClassListHT.clear();
+
+        recyclerViewHT = (RecyclerView) findViewById(R.id.recicladorHT);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        recyclerViewHT.setHasFixedSize(true);
+        recyclerViewlayoutManager = new LinearLayoutManager(this);
+        recyclerViewHT.setLayoutManager(recyclerViewlayoutManager);
+
+        SubjectNamesHTid= new ArrayList<>();
+        SubjectNamesHTfech= new ArrayList<>();
+        SubjectNamesHTestado= new ArrayList<>();
+
+
+        ////////////////////////////para ventas credito historial talonario///////////////////////////////
+        SubjectNamesHTVCid = new ArrayList<>();
+        SubjectNamesHTVCnombre = new ArrayList<>();
+        SubjectNamesHTVCtelf = new ArrayList<>();
+        SubjectNamesHTVCdir = new ArrayList<>();
+        SubjectNamesHTVCzona = new ArrayList<>();
+        SubjectNamesHTVCfech = new ArrayList<>();
+        SubjectNamesHTVCvendedor = new ArrayList<>();
+        SubjectNamesHTVCfoto = new ArrayList<>();
+
+        jsonArray = new JSONArray();
+        DataAdapterClassListHTVC = new ArrayList<>();
+        DataAdapterClassListHTVC.clear();
+
+        recyclerViewHTVC = (RecyclerView) findViewById(R.id.recicladorHTvc);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        recyclerViewHTVC.setHasFixedSize(true);
+        recyclerViewlayoutManager = new LinearLayoutManager(this);
+        recyclerViewHTVC.setLayoutManager(recyclerViewlayoutManager);
+
+        ////////////////////////////////Para info de ventas al credito historail talonario//////////////////////////////////////////
+        SubjectNamesHTVCGPS = new ArrayList<>();
+        jsonArray = new JSONArray();
+        DataAdapterClassListHTVCinfo = new ArrayList<>();
+        DataAdapterClassListHTVCinfo.clear();
+
+        recyclerViewHTVCinfo = (RecyclerView) findViewById(R.id.recicladorHTVCinfo);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        recyclerViewHTVCinfo.setHasFixedSize(true);
+        recyclerViewlayoutManager = new LinearLayoutManager(this);
+        recyclerViewHTVCinfo.setLayoutManager(recyclerViewlayoutManager);
+
+        /////////////////////////////////Para talonarios de Gestionar Usuario//////////////////////////////////////////
+        SubjectNamesGUTid = new ArrayList<>();
+        jsonArrayGUtalo = new JSONArray();
+        DataAdapterClassListGUTalo = new ArrayList<>();
+        DataAdapterClassListGUTalo.clear();
+
+        recyclerViewGUTalo = (RecyclerView) findViewById(R.id.recicladorGUtalo);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        recyclerViewGUTalo.setHasFixedSize(true);
+        recyclerViewlayoutManager = new LinearLayoutManager(this);
+        recyclerViewGUTalo.setLayoutManager(recyclerViewlayoutManager);
+
 
         vcConfirmar.setOnClickListener(new View.OnClickListener(){
                                             @Override
@@ -277,6 +404,11 @@ public class NavegacionMenu extends AppCompatActivity
                                             }
 
         });
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////
         RegUser= findViewById(R.id.button_reg_user);
         //btn_hacerfoto = findViewById(R.id.vccamara);
@@ -328,7 +460,10 @@ public class NavegacionMenu extends AppCompatActivity
 
         ImgEditUser= findViewById(R.id.editarGU);
         //btn_hacerfoto = findViewById(R.id.vccamara);
-
+        DataAdapterClassListHTVC = new ArrayList<>();
+        DataAdapterClassListHTVC.clear();
+        DataAdapterClassListHT = new ArrayList<>();
+        DataAdapterClassListHT.clear();
         DataAdapterClassListT = new ArrayList<>();
         DataAdapterClassListT.clear();
         recyclerViewT = (RecyclerView) findViewById(R.id.recicladorT);
@@ -343,7 +478,17 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewlayoutManagerG = new LinearLayoutManager(this);
         recyclerViewG.setLayoutManager(recyclerViewlayoutManagerG);
 
+        SubjectGUid = new ArrayList<>();
+        SubjectGUnombre = new ArrayList<>();
+        SubjectGUcargo = new ArrayList<>();
+        SubjectGUpass = new ArrayList<>();
+        SubjectGUestado = new ArrayList<>();
 
+        ////////////////////////////////para gestionar usuarios talonario/////////////////////////////
+        SubjectNamesGUTid = new ArrayList<>();
+        SubjectNamesGUTfech = new ArrayList<>();
+        SubjectNamesGUTestado = new ArrayList<>();
+        personaGU = new persona();
 
         recyclerViewG.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
@@ -364,11 +509,19 @@ public class NavegacionMenu extends AppCompatActivity
             public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
 
                 ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
+                RecyclerViewClickedItemPOSR=0;
 
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)) {
-                    Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
+
+                    RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
+                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    personaGU.IdUsuario=SubjectGUid.get(RecyclerViewClickedItemPOSR);
+                    personaGU.Nombre=SubjectGUnombre.get(RecyclerViewClickedItemPOSR);
+                    personaGU.Password=SubjectGUpass.get(RecyclerViewClickedItemPOSR);
+                    personaGU.Estado=SubjectGUestado.get(RecyclerViewClickedItemPOSR);
+                    personaGU.Rol=SubjectGUcargo.get(RecyclerViewClickedItemPOSR);
                 }
+
                 return false;
             }
 
@@ -390,8 +543,123 @@ public class NavegacionMenu extends AppCompatActivity
             }
         });
 
+/////////////////////////////////////////////////////Cargar lista de ventas credito de historial talonario////////////////////////////////////////////////
+        recyclerViewHT.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
+            GestureDetector gestureDetectorG = new GestureDetector(NavegacionMenu.this, new GestureDetector.SimpleOnGestureListener() {
 
+                @Override public boolean onSingleTapUp(MotionEvent motionEvent) {
+
+                    return true;
+                }
+                //@Override public boolean onLongPress(MotionEvent e) {
+
+                //    return true;
+
+                //}
+
+            });
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
+
+                ChildViewHT = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                RecyclerViewClickedItemPOSR=0;
+
+                if(ChildViewHT != null && gestureDetectorG.onTouchEvent(motionEvent)) {
+                    Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
+                    RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewHT);
+                    subjIdHT= SubjectNamesHTid.get(RecyclerViewClickedItemPOSR);
+                    //SubjectNames.clear();// = new ArrayList<>();
+                    DataAdapterClassListHTVC.clear();
+                    recyclerViewHTVC.setAdapter(recyclerViewadapterHTVC);
+                    String i="1";
+                    EnvioHTVentaCredito(i);////////cambiar esto subjIdHT
+                    tcardhtvcid.setText("Talonario: "+SubjectNamesHTid.get(RecyclerViewClickedItemPOSR));
+                    tcardhtvcfech.setText("Fecha: "+SubjectNamesHTfech.get(RecyclerViewClickedItemPOSR));
+                    Historial.setVisibility(View.INVISIBLE);
+                    HTVentasCredito.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
+
+                ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (ChildViewG != null && ImgEditUser.onTouchEvent(motionEvent)){
+                    //Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
+                    //startActivity(intent);
+
+                }
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+//////////////////////////////////////////Para cargar los cobros en el historial ventas al credito////////////////////////////////////////
+        recyclerViewHTVC.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+
+            GestureDetector gestureDetectorG = new GestureDetector(NavegacionMenu.this, new GestureDetector.SimpleOnGestureListener() {
+
+                @Override public boolean onSingleTapUp(MotionEvent motionEvent) {
+
+                    return true;
+                }
+                //@Override public boolean onLongPress(MotionEvent e) {
+
+                //    return true;
+
+                //}
+
+            });
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
+
+                ChildViewHTVC = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                RecyclerViewClickedItemPOSR=0;
+
+                if(ChildViewHTVC != null && gestureDetectorG.onTouchEvent(motionEvent)) {
+                    RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewHTVC);
+                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //DataAdapterClassListHTVC.clear();
+                    //recyclerViewHTVC.setAdapter(recyclerViewadapterHTVC);
+                    String i="1";
+                    //EnvioHTVentaCredito(i);////////cambiar esto subjIdHT
+                    nombreHTVCinfo.setText("Nombre: "+SubjectNamesHTVCnombre.get(RecyclerViewClickedItemPOSR));
+                    telefonoHTVCinfo.setText("Telefono: "+SubjectNamesHTVCtelf.get(RecyclerViewClickedItemPOSR));
+                    zonaHTVCinfo.setText("Zona: "+SubjectNamesHTVCzona.get(RecyclerViewClickedItemPOSR));
+                    vendedorHTVCinfo.setText("Vendedor: "+SubjectNamesHTVCvendedor.get(RecyclerViewClickedItemPOSR));
+                    direccionHTVCinfo.setText("Dir: "+SubjectNamesHTVCdir.get(RecyclerViewClickedItemPOSR));
+                    fechaHTVCinfo.setText("Fecha: "+SubjectNamesHTVCfech.get(RecyclerViewClickedItemPOSR));
+                    EnvioHTVentCredCobro("1");
+                    HTVentasCredito.setVisibility(View.INVISIBLE);
+                    HTVCinfo.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
+
+                ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (ChildViewG != null && ImgEditUser.onTouchEvent(motionEvent)){
+                    //Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
+                    //startActivity(intent);
+
+                }
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //fab.setOnClickListener(new View.OnClickListener() {
         //    @Override
@@ -512,7 +780,7 @@ public class NavegacionMenu extends AppCompatActivity
         });
 
 
-    txtfecha.setOnClickListener(new View.OnClickListener(){
+        txtfecha.setOnClickListener(new View.OnClickListener(){
         @Override
         public void onClick(View view){
             c=Calendar.getInstance();
@@ -527,8 +795,8 @@ public class NavegacionMenu extends AppCompatActivity
                 }
             },year1,month1,day);
             dpd.show();
-        }
-    });
+            }
+        });
 
         CrearTalonario.setOnClickListener(new View.OnClickListener(){
         @Override
@@ -592,6 +860,21 @@ public class NavegacionMenu extends AppCompatActivity
 
         );
     }
+
+    //////////////////////////////////Para llenar la lista de los talonarios de Gestionar Usuario/////////////////////////////
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.checkBoxPasivo:
+                if (CheckPasivo.isChecked())
+                    Toast.makeText(getApplicationContext(), "Tiqueado", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(getApplicationContext(), "Des tiqueado", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
     public boolean verificacionCP(){
         boolean b=false;
         if(oldpass.getText().toString().isEmpty()==false && newpass.getText().toString().isEmpty()==false){
@@ -665,6 +948,7 @@ public class NavegacionMenu extends AppCompatActivity
         CambiarPass.setVisibility(View.INVISIBLE);
         CambiarTelf.setVisibility(View.INVISIBLE);
         FrameCrearTalonario.setVisibility(View.INVISIBLE);
+
         if (id == R.id.nav_camera) {
             String Sfecha = getCurrentTimeStamp();
             Vcontfecha.setText(Sfecha);
@@ -672,7 +956,13 @@ public class NavegacionMenu extends AppCompatActivity
 
 
         } else if (id == R.id.nav_gallery) {
-
+            String Idraid="22";///cambiar
+            String estado="0";
+            SubjectNames.clear();// = new ArrayList<>();
+            DataAdapterClassListHT.clear();
+            recyclerViewHT.setAdapter(recyclerViewadapterHT);
+            EnvioHistorialTalo(Idraid,estado);
+            Historial.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_slideshow) {
             generarHistorialTalo();
@@ -689,15 +979,15 @@ public class NavegacionMenu extends AppCompatActivity
             String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
 
 
-            if (c.equals("1")) {
-                generarGestionarUser();
+            if (c.equals("2")) {
+
                 SubjectNames.clear();// = new ArrayList<>();
                 DataAdapterClassList.clear();
                 recyclerView.setAdapter(recyclerViewadapter);
                 JSON_WEB_CALL();
                 GesUsuario.setVisibility(View.VISIBLE);
             }else{
-                if (c.equals("2")){
+                if (c.equals("1")){
                     cargarperfil();
                     Perfil.setVisibility(View.VISIBLE);
                 }
@@ -712,6 +1002,10 @@ public class NavegacionMenu extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void cargarperfil(){
         nombre.setText("Nombre:");
         usuario.setText("Usuario:");
@@ -776,6 +1070,7 @@ public class NavegacionMenu extends AppCompatActivity
         }
         return false;
     }
+
     ////////////////////////////Generamos la lista del historial de los talonarios//////////////////
     public void generarHistorialTalo(){
 
@@ -786,30 +1081,22 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewT.setAdapter(recyclerViewadapterT);
     }
     ///////////////////////////Generamos la lista de los usuarios///////////////////////////////////
-    public void generarGestionarUser(){
-
-        GestionarUser b = new GestionarUser();
-        DataAdapterClassListG=(b.generar());
-
-        recyclerViewadapterG = new RecyclerAdapGesU(DataAdapterClassListG, this);
-        recyclerViewG.setAdapter(recyclerViewadapterG);
-    }
 
     public void registrarUsuario(View v){
-        Intent intent = new Intent(NavegacionMenu.this, RegUser.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+
+
+
     }
-    public void TalonarioUsuario(View v){
-        Intent intent = new Intent(NavegacionMenu.this, RegUser.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    public void talonarioUsuario(View v){
+        GesUsuario.setVisibility(View.INVISIBLE);
+        GesUsuarioTalo.setVisibility(View.VISIBLE);
     }
 
     public void editarUsuario(View v){
+
         Intent intent = new Intent(NavegacionMenu.this, EditarUser.class);
+        intent.putExtra("Persona", personaGU);
         startActivity(intent);
-        Toast.makeText(getApplicationContext(),"si",Toast.LENGTH_SHORT).show();
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
@@ -888,6 +1175,8 @@ public class NavegacionMenu extends AppCompatActivity
         }else{
             return bitmap;
         }
+
+
     }
 
     public static String getCurrentTimeStamp(){
@@ -920,6 +1209,12 @@ public class NavegacionMenu extends AppCompatActivity
         Inicio.setVisibility(View.INVISIBLE);
         VentaC.setVisibility(View.VISIBLE);
     }
+
+    public void hTVCcatras (View v){
+        HTVentasCredito.setVisibility(View.INVISIBLE);
+        Historial.setVisibility(View.VISIBLE);
+    }
+
     /////////////////////////////////////GPS PARA VENTAS AL CREDITO/////////////////////////
 
     public void ConseguirGPS(){
@@ -970,6 +1265,11 @@ public class NavegacionMenu extends AppCompatActivity
     public void JSON_WEB_CALL(){
 
         SubjectNames.clear();// = new ArrayList<>();
+        SubjectGUid.clear();
+        SubjectGUnombre.clear();
+        SubjectGUcargo.clear();
+        SubjectGUpass.clear();
+        SubjectGUestado.clear();
         DataAdapterClassList.clear();
         recyclerView.setAdapter(recyclerViewadapter);
 
@@ -1004,14 +1304,16 @@ public class NavegacionMenu extends AppCompatActivity
             try {
                 json = array.getJSONObject(i);
 
+                GetDataAdapter2.setIdusuario(json.getString("id"));
+                SubjectGUid.add(json.getString("id"));
                 GetDataAdapter2.setNombre(json.getString("nombre"));
-
+                SubjectGUnombre.add(json.getString("nombre"));
+                GetDataAdapter2.setPassword(json.getString("password"));
+                SubjectGUpass.add(json.getString("password"));
                 GetDataAdapter2.setCargo(json.getString("id_rol"));
-
-                //Adding subject name here to show on click event.
-                //SubjectNames.add(json.getString("gym"));
-
+                SubjectGUcargo.add(json.getString("id_rol"));
                 GetDataAdapter2.setEstado(json.getString("estado"));
+                SubjectGUestado.add(json.getString("estado"));
 
 
             }
@@ -1043,7 +1345,7 @@ public class NavegacionMenu extends AppCompatActivity
         DataAdapterClassList.clear();
         recyclerView.setAdapter(recyclerViewadapter);
 
-        jsonArrayRequest = new JsonArrayRequest(HTTP_SERVER_URLT,
+        jsonArrayRequest = new JsonArrayRequest(HTTP_SERVER_URLHT,
 
                 new com.android.volley.Response.Listener<JSONArray>() {
                     @Override
@@ -1078,12 +1380,11 @@ public class NavegacionMenu extends AppCompatActivity
 
                 GetDataAdapter2.setCargo(json.getString("estado"));
 
-                //Adding subject name here to show on click event.
-                //SubjectNames.add(json.getString("gym"));
-
                 GetDataAdapter2.setEstado(json.getString("fecha_c"));
 
                 GetDataAdapter2.setEstado(json.getString("id_supervisor"));
+
+
             }
             catch (JSONException e)
             {
@@ -1103,6 +1404,472 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewadapter = new RecyclerAdapGesU(DataAdapterClassList, this);
 
         recyclerView.setAdapter(recyclerViewadapter);
+    }
+
+    public void EnvioHistorialTalo(final String Idpersona, final String estado){
+        SubjectNamesHTid.clear();
+        SubjectNamesHTfech.clear();
+        SubjectNamesHTestado.clear();
+
+
+
+        DataAdapterClassListHT.clear();
+        recyclerViewHT.setAdapter(recyclerViewadapterHT);
+
+        class HistorialTaloFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                //progressDialog.dismiss();
+                if (httpResponseMsg.toString().equals("Registration Successfully")) {
+
+                    //Toast.makeText(Menu_principal.this, "Listado", Toast.LENGTH_LONG).show();
+                    //JSON_WEB_CALL();
+
+                }
+                //Toast.makeText(Menu_principal.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+                FinalJSonObject = httpResponseMsg ;
+
+                if(FinalJSonObject != null)
+                {
+                    JSONArray jsonArray = null;
+
+                    try {
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        jsonArray = new JSONArray(FinalJSonObject);
+                        JSON_PARSE_DATA_AFTER_WEBCALLHT(jsonArray);
+                        //JSONObject jsonObject;
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                        //ReCargarLista(jsonArray);
+                        e.printStackTrace();
+                    }
+                }else{
+                    //DataAdapterClassList.clear();
+                    //SubjectNamesRLU.clear();// = new ArrayList<>();
+                    //DataAdapterClassListRLU.clear();
+
+                    //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                    //JSONObject jsonObject;
+                    //DataAdapterClassListRLU.clear();
+                    JSONArray jsonArray = null;
+
+                    try {
+                        jsonArray = new JSONArray(FinalJSonObject);
+
+                        //ReCargarLista(jsonArray);
+
+                        //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                        //JSONObject jsonObject;
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                        e.printStackTrace();
+                    }
+                }
+                //JSON_PARSE_DATA_AFTER_WEBCALLRLU(FinalJSonObject);
+                //JSONArray jsonArray = null;
+                //jsonArray = new JSONArray(FinalJSonObject);
+                //JSONObject jsonObject;
+                //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("idpersona",params[0]);
+
+                hashMap.put("estado",params[1]);
+
+                finalResult = httpParse.postRequest(hashMap, HTTP_SERVER_URLHT);
+
+                return finalResult;
+            }
+        }
+        HistorialTaloFunctionClass RegisterFunctionClass = new HistorialTaloFunctionClass();
+        RegisterFunctionClass.execute(Idpersona,estado);
+    }
+
+    /*public void ReCargarLista(JSONArray array){
+
+        for(int i = 0; i<=array.length(); i++) {
+            DataAdapterHT GetDataAdapter3 = new DataAdapterHT();
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                //GetDataAdapter3.setRaidlvl(json.getString("idraid"));
+                //SubjectNamesR.add(json.getString("idraid"));
+
+                GetDataAdapter3.setNroTalo(json.getString("id"));
+
+                GetDataAdapter3.setFechaTalo(json.getString("fecha_c"));
+
+                GetDataAdapter3.setEstado(json.getString("estado"));
+
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            }
+            DataAdapterClassListHT.add(GetDataAdapter3);
+        }
+        DataAdapterClassList.clear();
+        //SubjectNamesRLU.clear();// = new ArrayList<>();
+
+        //progressBarR.setVisibility(View.GONE);
+
+        recyclerViewadapterHT = new RecyclerAdapHT(DataAdapterClassListHT, this);
+        recyclerViewHT.setAdapter(recyclerViewadapterHT);
+    }*/
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALLHT(JSONArray array){
+
+        for(int i = 0; i<array.length(); i++) {
+
+            DataAdapterHT GetDataAdapter3 = new DataAdapterHT();
+
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                //GetDataAdapter3.setRaidlvl(json.getString("idraid"));
+                //SubjectNamesR.add(json.getString("idraid"));
+
+                GetDataAdapter3.setNroTalo(json.getString("id"));
+                SubjectNamesHTid.add(json.getString("id"));
+                GetDataAdapter3.setFechaTalo(json.getString("fecha_c"));
+                SubjectNamesHTfech.add(json.getString("fecha_c"));
+                GetDataAdapter3.setEstado(json.getString("estado"));
+                SubjectNamesHTestado.add(json.getString("estado"));
+
+            }
+            catch (JSONException e)
+            {
+
+                e.printStackTrace();
+            }
+
+            DataAdapterClassListHT.add(GetDataAdapter3);
+
+        }
+        //progressBarR.setVisibility(View.GONE);
+        recyclerViewadapterHT = new RecyclerAdapHT(DataAdapterClassListHT, this);
+        recyclerViewHT.setAdapter(recyclerViewadapterHT);
+    }
+
+    //////////////////////////////////////////////////Consultar ventas credito de historial talo/////////////////////////////////////////////////////////////
+    public void EnvioHTVentaCredito(final String Idtalo){
+
+        SubjectNamesHTVCid.clear();SubjectNamesHTVCnombre.clear();
+        SubjectNamesHTVCtelf.clear();SubjectNamesHTVCdir.clear();
+        SubjectNamesHTVCzona.clear();SubjectNamesHTVCfech.clear();
+        SubjectNamesHTVCvendedor.clear();SubjectNamesHTVCfoto.clear();
+
+        DataAdapterClassListHTVC.clear();
+        recyclerViewHTVC.setAdapter(recyclerViewadapterHTVC);
+
+        class HTVentaCreditoFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+                //progressDialog.dismiss();
+                if (httpResponseMsg.toString().equals("Registration Successfully")) {
+                }
+                //Toast.makeText(Menu_principal.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+                FinalJSonObject = httpResponseMsg ;
+
+                if(FinalJSonObject != null)
+                {
+                    JSONArray jsonArray = null;
+
+                    try {
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        jsonArray = new JSONArray(FinalJSonObject);
+                        JSON_PARSE_DATA_AFTER_WEBCALLHTVC(jsonArray);
+
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }else{
+
+                    JSONArray jsonArray = null;
+
+                    try {
+                        jsonArray = new JSONArray(FinalJSonObject);
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("idtalo",params[0]);
+
+                finalResult = httpParse.postRequest(hashMap, HTTP_SERVER_URLHTVC);
+
+                return finalResult;
+            }
+        }
+        HTVentaCreditoFunctionClass RegisterFunctionClass = new HTVentaCreditoFunctionClass();
+        RegisterFunctionClass.execute(Idtalo);
+    }
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALLHTVC(JSONArray array){
+
+        for(int i = 0; i<array.length(); i++) {
+
+            DataAdapterHTVC GetDataAdapter3 = new DataAdapterHTVC();
+
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                SubjectNamesHTVCid.add(json.getString("id"));
+                GetDataAdapter3.setNombre(json.getString("nombre"));
+                SubjectNamesHTVCnombre.add(json.getString("nombre"));
+                SubjectNamesHTVCtelf.add(json.getString("telefono"));
+                GetDataAdapter3.setDireccion(json.getString("direccion"));
+                SubjectNamesHTVCdir.add(json.getString("direccion"));
+                SubjectNamesHTVCzona.add(json.getString("zona"));
+                GetDataAdapter3.setFecha(json.getString("fecha"));
+                SubjectNamesHTVCfech.add(json.getString("fecha"));
+                SubjectNamesHTVCvendedor.add(json.getString("vendedor"));
+                SubjectNamesHTVCfoto.add(json.getString("foto"));
+            }
+            catch (JSONException e)
+            {
+
+                e.printStackTrace();
+            }
+
+            DataAdapterClassListHTVC.add(GetDataAdapter3);
+
+        }
+        //progressBarR.setVisibility(View.GONE);
+        recyclerViewadapterHTVC = new RecyclerAdapHTVC(DataAdapterClassListHTVC, this);
+        recyclerViewHTVC.setAdapter(recyclerViewadapterHTVC);
+    }
+
+    public void EnvioHTVentCredCobro(final String Idventa_credito){
+
+        DataAdapterClassListHTVCinfo.clear();
+        recyclerViewHTVCinfo.setAdapter(recyclerViewadapterHTVCinfo);
+
+        class HTVentCredCobroFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+                //progressDialog.dismiss();
+                if (httpResponseMsg.toString().equals("Registration Successfully")) {
+                }
+                //Toast.makeText(Menu_principal.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+                FinalJSonObject = httpResponseMsg ;
+
+                if(FinalJSonObject != null)
+                {
+                    JSONArray jsonArray = null;
+
+                    try {
+                        Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        jsonArray = new JSONArray(FinalJSonObject);
+                        JSON_PARSE_DATA_AFTER_WEBCALLHTVCcobro(jsonArray);
+
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }else{
+
+                    JSONArray jsonArray = null;
+
+                    try {
+                        jsonArray = new JSONArray(FinalJSonObject);
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("idventcred",params[0]);
+
+                finalResult = httpParse.postRequest(hashMap, HTTP_SERVER_URLHTVCinfo);
+
+                return finalResult;
+            }
+        }
+        HTVentCredCobroFunctionClass RegisterFunctionClass = new HTVentCredCobroFunctionClass();
+        RegisterFunctionClass.execute(Idventa_credito);
+    }
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALLHTVCcobro(JSONArray array){
+
+        for(int i = 0; i<array.length(); i++) {
+
+            DataAdapterHTVCinfo GetDataAdapter3 = new DataAdapterHTVCinfo();
+
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                GetDataAdapter3.setFecha(json.getString("fecha"));
+                GetDataAdapter3.setCuota(json.getString("nro_cuota"));
+                GetDataAdapter3.setMonto(json.getString("monto"));
+                GetDataAdapter3.setSubtotal(json.getString("subtotal"));
+                GetDataAdapter3.setGps(json.getString("id_gps"));
+                SubjectNamesHTVCGPS.add(json.getString("id_gps"));
+            }
+            catch (JSONException e)
+            {
+
+                e.printStackTrace();
+            }
+
+            DataAdapterClassListHTVCinfo.add(GetDataAdapter3);
+
+        }
+        //progressBarR.setVisibility(View.GONE);
+        recyclerViewadapterHTVCinfo = new RecyclerAdapHTVCinfo(DataAdapterClassListHTVCinfo, this);
+        recyclerViewHTVCinfo.setAdapter(recyclerViewadapterHTVCinfo);
+    }
+
+    /////////////////////////////////////Para talonario en Gestionar Usuarios////////////////////////////////////////
+    public void EnvioGUTalo(final String Idpersona, final String estado){
+        SubjectNamesHTid.clear();
+        SubjectNamesGUTid.clear();
+        SubjectNamesGUTfech.clear();
+        SubjectNamesGUTestado.clear();
+        DataAdapterClassListGUTalo.clear();
+        recyclerViewGUTalo.setAdapter(recyclerViewadapterGUTalo);
+
+        class GUTaloFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+                //progressDialog.dismiss();
+
+                Toast.makeText(NavegacionMenu.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+                FinalJSonObject = httpResponseMsg ;
+
+                if(FinalJSonObject != null)
+                {
+                    JSONArray jsonArray = null;
+
+                    try {
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        jsonArray = new JSONArray(FinalJSonObject);
+                        JSON_PARSE_DATA_AFTER_WEBCALLGUtalo(jsonArray);
+                        //JSONObject jsonObject;
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                        //ReCargarLista(jsonArray);
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("idpersona",params[0]);
+
+                hashMap.put("estado",params[1]);
+
+                finalResult = httpParse.postRequest(hashMap, HTTP_SERVER_URLHT);
+
+                return finalResult;
+            }
+        }
+        GUTaloFunctionClass RegisterFunctionClass = new GUTaloFunctionClass();
+        RegisterFunctionClass.execute(Idpersona,estado);
+    }
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALLGUtalo(JSONArray array){
+
+        for(int i = 0; i<array.length(); i++) {
+
+            DataAdapterHT GetDataAdapter3 = new DataAdapterHT();
+
+            JSONObject json = null;
+            try {
+                json = array.getJSONObject(i);
+
+                //GetDataAdapter3.setRaidlvl(json.getString("idraid"));
+                //SubjectNamesR.add(json.getString("idraid"));
+
+                GetDataAdapter3.setNroTalo(json.getString("id"));
+                SubjectNamesHTid.add(json.getString("id"));
+                GetDataAdapter3.setFechaTalo(json.getString("fecha_c"));
+                SubjectNamesHTfech.add(json.getString("fecha_c"));
+                GetDataAdapter3.setEstado(json.getString("estado"));
+                SubjectNamesHTestado.add(json.getString("estado"));
+
+            }
+            catch (JSONException e)
+            {
+
+                e.printStackTrace();
+            }
+
+            DataAdapterClassListHT.add(GetDataAdapter3);
+
+        }
+        //progressBarR.setVisibility(View.GONE);
+        recyclerViewadapterHT = new RecyclerAdapHT(DataAdapterClassListHT, this);
+        recyclerViewHT.setAdapter(recyclerViewadapterHT);
     }
 
 }
