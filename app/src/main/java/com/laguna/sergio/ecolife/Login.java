@@ -41,10 +41,6 @@ public class Login extends AppCompatActivity {
         txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
         mContentResolver=this.getContentResolver();
-        //final EcoLifeDBHelper admin = new EcoLifeDBHelper(this);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
-
-
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
              public void onClick(View v){
@@ -66,10 +62,18 @@ public class Login extends AppCompatActivity {
                 if (r>0){
                     persona p=new persona();
                     p.login(res,mContentResolver);
-                    SincroT(tal);
-                    SincroGPS(gps);
-                    SincroVC(vc);
-                    SincroC(c);
+                    if(con.objJson(tal)>0) {
+                        SincroT(tal);
+                    }
+                    if(con.objJson(gps)>0) {
+                        SincroGPS(gps);
+                    }
+                    if(con.objJson(vc)>0) {
+                        SincroVC(vc);
+                    }
+                    if(con.objJson(c)>0){
+                        SincroC(c);
+                    }
                     Intent i= new Intent(Login.this,NavegacionMenu.class);
                     startActivity(i);
                     //Toast.makeText(getApplicationContext(),Integer.toString(x), Toast.LENGTH_LONG).show();

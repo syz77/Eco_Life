@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 
 public class venta_credito {
-    private String Nombre,Telefono,Zona,Vendedor,Direccion,Fecha,Prodid,Talonarioid,Talonarionubeid,Foto,Fotonombre,Online;
+    public String Nombre,Telefono,Zona,Vendedor,Direccion,Fecha,Prodid,Talonarioid,Talonarionubeid,Foto,Fotonombre,Online,Id,NubeId;
 
     public venta_credito(){
         Nombre=null;Telefono=null;Zona=null;Vendedor=null;Direccion=null;Fecha=null;Prodid=null;

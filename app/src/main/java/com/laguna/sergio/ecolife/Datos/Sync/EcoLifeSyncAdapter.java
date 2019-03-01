@@ -80,9 +80,6 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (detallecontado != null) {
                     insertData(detallecontado, "detalle_contado");
                 }
-                if (gps != null) {
-                    insertData(gps, "gps");
-                }
                 if (talonario != null) {
                     insertData(talonario, "talonario");
                 }
@@ -92,6 +89,13 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (cobro != null) {
                     insertData(cobro, "cobro");
                 }
+                people.close();
+                gps.close();
+                ventacontado.close();
+                detallecontado.close();
+                talonario.close();
+                ventacredito.close();
+                cobro.close();
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error passing data ", e);
@@ -121,7 +125,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     respuesta=con.InsertarTalonario(Testado,Tfecha,Tid_sup);
                     respuesta=cortar(respuesta);
                     args=new String[]{Tid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID,Integer.parseInt(respuesta));
+                    content.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID,respuesta);
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,content,where,args);
                     Log.d(LOG_TAG, "Talonario sync successfull");
@@ -137,12 +141,12 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     Glatitud=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD));
                     Glongitud=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD));
                     respuesta=con.InsertarGPS(Glatitud,Glongitud);
-                    respuesta=cortar(respuesta);
+                    String s=cortar(respuesta);
                     args=new String[]{Gid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID,Integer.parseInt(respuesta));
+                    content.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID,s);
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,content,where,args);
-                    Log.d(LOG_TAG, "GPS sync successfull");
+                    Log.d(LOG_TAG, "GPS sync successfull:"+respuesta+"s="+s);
                 }
 
                 break;
@@ -163,7 +167,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     respuesta=con.InsertRegistro(Pnombre,Pcorreo,Ppassword,Ptelefono,Pfecha,Prolid,Pci,Pestado);
                     respuesta=cortar(respuesta);
                     args=new String[]{Pid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID,Integer.parseInt(respuesta));
+                    content.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID,respuesta);
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,content,where,args);
                     Log.d(LOG_TAG, "Persona sync successfull");
@@ -186,9 +190,9 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCTsupidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID));
                     respuesta=con.InsertarVentaContado(VCTnombre,VCTtelefono,VCTdireccion,VCTzona,VCTfecha,VCTvendedor,VCTsupidnube
                     ,VCTprodid);
-                    respuesta=cortar(respuesta);
+                    String s=cortar(respuesta);
                     args=new String[]{VCTid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID,Integer.parseInt(respuesta));
+                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID,s);
                     content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE, online);
                     mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO,content,where,args);
                     Log.d(LOG_TAG, "Venta contado sync successfull");
@@ -213,14 +217,18 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCfotonombre=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO_NOMBRE));
                     VCtalonarioidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID));
                     if (VCtalonarioidnube != null){
-                        respuesta=con.InsertarVentaCredito(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfoto
-                                ,VCprodid, VCtalonarioidnube);
-                        respuesta=cortar(respuesta);
-                        args=new String[]{VCid};
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,Integer.parseInt(respuesta));
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
-                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content,where,args);
-                        Log.d(LOG_TAG, "Venta credito sync successfull");
+                        con.InsertarVentaCreditoFoto(VCnombre,VCtelefono,VCdireccion,VCzona,VCfecha,VCvendedor,VCfotonombre
+                                ,VCfoto,VCprodid, VCtalonarioidnube,VCid,mContentResolver);
+                        //if(con.objJson(respuesta)>0) {
+                            //String de= cortar(respuesta);
+                            //args = new String[]{VCid};
+                            //content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID, de);
+                            //content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
+                            //mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, content, where, args);
+                            Log.d(LOG_TAG, "Venta credito sync successfull");
+                        //}else {
+                        //    Log.d(LOG_TAG, "Venta credito sync not successfull" + "  " + respuesta);
+                        //}
                     }else{
                         String talonarioid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID));
                         ContentValues content2=new ContentValues();
@@ -231,6 +239,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         String talonarionubeid=talonario.getString(talonario.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID,talonarionubeid);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,content2,where,args);
+                        talonario.close();
                     }
                 }
 
@@ -247,7 +256,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         respuesta=con.InsertarDetalleContado(DCventa_nubeid,DCprod_id);
                         respuesta=cortar(respuesta);
                         args=new String[]{DCid};
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,Integer.parseInt(respuesta));
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,respuesta);
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content,where,args);
                         Log.d(LOG_TAG, "Detalle contado sync successfull");
@@ -261,6 +270,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         String ventacontadonubeid=ventacont.getString(ventacont.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID));
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID,ventacontadonubeid);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content2,where,args);
+                        ventacont.close();
                     }
 
                 }
@@ -282,27 +292,31 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
                         respuesta=cortar(respuesta);
                         args=new String[]{Cid};
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID,Integer.parseInt(respuesta));
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID,respuesta);
                         content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content,where,args);
-                        Log.d(LOG_TAG, "Cobro sync successfull");
+                        Log.d(LOG_TAG, "Cobro sync successfull "+respuesta);
                     }else{
                         String creditoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID));
                         String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));
                         ContentValues content2=new ContentValues();
-                        ContentValues content3=new ContentValues();
                         args=new String[]{Cid};
                         String[] args2=new String[]{creditoid};
                         String[] args3=new String[]{gpsid};
                         Cursor credito = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
                                 ecolifedb.EcoLifeEntry._VENTA_CREDITOID +"=?", args2, null);
-                        Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                        Cursor gps2 = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
                                 ecolifedb.EcoLifeEntry._GPSID +"=?", args3, null);
+                        credito.moveToNext();
+                        gps2.moveToNext();
                         String creditonubeid=credito.getString(credito.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID));
-                        String gpsnubeid=gps.getString(gps.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                        String gpsnubeid=gps2.getString(gps2.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,creditonubeid);
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,gpsnubeid);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content2,where,args);
+                        Log.d(LOG_TAG,"Cobro sync posposed, changing ids:"+creditonubeid+"gpsnubeid:"+gpsnubeid);
+                        credito.close();
+                        gps2.close();
                     }
                 }
                 break;
@@ -339,6 +353,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, values, where, args);
             }
         }
+        pers.close();
 
 
 
@@ -346,31 +361,18 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public String cortar(String s){
-        int n=s.length();
-        String sub="";
-        int d;
-        if (n==37) {
-            sub = s.substring(18, 19);
+        String id="";
+        try {
+            JSONArray json = new JSONArray(s);
+            //for (int i = 0; i < json.length(); i++) {
+            JSONObject c = json.getJSONObject(0);
+            id = c.getString("MAX(id)");
+            //}
+
+        }catch( final JSONException e){
+
         }
-        if (n==39){
-            sub = s.substring(18, 20);
-        }
-        if(n==41){
-            sub = s.substring(18,21);
-        }
-        if(n==43){
-            sub = s.substring(18,22);
-        }
-        if (n==45){
-            sub = s.substring(18,23);
-        }
-        if (n==47){
-            sub = s.substring(18,24);
-        }
-        if (n==49){
-            sub = s.substring(18,25);
-        }
-        return sub;
+        return id;
     }
 
 

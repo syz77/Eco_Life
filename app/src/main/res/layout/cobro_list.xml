@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cobro_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:background="?android:attr/colorBackground"
+    android:visibility="invisible"
+    tools:context=".NavegacionMenu"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_navegacion_menu">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/fondo_color"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="257dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/DetallesCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Detalles del Cliente"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/NombreCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/TelefonoCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/ZonaCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/VendedorCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/DireccionCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/FechaCobro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <View
+            android:id="@+id/linea2"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnmostrar_mapa"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="?android:attr/textSelectHandle" />
+
+            <ImageButton
+                android:id="@+id/btnmostrar_foto"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/almacen" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+        <View
+            android:id="@+id/linea3"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+        <TextView
+            android:id="@+id/NuevoCobro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nuevo Cobro:"
+            android:layout_marginTop="3dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+        <View
+            android:id="@+id/linea5"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:background="@color/colorPrimaryDark"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editMonto"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:hint="Monto"
+                android:inputType="number" />
+
+            <View
+                android:id="@+id/linea4"
+                android:layout_width="2sp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark">
+            </View>
+
+            <Button
+                android:id="@+id/btnnuevo_cobro"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Agregar Nuevo Cobro" />
+        </LinearLayout>
+        <View
+            android:id="@+id/linea"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryDark">
+
+        </View>
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recicladorC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:padding="3dp" />
+    </LinearLayout>
+</FrameLayout>

@@ -4,6 +4,7 @@ public class DataAdapterTalo {
 
     String NroTalo;
     String FechaTalo;
+    String Estado;
 
 
 
@@ -25,6 +26,12 @@ public class DataAdapterTalo {
     public void setFechaTalo(String FechaTalo) {
 
         this.FechaTalo = FechaTalo;
+    }
+    public String getEstado(){
+        return Estado;
+    }
+    public void setEstado(String estado){
+        this.Estado=estado;
     }
 
 

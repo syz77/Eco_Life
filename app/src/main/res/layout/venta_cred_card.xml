@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:clickable="true"
-            android:onClick="talonario_ventas">
+            android:onClick="ventas_cobro">
 
             <View
                 android:id="@+id/linea"
@@ -28,7 +28,7 @@
             </View>
 
             <TextView
-                android:id="@+id/nroTalonario"
+                android:id="@+id/nroCredito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -38,7 +38,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/fechaTalonario"
+                android:id="@+id/fechaCredito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -47,7 +47,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/estadoTalonario"
+                android:id="@+id/direccionCredito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
