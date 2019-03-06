@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_gestuser_talo"
+    android:id="@+id/activity_gutalo_ventcred"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
@@ -15,42 +15,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/fondo_color"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="74dp"
+            android:layoutDirection="rtl"
             android:orientation="horizontal">
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layoutDirection="rtl"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/checkBoxExpirado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginRight="15dp"
-                    android:checked="false"
-                    android:padding="20dp"
-                    android:text="@string/gutalo_expirado"
-                    android:textColor="@color/colorBlanco"
-                    android:textSize="20sp"
-                    android:textStyle="bold|italic" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layoutDirection="rtl"
-                android:layout_gravity="right"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -61,11 +37,41 @@
                     app:srcCompat="@drawable/talonarios" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/idtaloGUTvc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="TextView"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/fechaGUTvc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="TextView"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/estadoGUTvc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="TextView"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/recicladorGUtalo"
+            android:id="@+id/recicladorGUTvc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="3dp" />

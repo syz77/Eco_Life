@@ -22,10 +22,11 @@
                 android:layout_width="0dp"
                 android:layout_weight="6.0"
                 android:id="@+id/LinearLayout_GUtalo"
+                android:onClick="gestuserVentasTalo"
                 android:orientation="vertical">
 
                 <View
-                    android:id="@+id/lineaGU"
+                    android:id="@+id/lineaGUThor"
                     android:layout_width="wrap_content"
                     android:layout_height="7dp"
                     android:layout_marginTop="5dp"
@@ -64,16 +65,37 @@
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/lineaGUTvert"
+                android:layout_width="7dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_blue_dark">
+
+            </View>
+
             <ImageView
                 android:id="@+id/imageGUtalo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
+                android:clickable="true"
                 android:layout_marginRight="15dp"
-
+                android:onClick="gestuserCambiarTalo"
                 android:layout_weight="1"
                 card_view:srcCompat="@drawable/entrega" />
+
+            <ImageView
+                android:id="@+id/imageGUTestado"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="gestuserEstadoTalo"
+                card_view:srcCompat="@drawable/pluma" />
 
         </LinearLayout>
 

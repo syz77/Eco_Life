@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eco Life</string>
+    <string name="app_name">EcoLife</string>
     <string name="title_activity_menu">Menu</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,9 +18,10 @@
     <string name="lateral_ven">Historial</string>
     <string name="lateral_usu">Gestionar usuarios</string>
     <string name="lateral_tal">Talonarios actuales</string>
-    <string name="lateral_com">Empresa</string>
-    <string name="lateral_option">Opciones</string>
-    <string name="lateral_info">Información</string>
+    <string name="lateral_com">Compartir</string>
+    <string name="lateral_option">Telf EcoLife: 75522112 </string>
+    <string name="lateral_info">Imformacion</string>
+    <string name="lateral_emp">Empresa</string>
 
     <string name="ini_ventacont">VENTA AL CONTADO</string>
     <string name="ini_ventacred">VENTA AL CREDITO</string>
@@ -31,7 +32,10 @@
     <string name="ini_nuevotalo">CREAR NUEVO TALONARIO</string>
 
     <string name="GestUsu_cargo">Cargo</string>
+    <string name="GestUsu_titulo">LISTA DE USUARIOS</string>
     <string name="GestUsu_reg">REGISTRAR USUARIO</string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -69,9 +73,18 @@
     <string name="htvcred_atras">Volver</string>
 
     <string name="gutalo_expirado">Expirados</string>
+    <string name="gutalo_cambiartitulo">Tranferir talonario</string>
+
+    <string name="gutalo_estadotitulo">Cambio de estado del talonario</string>
+    <string name="gutalo_estadonrotalo">Nro de talonario: </string>
+    <string name="gutalo_estadofecha">Fecha: </string>
+    <string name="gutalo_estadoactual">Estado actual: </string>
+    <string name="gutalo_estadocambiar">Expirar talonario</string>
+
+    <string name="foto_titulo">FOTO DEL DOMICILIO</string>
 
     <string name="nav_header_ecolife">ECOLIFE S.R.L.</string>
-    <string name="nav_header_telfverde">75522112</string>
+    <string name="nav_header_telfverde">Calle Aroma Esq. Charcas</string>
 
 
 
