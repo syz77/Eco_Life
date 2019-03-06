@@ -86,7 +86,6 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_VENDEDOR + " TEXT NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_DIRECCION + " TEXT NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_FECHA + " DATE NOT NULL," +
-                ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_PRODID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID + " INTEGER," +
@@ -95,7 +94,8 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_DETALLECONTADO_TABLE = "CREATE TABLE " + ecolifedb.EcoLifeEntry.DETALLE_CONTADO_TABLE + " (" +
                 ecolifedb.EcoLifeEntry._DETALLE_CONTADOID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_PRODID + " INTEGER NOT NULL," +
-                ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTAID + " INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTAID + " INTEGER NOT NULL," +
+                ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_CANTIDAD + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE + " TEXT," +
                 ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID + " INTEGER"+");";

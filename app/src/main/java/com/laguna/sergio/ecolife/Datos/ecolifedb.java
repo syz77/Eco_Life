@@ -123,7 +123,6 @@ public class ecolifedb {
         public final static String COLUMN_VENTACONT_VENDEDOR = "vendedor";
         public final static String COLUMN_VENTACONT_DIRECCION = "direccion";
         public final static String COLUMN_VENTACONT_FECHA = "fecha";
-        public final static String COLUMN_VENTACONT_PRODID = "id_prod";
         public final static String COLUMN_VENTACONT_SUPID = "id_sup";
         public final static String COLUMN_VENTACONT_SUPNUBEID="supervisornube_id";
         public final static String COLUMN_VENTACONT_NUBEID="ventacontnube_id";
@@ -132,6 +131,7 @@ public class ecolifedb {
         //COLUMNS FOR DETALLE_CONTADO
         public final static String COLUMN_DETALLEC_PRODID = "id_prod";
         public final static String COLUMN_DETALLEC_VENTAID = "id_venta";
+        public final static String COLUMN_DETALLEC_CANTIDAD = "cantidad";
         public final static String COLUMN_DETALLEC_VENTANUBEID="ventanube_id";
         public final static String COLUMN_DETALLEC_NUBEID = "detallecnube_id";
         public final static String COLUMN_DETALLEC_ONLINE="detallec_online";

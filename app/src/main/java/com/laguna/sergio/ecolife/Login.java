@@ -65,9 +65,9 @@ public class Login extends AppCompatActivity {
                     if(con.objJson(tal)>0) {
                         SincroT(tal);
                     }
-                    if(con.objJson(gps)>0) {
+                    /*if(con.objJson(gps)>0) {
                         SincroGPS(gps);
-                    }
+                    }*/
                     if(con.objJson(vc)>0) {
                         SincroVC(vc);
                     }
@@ -203,15 +203,15 @@ public class Login extends AppCompatActivity {
                 idcreditonube=c.getString("id_credito");
                 idgpsnube=c.getString("id_gps");
                 String[] args= new String[]{idcreditonube};
-                String[] args2=new String[]{idgpsnube};
+                //String[] args2=new String[]{idgpsnube};
                 Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
                         ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + "=?", args, null);
                 v.moveToNext();
                 idcreditolocal=v.getString(v.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
-                Cursor g = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                /*Cursor g = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
                         ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID + "=?", args2, null);
                 g.moveToNext();
-                idgpslocal=g.getString(g.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                idgpslocal=g.getString(g.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));*/
                 ContentValues values = new ContentValues();
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, idnube);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO, monto);
@@ -221,11 +221,9 @@ public class Login extends AppCompatActivity {
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,idcreditonube);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,idgpsnube);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,idcreditolocal);
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID,idgpslocal);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE,online);
                 mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values);
                 v.close();
-                g.close();
             }
         }catch (JSONException e){
 
