@@ -92,6 +92,9 @@ import com.laguna.sergio.ecolife.Datos.talonario;
 import com.laguna.sergio.ecolife.Datos.venta_credito;
 import com.laguna.sergio.ecolife.Datos.cobro;
 import com.laguna.sergio.ecolife.Datos.gps;
+import com.laguna.sergio.ecolife.Datos.venta_contado;
+import com.laguna.sergio.ecolife.Datos.detalle_contado;
+import com.laguna.sergio.ecolife.Datos.Sync.EcoLifeSyncAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,7 +119,8 @@ public class NavegacionMenu extends AppCompatActivity
     RecyclerView.Adapter recyclerViewadapterT;
     RecyclerView.LayoutManager recyclerViewlayoutManagerT;
 
-    String idtalo;
+    String idtalolocal;
+    String idtalonube;
     ArrayList<talonario> arraT;
 
     JSONArray jsonArray = null;
@@ -190,8 +194,7 @@ public class NavegacionMenu extends AppCompatActivity
     ImageButton btnMostrarMapa,btnMostrarFoto;
     EditText etmontoCobro;
 
-    ListView lvdetallevc;
-    Button btnAgregarDetalle;
+
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
@@ -201,9 +204,15 @@ public class NavegacionMenu extends AppCompatActivity
 
 
     ////////////////////////Para ventas al contado//////////////////////////////////////////////////
+    ListView lvdetallevc;
     Spinner SpinnerVcont;
     TextView Vcontfecha,Vcfecha;
-    String vcontprod;
+    Button btnAgregarDetalle,btnAgregarVContado;
+    EditText etclientecontado,etdireccioncontado,etzonacontado,etpromcontado,etcantcontado,etsubcontado,ettelefcontado;
+    String vcontprod,fechacontado;
+    ArrayList<String> detalle;
+    int subtotal,contador;
+    ArrayAdapter<String>adapterDetalle;
     /////////////////////Para seleccionar la lista de gestion de usuario///////////////////////////
     View ChildViewG;
     Button RegUser;
@@ -236,6 +245,8 @@ public class NavegacionMenu extends AppCompatActivity
     boolean nuevaventac;
 
     ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
+    Button btnCambiarAPasivo;
+    AlertDialog.Builder dialogo1;
     CheckBox CheckPasivo, CheckExpirado;
     JSONArray jsonArrayGUtalo = null;
     //String FinalJSonObject = "";
@@ -294,7 +305,12 @@ public class NavegacionMenu extends AppCompatActivity
         CrearTalonario=findViewById(R.id.btnCrear_Talonario);
         creartalo=findViewById(R.id.btncrear_talo);
         txtfecha=findViewById(R.id.editTextDate);
-        
+        etclientecontado=findViewById(R.id.vcontnombre);
+        etdireccioncontado=findViewById(R.id.vcontdireccion);
+        etzonacontado=findViewById(R.id.vcontnrozona);
+        etpromcontado=findViewById(R.id.vcontvendedor);
+        etcantcontado=findViewById(R.id.editCantidad);
+        btnCambiarAPasivo=findViewById(R.id.btnpasivo);
         nuevavc=findViewById(R.id.activity_venta_credito);
         cargarDatosTalo();
         lvdetallevc=findViewById(R.id.listviewVCont);
@@ -362,7 +378,7 @@ public class NavegacionMenu extends AppCompatActivity
         }
 
 //////////////////////////////////Para Gestionar Usuario Talonario/////////////////////////////////////////
-        CheckPasivo = (CheckBox) findViewById(R.id.checkBoxPasivo);
+        CheckPasivo = (CheckBox) findViewById(R.id.checkBoxExpirado);
         CheckPasivo.setOnClickListener(this);
         CheckExpirado = (CheckBox) findViewById(R.id.checkBoxExpirado);
         CheckExpirado.setOnClickListener(this);
@@ -425,6 +441,21 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewGUTalo.setHasFixedSize(true);
         recyclerViewlayoutManager = new LinearLayoutManager(this);
         recyclerViewGUTalo.setLayoutManager(recyclerViewlayoutManager);
+        ///////////////////////Dialogo de alerta///////////////////
+        dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿ Esta seguro de cambiar el estado a pasivo ?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                cambiarActivo();
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                dialogo1.cancel();
+            }
+        });
 
 
         vcConfirmar.setOnClickListener(new View.OnClickListener(){
@@ -458,6 +489,7 @@ public class NavegacionMenu extends AppCompatActivity
                                                                 }
                                                                 Talo.close();
                                                             }
+                                                vcCamara.setImageResource(android.R.color.transparent);
 
                                             }
 
@@ -480,6 +512,8 @@ public class NavegacionMenu extends AppCompatActivity
         String[] producto = {"MEGA JUNIOR","NONI ENERGY","FIBRA PLUS","MEGA FAMILY"};
         SpinnerVcont.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, producto));
         SpinnerVcred.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, producto));
+        SpinnerVcred.setSelection(0);
+        SpinnerVcont.setSelection(0);
         SpinnerVcont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -487,7 +521,8 @@ public class NavegacionMenu extends AppCompatActivity
             {
                 //Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
                 String c= adapterView.getItemAtPosition(position).toString();//adapterView.getItemAtPosition(position);
-                if(c.equals("MEGA JUNIOR")){
+                vcontprod=c;
+                /*if(c.equals("MEGA JUNIOR")){
                     vcontprod="1";
                 }else if(c.equals("NONI ENERGY")){
                     vcontprod="2";
@@ -495,7 +530,7 @@ public class NavegacionMenu extends AppCompatActivity
                         vcontprod="3";
                         }else if(c.equals("MEGA FAMILY")){
                             vcontprod="4";
-                }
+                }*/
             }
 
             @Override
@@ -600,7 +635,7 @@ public class NavegacionMenu extends AppCompatActivity
                 ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
                 RecyclerViewClickedItemPOSR=0;
 
-                if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent))
+                if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)){
                     
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
                     Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
@@ -610,7 +645,7 @@ public class NavegacionMenu extends AppCompatActivity
                     personaGU.Estado=SubjectGUestado.get(RecyclerViewClickedItemPOSR);
                     personaGU.Rol=SubjectGUcargo.get(RecyclerViewClickedItemPOSR);
                 }
-                }
+
                 return false;
             }
 
@@ -656,7 +691,8 @@ public class NavegacionMenu extends AppCompatActivity
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)) {
                     int x=recyclerView.getChildAdapterPosition(ChildViewG);
                     talonario t=arraT.get(x);
-                    idtalo= t.Id;
+                    idtalonube= t.Idnube;
+                    idtalolocal=t.Id;
                 }
                 return false;
             }
@@ -1084,15 +1120,131 @@ public class NavegacionMenu extends AppCompatActivity
             }
 
         });
+        etsubcontado=findViewById(R.id.editSub);
         lvdetallevc=findViewById(R.id.listviewVCont);
+        btnAgregarVContado=findViewById(R.id.vcontconfirmar);
+        ettelefcontado=findViewById(R.id.vconttelefono);
+        subtotal=0;
+        contador=0;
+        detalle=new ArrayList<String>();
+        adapterDetalle=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1);
+        //EditText etclientecontado,etdireccioncontado,etzonacontado,etpromcontado,etcantcontado;subtotal contador
+        //String vcontprod,fechacontado;
         btnAgregarDetalle.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String[] val=new String[]{"uno","dos","tres","cuatro","cinco","seis"};
-                ArrayAdapter<String>adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,val);
-                lvdetallevc.setAdapter(adapter);
+                if(etcantcontado.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"Introducir una cantidad",Toast.LENGTH_SHORT).show();
+                }else {
+                    String cantidad = etcantcontado.getText().toString();
+                    String cad = vcontprod + " x " + cantidad;
+                    detalle.add(transform(vcontprod));
+                    detalle.add(cantidad);
+                    contador++;
+                    subtotal = subtotal + (Integer.parseInt(cantidad) * 140);
+                    etsubcontado.setText(Integer.toString(subtotal));
+                    adapterDetalle.add(cad);
+                    lvdetallevc.setAdapter(adapterDetalle);
+                }
             }
         });
+        btnAgregarVContado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etclientecontado.getText().toString().equals("")||etdireccioncontado.getText().toString().equals("")||
+                        etzonacontado.getText().toString().equals("")||etpromcontado.getText().toString().equals("")||
+                        etcantcontado.getText().toString().equals("")||etsubcontado.getText().toString().equals("") ||
+                        ettelefcontado.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(),"Rellene todos los campos",Toast.LENGTH_SHORT).show();
+                }else {
+                    Cursor p = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                            ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+                    p.moveToNext();
+                    fechacontado = getCurrentTimeStamp();
+                    String id = p.getString(p.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+                    String idnube = p.getString(p.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+                    venta_contado vc = new venta_contado(etclientecontado.getText().toString(), ettelefcontado.getText().toString()
+                            , etzonacontado.getText().toString(), etpromcontado.getText().toString(), etdireccioncontado.getText().toString()
+                            , fechacontado, id, idnube);
+                    vc.insert(vc, mContentResolver);
+                    Cursor d = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO, null,
+                            null, null, null);
+                    d.moveToLast();
+                    for (int i = 0; i < contador * 2; i = i + 2) {
+                        String idc = d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CONTADOID));
+                        String idcn = d.getString(d.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID));
+                        String prod = detalle.get(i);
+                        String cant = detalle.get(i + 1);
+                        detalle_contado detc = new detalle_contado(prod, idc, idcn, cant);
+                        detc.insert(detc, mContentResolver);
+                    }
+                    p.close();
+                    d.close();
+                    contador = 0;
+                    subtotal=0;
+                    detalle.clear();
+                    adapterDetalle.clear();
+                    cleanventacontado();
+                }
+            }
+        });
+
+
+        btnCambiarAPasivo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                dialogo1.show();
+            }
+        });
+
+    }
+    public void cambiarActivo(){
+        Cursor c=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
+        if(c.getCount()>0) {
+            c.moveToNext();
+            String id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+            String[] args=new String[]{id};
+            String est="3";
+            ContentValues val=new ContentValues();
+            val.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO,est);
+            mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,val,
+                    ecolifedb.EcoLifeEntry._TALONARIOID+"=?",args);
+
+        }
+        c.close();
+        EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
+    }
+
+    public String transform(String s){
+        String a="";
+        if(s.equals("MEGA JUNIOR")){
+            a="1";
+        }else{
+            if(s.equals("NONI ENERGY")){
+                a="2";
+            }else{
+                if(s.equals("FIBRA PLUS")){
+                    a="3";
+                }else{
+                    if(s.equals("MEGA FAMILY")){
+                        a="4";
+                    }
+                }
+            }
+        }
+        return a;
+    }
+
+    public void cleanventacontado(){
+        etclientecontado.setText("");
+        etdireccioncontado.setText("");
+        etzonacontado.setText("");
+        etpromcontado.setText("");
+        etcantcontado.setText("");
+        etsubcontado.setText("");
+        ettelefcontado.setText("");
+        etcantcontado.setText("");
     }
 
     //////////////////////////////////Para llenar la lista de los talonarios de Gestionar Usuario/////////////////////////////
@@ -1100,7 +1252,7 @@ public class NavegacionMenu extends AppCompatActivity
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.checkBoxPasivo:
+            case R.id.checkBoxExpirado:
                 if (CheckPasivo.isChecked())
                     Toast.makeText(getApplicationContext(), "Tiqueado", Toast.LENGTH_LONG).show();
                 else
@@ -1179,6 +1331,7 @@ public class NavegacionMenu extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Ventas.setVisibility(View.INVISIBLE);
         VentaC.setVisibility(View.INVISIBLE);
         Inicio.setVisibility(View.INVISIBLE);
         Ventas.setVisibility(View.INVISIBLE);
@@ -1188,15 +1341,22 @@ public class NavegacionMenu extends AppCompatActivity
         CambiarPass.setVisibility(View.INVISIBLE);
         CambiarTelf.setVisibility(View.INVISIBLE);
         FrameCrearTalonario.setVisibility(View.INVISIBLE);
-
         ventaCredList.setVisibility(View.INVISIBLE);
         cobroList.setVisibility(View.INVISIBLE);
+        EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
+
+
         if(!estadoverificacion()){
             finish();
             System.exit(0);
         }
 
         if (id == R.id.nav_camera) {
+            EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
+            if(!estadoverificacion()){
+                finish();
+                System.exit(0);
+            }
             String Sfecha = getCurrentTimeStamp();
             Vcontfecha.setText(Sfecha);
             cargarDatosTalo();
@@ -1213,6 +1373,7 @@ public class NavegacionMenu extends AppCompatActivity
             Historial.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_slideshow) {
+            EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
                 finish();
                 System.exit(0);
@@ -1221,6 +1382,7 @@ public class NavegacionMenu extends AppCompatActivity
             ListaT.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_manage) {
+            EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
                 finish();
                 System.exit(0);
@@ -1369,6 +1531,11 @@ public class NavegacionMenu extends AppCompatActivity
                                             if(cobroList.getVisibility()==View.VISIBLE){
                                                 cobroList.setVisibility(View.INVISIBLE);
                                                 ventaCredList.setVisibility(VISIBLE);
+                                            }else{
+                                                if(Ventas.getVisibility()==View.VISIBLE){
+                                                    Ventas.setVisibility(View.INVISIBLE);
+                                                    Inicio.setVisibility(View.VISIBLE);
+                                                }
                                             }
                                         }
                                     }
@@ -1459,7 +1626,6 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
 
-    }
     public void talonarioUsuario(View v){
         GesUsuario.setVisibility(View.INVISIBLE);
         GesUsuarioTalo.setVisibility(View.VISIBLE);
@@ -1474,7 +1640,6 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
     public void talonario_ventas(View v){
-        Toast.makeText(this.getApplicationContext(),idtalo,Toast.LENGTH_SHORT).show();
         SubjectNames.clear();
         DataAdapterClassList.clear();
         generarVentasCreditoActuales();
@@ -1486,7 +1651,7 @@ public class NavegacionMenu extends AppCompatActivity
         SubjectNames.clear();
         DataAdapterClassList.clear();
         VentaCredList b=new VentaCredList();
-        DataAdapterClassListVC=(b.generar(mContentResolver,idtalo));
+        DataAdapterClassListVC=(b.generar(mContentResolver,idtalolocal));
         arrayVC=b.VentaCList;
         recyclerViewadapterVC = new RecyclerAdapVentaCred(DataAdapterClassListVC, this);
         recyclerViewVC.setAdapter(recyclerViewadapterVC);
@@ -1625,7 +1790,6 @@ public class NavegacionMenu extends AppCompatActivity
         direccionVC.setText("");
         zonaVC.setText("");
         nombrePVC.setText("");
-        vcCamara.setImageResource(android.R.color.transparent);
         Ventas.setVisibility(View.INVISIBLE);
         Inicio.setVisibility(View.INVISIBLE);
         VentaC.setVisibility(View.VISIBLE);

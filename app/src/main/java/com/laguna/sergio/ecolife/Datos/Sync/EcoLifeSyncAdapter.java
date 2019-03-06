@@ -68,27 +68,43 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE + "=0", null, null);
                 Cursor people = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                         ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + "=0", null, null);
-                if (people != null) {
+                Cursor cantTalo=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"!=0", null,null);
+                Cursor Taloscambiados=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=3",null,null);
+                Cursor TalosInacti=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=2",null,null);
+                if(Taloscambiados.getCount()>0){
+                    cambiarEstado(Taloscambiados);
+                }
+                if (people.getCount()>0) {
                     insertData(people, "persona");
                 }
-                if (gps != null) {
+                if (gps.getCount()>0) {
                     insertData(gps, "gps");
                 }
-                if (ventacontado != null) {
+                if (ventacontado.getCount()>0) {
                     insertData(ventacontado, "venta_contado");
                 }
-                if (detallecontado != null) {
+                if (detallecontado.getCount()>0) {
                     insertData(detallecontado, "detalle_contado");
                 }
-                if (talonario != null) {
+                if (talonario.getCount()>0) {
                     insertData(talonario, "talonario");
                 }
-                if (ventacredito != null) {
+                if (ventacredito.getCount()>0) {
                     insertData(ventacredito, "venta_credito");
                 }
-                if (cobro != null) {
+                if (cobro.getCount()>0) {
                     insertData(cobro, "cobro");
                 }
+                if(cantTalo.getCount()>0 ){
+                    updateTalo(cantTalo);
+                }
+                if (TalosInacti.getCount() > 0){
+                    inactivos(TalosInacti);
+                }
+                cantTalo.close();
                 people.close();
                 gps.close();
                 ventacontado.close();
@@ -96,6 +112,9 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 talonario.close();
                 ventacredito.close();
                 cobro.close();
+                Taloscambiados.close();
+                TalosInacti.close();
+
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error passing data ", e);
@@ -186,16 +205,18 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCTvendedor=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_VENDEDOR));
                     VCTdireccion=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_DIRECCION));
                     VCTfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_FECHA));
-                    VCTprodid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_PRODID));
                     VCTsupidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID));
-                    respuesta=con.InsertarVentaContado(VCTnombre,VCTtelefono,VCTdireccion,VCTzona,VCTfecha,VCTvendedor,VCTsupidnube
-                    ,VCTprodid);
+                    respuesta=con.InsertarVentaContado(VCTnombre,VCTtelefono,VCTdireccion,VCTzona,VCTfecha,VCTvendedor,VCTsupidnube);
                     String s=cortar(respuesta);
-                    args=new String[]{VCTid};
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID,s);
-                    content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE, online);
-                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO,content,where,args);
-                    Log.d(LOG_TAG, "Venta contado sync successfull");
+                    if(s.equals("")) {
+                        Log.d(LOG_TAG,"Venta contado sync fail");
+                    } else{
+                        args = new String[]{VCTid};
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID, s);
+                        content.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE, online);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO, content, where, args);
+                        Log.d(LOG_TAG, "Venta contado sync successfull " + s);
+                    }
                 }
 
                 break;
@@ -245,21 +266,26 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 break;
             case "detalle_contado":
-                String DCid,DCprod_id,DCventa_nubeid;
+                String DCid,DCprod_id,DCventa_nubeid,DCcantidad;
                 where=ecolifedb.EcoLifeEntry._DETALLE_CONTADOID+"=?";
                 Log.d(LOG_TAG, "Starting sync detalle contado");
                 while (c.moveToNext()){
                     DCid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._DETALLE_CONTADOID));
                     DCprod_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_PRODID));
                     DCventa_nubeid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID));
+                    DCcantidad=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_CANTIDAD));
                     if (DCventa_nubeid != null){
-                        respuesta=con.InsertarDetalleContado(DCventa_nubeid,DCprod_id);
-                        respuesta=cortar(respuesta);
-                        args=new String[]{DCid};
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID,respuesta);
-                        content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
-                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content,where,args);
-                        Log.d(LOG_TAG, "Detalle contado sync successfull");
+                        respuesta=con.InsertarDetalleContado(DCventa_nubeid,DCprod_id,DCcantidad);
+                        String s=cortar(respuesta);
+                        if(s.equals("")){
+                            Log.d(LOG_TAG,"Detalle contado sync failed "+s+","+DCventa_nubeid+","+DCprod_id+","+DCcantidad);
+                        }else {
+                            args = new String[]{DCid};
+                            content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_NUBEID, s);
+                            content.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE, online);
+                            mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO, content, where, args);
+                            Log.d(LOG_TAG, "Detalle contado sync successfull " + s);
+                        }
                     }else{
                         String ventacontadoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTAID));
                         ContentValues content2=new ContentValues();
@@ -267,10 +293,12 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         String[] args2=new String[]{ventacontadoid};
                         Cursor ventacont = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CONTADO, null,
                                 ecolifedb.EcoLifeEntry._VENTA_CONTADOID +"=?", args2, null);
+                        ventacont.moveToNext();
                         String ventacontadonubeid=ventacont.getString(ventacont.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID));
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_VENTANUBEID,ventacontadonubeid);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO,content2,where,args);
                         ventacont.close();
+                        Log.d(LOG_TAG,"Detalle contado sync no nubeid "+ventacontadonubeid);
                     }
 
                 }
@@ -374,8 +402,302 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         return id;
     }
+    public String cortarCount(String s){
+        String id="";
+        try {
+            JSONArray json = new JSONArray(s);
+            //for (int i = 0; i < json.length(); i++) {
+            JSONObject c = json.getJSONObject(0);
+            id = c.getString("COUNT(*)");
+            //}
 
+        }catch( final JSONException e){
 
+        }
+        return id;
+    }
+
+    public void SincroVC(String s){
+        String id,nombre,telefono,direccion,zona,fecha,vendedor,foto,id_prod,id_talonario,online;
+        try {
+            JSONArray json = new JSONArray(s);
+            online="1";
+            Log.d(LOG_TAG, "Venta_credito2 iniciada="+Integer.toString(json.length()));
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                id = c.getString("id");
+                nombre=c.getString("nombre");
+                telefono=c.getString("telefono");
+                direccion=c.getString("direccion");
+                zona=c.getString("zona");
+                fecha=c.getString("fecha");
+                vendedor=c.getString("vendedor");
+                foto=c.getString("foto");
+                id_prod=c.getString("id_prod");
+                id_talonario=c.getString("id_talonario");
+                String[] args= new String[]{id_talonario};
+                Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID + "=?", args, null);
+                Log.d(LOG_TAG, "Cursor creado con exito=");
+                if (v.getCount()>1){
+                    v.moveToLast();
+                }else{
+                    v.moveToNext();
+                }
+                String localid=v.getString(v.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                Log.d(LOG_TAG, "Valor de localid="+localid);
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID, id);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NOMBRE, nombre);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TELEFONO,telefono);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_DIRECCION, direccion);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ZONA, zona);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FECHA,fecha);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_VENDEDOR, vendedor);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FOTO, foto);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_PRODID,id_prod);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIONUBEID,id_talonario);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID,localid);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, values);
+                Log.d(LOG_TAG, "Venta_credito2 agregada="+id);
+                v.close();
+            }
+        }catch (JSONException e){
+
+        }
+    }
+    public void SincroGPS(String s){
+        String online="1";
+        try {
+            JSONArray json = new JSONArray(s);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                String id = c.getString("id");
+                String latitud=c.getString("latitud");
+                String longitud=c.getString("longitud");
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID, id);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LATITUD, latitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_LONGITUD,longitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, values);
+            }
+        }catch (JSONException e){
+
+        }
+    }
+    public void SincroC(String s){
+        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,idgpsnube,idcreditolocal,idgpslocal;
+        String online="1";
+        try {
+            JSONArray json = new JSONArray(s);
+            Log.d(LOG_TAG, "Venta_credito2 iniciada="+Integer.toString(json.length()));
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(i);
+                idnube = c.getString("id");
+                monto=c.getString("monto");
+                nro_cuota=c.getString("nro_cuota");
+                subtotal=c.getString("subtotal");
+                fecha=c.getString("fecha");
+                idcreditonube=c.getString("id_credito");
+                idgpsnube=c.getString("id_gps");
+                String[] args= new String[]{idcreditonube};
+                Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + "=?", args, null);
+                if (v.getCount()>1){
+                    v.moveToLast();
+                }else{
+                    v.moveToNext();
+                }
+                idcreditolocal=v.getString(v.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
+                Log.d(LOG_TAG, "Valor de localid="+idcreditolocal);
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, idnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO, monto);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NRO_CUOTA,nro_cuota);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL,subtotal);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA,fecha);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,idcreditonube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,idgpsnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,idcreditolocal);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE,online);
+                mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values);
+                Log.d(LOG_TAG, "Cobro2 agregada="+idnube);
+                v.close();
+            }
+        }catch (JSONException e){
+
+        }
+    }
+
+    private void cambiarEstado(Cursor c){
+        Conexion con=new Conexion();
+        c.moveToNext();
+        String id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+        String s=con.activopasivo(id);
+        if(s.equals("")){
+        }else{
+            String idl=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+            String[] args=new String[]{idl};
+            String est="2";
+            ContentValues val=new ContentValues();
+            val.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO,est);
+            mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,val,
+                    ecolifedb.EcoLifeEntry._TALONARIOID+"=?",args);
+        }
+    }
+
+    private void updateTalo(Cursor cantTalo){
+        Cursor n=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+        String idp="";
+        String idnp="";
+        String email="";
+        String pass="";
+        if(n!=null){
+            n.moveToNext();
+            idp=n.getString(n.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+            idnp=n.getString(n.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+            email=n.getString(n.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
+            pass=n.getString(n.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+        }
+        Conexion con=new Conexion();
+        String res=con.cantTalo(idnp);
+        if(res.equals("")){
+            Log.d(LOG_TAG, "Error de servidor idPersona="+idnp);
+        }else{
+            String lo=cortarCount(res);
+            Log.d(LOG_TAG, "qwer="+res+" dew="+lo);
+            int a = Integer.parseInt(lo);
+            if (a == cantTalo.getCount()) {
+                Log.d(LOG_TAG, "No need sync talos");
+            } else {
+                if (a < cantTalo.getCount()) {
+                    String jtodo = con.todoTalonario(email, pass);
+                    Log.d(LOG_TAG, "Menor cantidad de talos en la nube="+Integer.toString(a)+"<"+Integer.toString(cantTalo.getCount()));
+                    try {
+                        JSONArray json = new JSONArray(jtodo);
+                        for (int i = 0; i < cantTalo.getCount(); i++) {
+                            cantTalo.moveToNext();
+                            String idnube = cantTalo.getString(cantTalo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+                            boolean x=true;
+                            String temp="";
+                            int j=0;
+                            while(x && j<json.length()){
+                                JSONObject c = json.getJSONObject(j);
+                                String id = c.getString("id");
+                                if (id.equals(idnube)) {
+                                    x=false;
+                                }
+                                temp=id;
+                                j++;
+                            }
+                            if(x) {
+                                String ne="true";
+                                Log.d(LOG_TAG,"qwert="+ ne+" ciclo"+Integer.toString(i)+" i="+idnube+" idcursor:"+temp);
+                            }else{
+                                String ne="false";
+                                Log.d(LOG_TAG, "qwert="+ ne+" ciclo"+Integer.toString(i)+" id="+idnube+" idcursor:"+temp);
+                            }
+                            if (x) {
+                                String est = "0";
+                                String[] args = new String[]{idnube};
+                                ContentValues values = new ContentValues();
+                                values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO, est);
+                                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, values,
+                                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID + "=?", args);
+                                Log.d(LOG_TAG, "Cantidad de talonarios reducida en la bd local="+idnube);
+                            }
+
+                        }
+                    } catch (JSONException e) {
+                    }
+                } else {
+                    if (a > cantTalo.getCount()) {
+                        String jtodo = con.todoTalonario(email, pass);
+                        Log.d(LOG_TAG, "Mayor cantidad de talos en la nube="+Integer.toString(a)+">"+Integer.toString(cantTalo.getCount()));
+                        try {
+                            JSONArray json = new JSONArray(jtodo);
+                            for (int i = 0; i < a; i++) {
+                                JSONObject c = json.getJSONObject(i);
+                                String id = c.getString("id");
+                                String temp="";
+                                boolean x=true;
+                                while(x && cantTalo.moveToNext()){
+                                    String idnube = cantTalo.getString(cantTalo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+                                    if (id.equals(idnube)) {
+                                        x=false;
+                                    }
+                                    temp=idnube;
+                                }
+                                if(x) {
+                                    String ne="true";
+                                    Log.d(LOG_TAG,"qwerty="+ ne+" ciclo"+Integer.toString(i)+" i="+id+" idcursor:"+temp);
+                                }else{
+                                    String ne="false";
+                                    Log.d(LOG_TAG, "qwerty="+ ne+" ciclo"+Integer.toString(i)+" id="+id+" idcursor:"+temp);
+                                }
+                                cantTalo.moveToPosition(0);
+                                if (x) {
+                                    ContentValues values = new ContentValues();
+                                    String estado = c.getString("estado");
+                                    String fecha_c = c.getString("fecha_c");
+                                    String online = "1";
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID, id);
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO, estado);
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C, fecha_c);
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORID, idp);
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_SUPERVISORNUBEID, idnp);
+                                    values.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ONLINE, online);
+                                    mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, values);
+                                    Log.d(LOG_TAG, "Cantidad de talos aumentada para igualar la nube="+id);
+                                    String v=con.todoVentaCredito2(id);
+                                    String co=con.todoCobro2(id);
+                                    SincroVC(v);
+                                    SincroC(co);
+                                    Log.d(LOG_TAG, "magico:"+v+"------------"+co);
+                                }
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                }
+            }
+        }
+        n.close();
+    }
+
+    private void inactivos(Cursor c){
+        Conexion con=new Conexion();
+        while (c.moveToNext()) {
+            String id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+            String ti = con.tainactivo(id);
+            if(ti.equals("")){
+                Log.d(LOG_TAG, "Error de servidor"+ti);
+            }else{
+                try {
+                    Log.d(LOG_TAG, "Respuesta= "+ti);
+                    JSONArray json = new JSONArray(ti);
+                    JSONObject co = json.getJSONObject(0);
+                    String est = co.getString("estado");
+                    Log.d(LOG_TAG, "Estado de talonario en la nube= "+est);
+                    if(est.equals("0")){
+                        String idl=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                        String estado="0";
+                        String[] args=new String[]{idl};
+                        ContentValues val=new ContentValues();
+                        val.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO,estado);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,val,
+                                ecolifedb.EcoLifeEntry._TALONARIOID+"=?",args);
+                        Log.d(LOG_TAG, "Estado de talonario actualizado"+ti);
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+        }
+    }
 
 
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {

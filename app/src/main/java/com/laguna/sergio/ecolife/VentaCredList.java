@@ -48,7 +48,6 @@ public class VentaCredList extends AppCompatActivity {
             String vcid = vc.getString(vc.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
             GetDataAdapter3.setNro(Integer.toString(aux));
             v.Id = vcid;
-            //SubjectNivelRaidlista.add("raidlvl");
             String vcf = vc.getString(vc.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_FECHA));
             GetDataAdapter3.setFecha(vcf);
             v.Fecha = vcf;

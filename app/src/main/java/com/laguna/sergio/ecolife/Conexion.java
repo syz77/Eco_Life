@@ -207,9 +207,9 @@ public class Conexion {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
-                                       String vendedor, String id_sup, String id_prod){
+                                       String vendedor, String id_sup){
         String parametros="nombre="+nombre+"&telefono="+telefono+"&direccion="+direccion+"&zona="+zona+
-                "&fecha="+fecha+"&vendedor="+vendedor+"&id_sup="+id_sup+"&id_prod="+id_prod;
+                "&fecha="+fecha+"&vendedor="+vendedor+"&id_sup="+id_sup;
         HttpURLConnection connection=null;
         String respuesta="";
         try{
@@ -255,8 +255,8 @@ public class Conexion {
         return respuesta;
     }
 
-    public String InsertarDetalleContado(String id_venta, String id_prod){
-        String parametros="id_venta="+id_venta+"&id_prod="+id_prod;
+    public String InsertarDetalleContado(String id_venta, String id_prod,String cant){
+        String parametros="id_venta="+id_venta+"&id_prod="+id_prod+"&cant="+cant;
         HttpURLConnection connection=null;
         String respuesta="";
         try{
@@ -488,12 +488,105 @@ public class Conexion {
         }catch(Exception e){ }
         return respuesta;
     }
-    public String estadoverf(String user, String pass){
-        String parametros="email="+user+"&pass="+pass;
+    public String cantTalo(String id){
+        String parametros="id="+id;
         HttpURLConnection connection;
         String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/estadoverif.php?email="+user+"&pass="+pass);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/cantidadTalos.php?id="+id);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+
+    public String todoVentaCredito2(String id){
+        String parametros="id="+id;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todoventacredito2.php?id="+id);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String todoCobro2(String id){
+        String parametros="id="+id;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/todocobro2.php?id="+id);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String activopasivo(String id){
+        String parametros="id="+id;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/CambiarActivoPasivo.php?id="+id);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
+            connection.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream= new Scanner(connection.getInputStream());
+
+            while(inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+            connection.disconnect();
+        }catch(Exception e){ }
+        return respuesta;
+    }
+    public String tainactivo(String id){
+        String parametros="id="+id;
+        HttpURLConnection connection;
+        String respuesta="";
+        try{
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/TalonarioInactivo.php?id="+id);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));

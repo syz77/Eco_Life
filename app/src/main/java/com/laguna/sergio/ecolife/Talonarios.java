@@ -46,9 +46,9 @@ public class Talonarios extends AppCompatActivity {
         while(talo.moveToNext()){
             talonario t= new talonario();
             DataAdapterTalo GetDataAdapter3 = new DataAdapterTalo();
-            String tid=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
-            GetDataAdapter3.setNroTalo(tid);
-            t.Id=tid;
+            String tidn=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
+            GetDataAdapter3.setNroTalo(tidn);
+            t.Idnube=tidn;
             //SubjectNivelRaidlista.add("raidlvl");
             String tf=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C));
             GetDataAdapter3.setFechaTalo(tf);
@@ -56,6 +56,8 @@ public class Talonarios extends AppCompatActivity {
             String te=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO));
             GetDataAdapter3.setEstado(trad(te));
             t.Estado=te;
+            String tid=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+            t.Id=tid;
             DataAdapterClassListR.add(GetDataAdapter3);
             TaloList.add(t);
         }
@@ -69,7 +71,7 @@ public class Talonarios extends AppCompatActivity {
         if(a.equals("1")){
             f="Activo";
         }else if (a.equals("2")){
-            f="Inactivo";
+            f="Pasivo";
         }
         return f;
     }
