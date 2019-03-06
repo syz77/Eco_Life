@@ -31,6 +31,10 @@
     <include layout="@layout/activity_ht_ventcred" />
     <include layout="@layout/activity_gestionar_user" />
     <include layout="@layout/activity_gestuser_talo" />
+    <include layout="@layout/activity_gutalo_cambiar" />
+    <include layout="@layout/activity_gutalo_estado" />
+    <include layout="@layout/activity_gutalo_ventcred" />
+    <include layout="@layout/activity_foto" />
     <include layout="@layout/activity_perfil" />
     <include layout="@layout/cambiarpass"/>
     <include layout="@layout/cambiar_telf" />

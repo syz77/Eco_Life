@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:visibility="visible"
+    android:visibility="invisible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NavegacionMenu"
     tools:showIn="@layout/app_bar_navegacion_menu">
@@ -18,176 +18,172 @@
         android:id="@+id/scroll1">
 
 
-    <RelativeLayout
-        android:id="@+id/relativevcont"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/vconttitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="3dp"
-            android:text="@string/vcont_titulo"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/vcontfecha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:drawableLeft="@drawable/reloj"
-            android:text="@string/vc_hf"
-            android:textSize="18sp" />
-
-        <View
-            android:id="@+id/lineavcont"
-            android:layout_width="wrap_content"
-            android:layout_height="7dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="32dp"
-            android:background="@color/colorPrimaryDark">
-
-        </View>
-
-        <EditText
-            android:id="@+id/vcontnombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/lineavcont"
-            android:layout_marginTop="15dp"
-            android:ems="10"
-            android:hint="@string/vc_nombre"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/vconttelefono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/vcontnombre"
-            android:hint="@string/vc_telf"
-            android:layout_alignParentStart="true"
-            android:ems="10"
-            android:inputType="phone" />
-
-        <EditText
-            android:id="@+id/vcontdireccion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/vconttelefono"
-            android:layout_alignParentStart="true"
-            android:hint="@string/vc_direccion"
-            android:ems="10"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:id="@+id/vcontzona"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="181dp"
-            android:text="@string/vc_zona"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/vcontnrozona"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/vcontdireccion"
-            android:layout_toEndOf="@+id/vcontzona"
-            android:ems="10"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/vcontvendedor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:hint="@string/vc_vendedor"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="230dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
-
-        <View
-            android:id="@+id/lineavcontd"
-            android:layout_width="wrap_content"
-            android:layout_height="7dp"
-            android:layout_alignTop="@+id/vcontvendedor"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="48dp"
-            android:background="@color/colorPrimaryDark">
-
-        </View>
-
-        <TextView
-            android:id="@+id/vcontprod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lineavcontd"
-            android:layout_alignParentStart="true"
-            android:text="@string/vc_prod"
-            android:textSize="18sp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/linearvcont"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vcontprod"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/fondo_color"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinnervcont"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_alignParentRight="@+id/editCantidad" />
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editCantidad"
-                android:layout_alignParentRight="@+id/btnagregardetalle"
-                android:layout_toRightOf="@+id/spinnervcont"
-                android:layout_marginLeft="20dp"/>
-
-            <Button
-                android:id="@+id/btnagregardetalle"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
-                android:text="@string/vcont_agregar"
-                android:textColor="@color/colorBlanco"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-        </RelativeLayout>
-    </RelativeLayout>
         <LinearLayout
-            android:id="@+id/relativevcont2"
+            android:id="@+id/relativevcont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="@+id/scroll1">
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/vconttitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/vcont_titulo"
+                    android:textSize="18sp" />
 
+                <TextView
+                    android:id="@+id/vcontfecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:drawableLeft="@drawable/reloj"
+                    android:text="@string/vc_hf"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/lineavcont"
+                android:layout_width="wrap_content"
+                android:layout_height="7dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="32dp"
+                android:background="@color/colorPrimaryDark">
+
+            </View>
+
+            <EditText
+                android:id="@+id/vcontnombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/lineavcont"
+                android:layout_marginTop="15dp"
+                android:ems="10"
+                android:hint="@string/vc_nombre"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/vconttelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vcontnombre"
+                android:hint="@string/vc_telf"
+                android:layout_alignParentStart="true"
+                android:ems="10"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/vcontdireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vconttelefono"
+                android:layout_alignParentStart="true"
+                android:hint="@string/vc_direccion"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/vcontzona"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="0dp"
+                android:text="@string/vc_zona"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/vcontnrozona"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vcontdireccion"
+                android:layout_toEndOf="@+id/vcontzona"
+                android:ems="10"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/vcontvendedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:hint="@string/vc_vendedor"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <View
+                android:id="@+id/lineavcontd"
+                android:layout_width="wrap_content"
+                android:layout_height="7dp"
+                android:layout_alignTop="@+id/vcontvendedor"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="48dp"
+                android:background="@color/colorPrimaryDark">
+
+            </View>
+
+            <TextView
+                android:id="@+id/vcontprod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lineavcontd"
+                android:layout_alignParentStart="true"
+                android:text="@string/vc_prod"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/linearvcont"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/vcontprod"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/fondo_color"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinnervcont"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_alignParentRight="@+id/editCantidad" />
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editCantidad"
+                    android:layout_alignParentRight="@+id/btnagregardetalle"
+                    android:layout_toRightOf="@+id/spinnervcont"
+                    android:layout_marginLeft="20dp"/>
+
+                <Button
+                    android:id="@+id/btnagregardetalle"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/vcont_agregar"
+                    android:textColor="@color/colorBlanco"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+            </LinearLayout>
             <View
                 android:id="@+id/lineavcontt"
                 android:layout_width="wrap_content"
                 android:layout_height="7dp"
                 android:layout_marginTop="50dp"
                 android:background="@color/colorPrimaryDark">
-
             </View>
-
             <ListView
                 android:id="@+id/listviewVCont"
                 android:layout_width="match_parent"
@@ -206,5 +202,6 @@
                 android:text="@string/vc_confirmar"
                 android:textSize="24sp" />
         </LinearLayout>
+
     </ScrollView>
 </FrameLayout>
