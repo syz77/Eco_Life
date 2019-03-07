@@ -52,7 +52,6 @@ public class Login extends AppCompatActivity {
                 pass=txtPass.getText().toString();
                 final String res= con.login(email,pass);
                 final String tal=con.todoTalonario(email,pass);
-                final String gps=con.todoGPS(email,pass);
                 final String vc=con.todoVentaCredito(email,pass);
                 final String c=con.todoCobro(email,pass);
                 runOnUiThread(new Runnable() {
@@ -62,18 +61,30 @@ public class Login extends AppCompatActivity {
                 if (r>0){
                     persona p=new persona();
                     p.login(res,mContentResolver);
-                    if(con.objJson(tal)>0) {
-                        SincroT(tal);
+                    Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,null,
+                            null,null);
+                    Cursor vcred=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,null,
+                            null,null);
+                    Cursor cob=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,null,null,
+                            null,null);
+                    if (t.getCount()==0) {
+                        if (con.objJson(tal) > 0) {
+                            SincroT(tal);
+                        }
                     }
-                    /*if(con.objJson(gps)>0) {
-                        SincroGPS(gps);
-                    }*/
-                    if(con.objJson(vc)>0) {
-                        SincroVC(vc);
+                    if(vcred.getCount()==0) {
+                        if (con.objJson(vc) > 0) {
+                            SincroVC(vc);
+                        }
                     }
-                    if(con.objJson(c)>0){
-                        SincroC(c);
+                    if(cob.getCount()==0) {
+                        if (con.objJson(c) > 0) {
+                            SincroC(c);
+                        }
                     }
+                    t.close();
+                    vcred.close();
+                    cob.close();
                     Intent i= new Intent(Login.this,NavegacionMenu.class);
                     startActivity(i);
                     //Toast.makeText(getApplicationContext(),Integer.toString(x), Toast.LENGTH_LONG).show();

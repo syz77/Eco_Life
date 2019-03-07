@@ -43,6 +43,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewDebug;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.view.KeyEvent;
@@ -324,7 +325,9 @@ public class NavegacionMenu extends AppCompatActivity
         Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
         Foto= findViewById(R.id.activity_foto);
 
+
         ImageestadoGU= findViewById(R.id.estadoGU);
+
         Image_foto= findViewById(R.id.image_foto);
         CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
         CambiarTelf=(FrameLayout) findViewById(R.id.cambiar_telf);
@@ -556,6 +559,13 @@ public class NavegacionMenu extends AppCompatActivity
         recyclerViewGUTvc.setHasFixedSize(true);
         recyclerViewlayoutManager = new LinearLayoutManager(this);
         recyclerViewGUTvc.setLayoutManager(recyclerViewlayoutManager);
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+        }
+
 
         vcConfirmar.setOnClickListener(new View.OnClickListener(){
                                             @Override
@@ -1043,7 +1053,6 @@ public class NavegacionMenu extends AppCompatActivity
                 RecyclerViewClickedItemPOSR=0;
 
                 if(ChildViewHT != null && gestureDetectorG.onTouchEvent(motionEvent)) {
-                    Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewHT);
                     subjIdHT= SubjectNamesHTid.get(RecyclerViewClickedItemPOSR);
                     //SubjectNames.clear();// = new ArrayList<>();
@@ -1278,8 +1287,18 @@ public class NavegacionMenu extends AppCompatActivity
 
         CrearTalonario.setOnClickListener(new View.OnClickListener(){
         @Override
-        public void onClick(View view){
-            deinicioacreartalo();
+        public void onClick(View view) {
+            Cursor s = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+            if (s.getCount() > 0) {
+                s.moveToNext();
+                String as = s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+                if (as.equals("2")) {
+                    Toast.makeText(getApplicationContext(), "No puede crear talonarios", Toast.LENGTH_SHORT);
+                } else {
+                    deinicioacreartalo();
+                }
+            }
         }
     });
         creartalo.setOnClickListener(new View.OnClickListener(){
@@ -1298,10 +1317,10 @@ public class NavegacionMenu extends AppCompatActivity
                             talonario talo = new talonario(estado, fecha, idsup, idsupnube);
                             talo.insert(talo, mContentResolver);
                             t.close();
+                            cargarDatosTalo();
+                            Toast.makeText(getApplicationContext(),"Talonario creado exitosamente", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(),be,Toast.LENGTH_SHORT).show();
-
-
                 }
             }
 
@@ -1310,68 +1329,79 @@ public class NavegacionMenu extends AppCompatActivity
         btnNuevoCobro.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String nuevomonto=etmontoCobro.getText().toString();
-                if(nuevomonto.equals("")){
-                    Toast.makeText(getApplicationContext(),"Ingrese un monto",Toast.LENGTH_SHORT).show();
-                }else {
-                    int subtotal=0;
-                    int nrocuota=1;
-                    String[] args = new String[]{ventacfinal.Id};
-                    Cursor c = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
-                            ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID + "=?", args, null);
-                    if (c.getCount() != 0) {
-                        while(c.moveToNext()){
-                            String a=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO));
-                            subtotal=subtotal+Integer.parseInt(a);
-                            nrocuota++;
-                        }
-                        if(Integer.parseInt(nuevomonto)<=(140-subtotal)){
-                            fechaVC = getCurrentTimeStamp();
-                            subtotal=subtotal+Integer.parseInt(nuevomonto);
-                            ConseguirGPS();
-                            gps g=new gps(latitud,longitud);
-                            g.insert(g,mContentResolver);
-                            //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
-                            Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
-                                    null,null,null);
-                            gs.moveToLast();
-                            String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
-                            String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
-                            cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
-                                    ventacfinal.NubeId,idgps,idgpsnube);
-                            co.insert(co,mContentResolver);
-                            Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
-                            gs.close();
-                        }else{
-                            Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        if(Integer.parseInt(nuevomonto)<=140){
-                            nrocuota=1;
-                            subtotal=Integer.parseInt(nuevomonto);
-                            fechaVC = getCurrentTimeStamp();
-                            ConseguirGPS();
-                            gps g=new gps(latitud,longitud);
-                            g.insert(g,mContentResolver);
-                            //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
-                            Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
-                                    null,null,null);
-                            gs.moveToLast();
-                            String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
-                            String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
-                            cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
-                                    ventacfinal.NubeId,idgps,idgpsnube);
-                            co.insert(co,mContentResolver);
-                            Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
-                            gs.close();
-                        }else{
-                            Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
+                Cursor s=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+                if(s.getCount()>0) {
+                    s.moveToNext();
+                    String as=s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+                    if(as.equals("2")) {
+                        Toast.makeText(getApplicationContext(),"No puede realizar cobros",Toast.LENGTH_SHORT);
+                    }else{
+                        String nuevomonto=etmontoCobro.getText().toString();
+                        if(nuevomonto.equals("")){
+                            Toast.makeText(getApplicationContext(),"Ingrese un monto",Toast.LENGTH_SHORT).show();
+                        }else {
+                            int subtotal=0;
+                            int nrocuota=1;
+                            String[] args = new String[]{ventacfinal.Id};
+                            Cursor c = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
+                                    ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID + "=?", args, null);
+                            if (c.getCount() != 0) {
+                                while(c.moveToNext()){
+                                    String a=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO));
+                                    subtotal=subtotal+Integer.parseInt(a);
+                                    nrocuota++;
+                                }
+                                if(Integer.parseInt(nuevomonto)<=(140-subtotal)){
+                                    fechaVC = getCurrentTimeStamp();
+                                    subtotal=subtotal+Integer.parseInt(nuevomonto);
+                                    ConseguirGPS();
+                                    gps g=new gps(latitud,longitud);
+                                    g.insert(g,mContentResolver);
+                                    //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
+                                    Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
+                                            null,null,null);
+                                    gs.moveToLast();
+                                    String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                                    String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                                    cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
+                                            ventacfinal.NubeId,idgps,idgpsnube);
+                                    co.insert(co,mContentResolver);
+                                    Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
+                                    gs.close();
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                if(Integer.parseInt(nuevomonto)<=140){
+                                    nrocuota=1;
+                                    subtotal=Integer.parseInt(nuevomonto);
+                                    fechaVC = getCurrentTimeStamp();
+                                    ConseguirGPS();
+                                    gps g=new gps(latitud,longitud);
+                                    g.insert(g,mContentResolver);
+                                    //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
+                                    Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
+                                            null,null,null);
+                                    gs.moveToLast();
+                                    String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                                    String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                                    cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
+                                            ventacfinal.NubeId,idgps,idgpsnube);
+                                    co.insert(co,mContentResolver);
+                                    Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
+                                    gs.close();
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            c.close();
+                            generarCobrosActuales();
+                            EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
                         }
                     }
-                    c.close();
-                    generarCobrosActuales();
                 }
-
+                s.close();
             }
 
         });
@@ -1440,6 +1470,8 @@ public class NavegacionMenu extends AppCompatActivity
                     detalle.clear();
                     adapterDetalle.clear();
                     cleanventacontado();
+                    EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
+                    Toast.makeText(getApplicationContext(),"Venta al contado agregada con exito",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1751,15 +1783,17 @@ public class NavegacionMenu extends AppCompatActivity
     public void cargarDatosTalo(){
         Cursor c=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
-        c.moveToNext();
-        String id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
-        String fecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C));
-        String[] args=new String[]{id};
-        Cursor v=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,
-                ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID+"=?",args,null);
-        nrotalo.setText("Nro Talonario: "+id);
-        fechatalo.setText("Fecha de Creacion: "+fecha);
-        nroventas.setText("Creditos actuales:"+Integer.toString(v.getCount()));
+        if(c.getCount()>0) {
+            c.moveToNext();
+            String id = c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+            String fecha = c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_FECHA_C));
+            String[] args = new String[]{id};
+            Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
+                    ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID + "=?", args, null);
+            nrotalo.setText("Nro Talonario: " + id);
+            fechatalo.setText("Fecha de Creacion: " + fecha);
+            nroventas.setText("Creditos actuales:" + Integer.toString(v.getCount()));
+        }
         c.close();
     }
 
@@ -1873,17 +1907,6 @@ public class NavegacionMenu extends AppCompatActivity
                     }
                 }
             }
-             /*   VentaC.setVisibility(View.INVISIBLE);
-            Inicio.setVisibility(View.INVISIBLE);
-            Ventas.setVisibility(View.INVISIBLE);
-            ListaT.setVisibility(View.INVISIBLE);
-            GesUsuario.setVisibility(View.INVISIBLE);
-            Perfil.setVisibility(View.INVISIBLE);
-            CambiarPass.setVisibility(View.INVISIBLE);
-            CambiarTelf.setVisibility(View.INVISIBLE);
-            FrameCrearTalonario.setVisibility(View.INVISIBLE);
-            ventaCredList.setVisibility(View.INVISIBLE);
-            cobroList.setVisibility(View.INVISIBLE);*/
         }
         return false;
     }
@@ -1959,8 +1982,8 @@ public class NavegacionMenu extends AppCompatActivity
     ///////////////////////////Generamos la lista de los usuarios///////////////////////////////////
 
     public void registrarUsuario(View v){
-        recyclerViewadapterG = new RecyclerAdapGesU(DataAdapterClassListG, this);
-        recyclerViewG.setAdapter(recyclerViewadapterG);
+        Intent i= new Intent(NavegacionMenu.this,RegUser.class);
+        startActivity(i);
     }
     public void denuevaventaacobro(){
         Cursor c=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,
@@ -2150,7 +2173,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     public static String getCurrentTimeStamp(){
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
             //para la fecha parpara
@@ -2171,17 +2194,28 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
     public void ventCred(View v){
-        String Sfecha = getCurrentTimeStamp();
-        fotoVC="";
-        Vcfecha.setText(Sfecha);
-        nombreCVC.setText("");
-        telefonoVC.setText("");
-        direccionVC.setText("");
-        zonaVC.setText("");
-        nombrePVC.setText("");
-        Ventas.setVisibility(View.INVISIBLE);
-        Inicio.setVisibility(View.INVISIBLE);
-        VentaC.setVisibility(View.VISIBLE);
+        Cursor s=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+        if(s.getCount()>0) {
+            s.moveToNext();
+            String a=s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+            if(a.equals("2")) {
+                Toast.makeText(getApplicationContext(),"No puede realizar ventas",Toast.LENGTH_SHORT);
+            }else{
+                String Sfecha = getCurrentTimeStamp();
+                fotoVC = "";
+                Vcfecha.setText(Sfecha);
+                nombreCVC.setText("");
+                telefonoVC.setText("");
+                direccionVC.setText("");
+                zonaVC.setText("");
+                nombrePVC.setText("");
+                Ventas.setVisibility(View.INVISIBLE);
+                Inicio.setVisibility(View.INVISIBLE);
+                VentaC.setVisibility(View.VISIBLE);
+            }
+        }
+        s.close();
     }
 
     public void hTVCcatras (View v){

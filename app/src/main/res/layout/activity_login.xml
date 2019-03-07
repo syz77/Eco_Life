@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,52 +7,64 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <EditText
-        android:id="@+id/editUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editPass"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="205dp"
-        android:ems="10"
-        android:hint="@string/login_nombre"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="84dp"
-        tools:layout_editor_absoluteY="169dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
-    <EditText
-        android:id="@+id/editPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="197dp"
-        android:ems="10"
-        android:hint="@string/login_pass"
-        android:inputType="textPassword"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="232dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="134dp"
-        android:text="@string/login_ini"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="310dp" />
+            <EditText
+                android:id="@+id/editUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/editPass"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="205dp"
+                android:ems="10"
+                android:hint="@string/login_nombre"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="84dp"
+                tools:layout_editor_absoluteY="169dp" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="94dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="72dp"
-        app:srcCompat="@drawable/ecologo" />
+            <EditText
+                android:id="@+id/editPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/editUser"
+                android:ems="10"
+                android:hint="@string/login_pass"
+                android:inputType="textPassword"
+                tools:layout_editor_absoluteX="83dp"
+                tools:layout_editor_absoluteY="232dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="134dp"
+                android:text="@string/login_ini"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="160dp"
+                tools:layout_editor_absoluteY="310dp" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="125dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="72dp"
+                app:srcCompat="@drawable/ecolife" />
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
