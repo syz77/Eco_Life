@@ -169,7 +169,7 @@ public class RegUser extends AppCompatActivity {
     String cargoT(String c)
     {
         String a;
-        if(c=="supervisor"){
+        if(c.equals("Supervisor")){
             a="1";
         }else{
             a="2";
