@@ -160,7 +160,7 @@ public class NavegacionMenu extends AppCompatActivity
     RecyclerView recyclerViewG;
     RecyclerView.Adapter recyclerViewadapterG;
     RecyclerView.LayoutManager recyclerViewlayoutManagerG;
-    ImageView ImgEditUser;
+    ImageView ImgEditUser,ImageestadoGU;
 
     View ChildViewHTVC ;
     View ChildViewR ;//para enviar los datos de recyclerview tocado
@@ -168,7 +168,8 @@ public class NavegacionMenu extends AppCompatActivity
 
     DataAdapterGesU dataAdapterGesU;
     persona personaGU;
-    ArrayList<String> SubjectGUid, SubjectGUnombre, SubjectGUcargo, SubjectGUpass, SubjectGUestado;
+    ArrayList<String> SubjectGUid, SubjectGUnombre, SubjectGUcargo, SubjectGUpass, SubjectGUestado
+            ,SubjectGUcorreo,SubjectGUtelefono,SubjectGUfecha,SubjectGUci;
 
 
     /////////////////////////Para ventas al credito/////////////////////////////////////////////////
@@ -251,7 +252,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
     Button btnCambiarAPasivo;
-    AlertDialog.Builder dialogo1;
+    AlertDialog.Builder dialogo1,dialogo2;
     CheckBox CheckPasivo, CheckExpirado;
     JSONArray jsonArrayGUtalo = null;
     //String FinalJSonObject = "";
@@ -324,6 +325,8 @@ public class NavegacionMenu extends AppCompatActivity
         Perfil=(FrameLayout) findViewById(R.id.activity_perfil);
         Foto= findViewById(R.id.activity_foto);
 
+
+        ImageestadoGU= findViewById(R.id.estadoGU);
 
         Image_foto= findViewById(R.id.image_foto);
         CambiarPass=(FrameLayout) findViewById(R.id.cambiarpass);
@@ -525,6 +528,10 @@ public class NavegacionMenu extends AppCompatActivity
                 dialogo1.cancel();
             }
         });
+        ///////////////////Dialogo para ver la informacion del usuario//////////////////////////////
+
+
+
 
         //////////////////////////////Para cargar usuarios en cambiar talonario/////////////////////////////////////////
         SubjectGUTCIdUser = new ArrayList<>();
@@ -709,6 +716,10 @@ public class NavegacionMenu extends AppCompatActivity
         SubjectGUcargo = new ArrayList<>();
         SubjectGUpass = new ArrayList<>();
         SubjectGUestado = new ArrayList<>();
+        SubjectGUcorreo = new ArrayList<>();
+        SubjectGUtelefono = new ArrayList<>();
+        SubjectGUfecha = new ArrayList<>();
+        SubjectGUci = new ArrayList<>();;
 
         ////////////////////////////////para gestionar usuarios talonario/////////////////////////////
         SubjectNamesGUTid = new ArrayList<>();
@@ -984,19 +995,16 @@ public class NavegacionMenu extends AppCompatActivity
             @Override
             public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
 
-                ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
                 RecyclerViewClickedItemPOSR=0;
+                ChildViewG = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)) {
                     int x=recyclerView.getChildAdapterPosition(ChildViewG);
                     ventacfinal=arrayVC.get(x);
-                    RecyclerViewClickedItemPOSR =x;
+                    RecyclerViewClickedItemPOSR=x;
                     if (isOnlineNet()) {
                         EnvioTAVentCred(ventacfinal.NubeId);
                     }
-
-
                 }
                 return false;
             }
@@ -1475,6 +1483,7 @@ public class NavegacionMenu extends AppCompatActivity
                 dialogo1.show();
             }
         });
+
 
     }
     public void cambiarActivo(){
@@ -2315,6 +2324,10 @@ public class NavegacionMenu extends AppCompatActivity
                 SubjectGUcargo.add(json.getString("id_rol"));
                 GetDataAdapter2.setEstado(json.getString("estado"));
                 SubjectGUestado.add(json.getString("estado"));
+                SubjectGUcorreo.add(json.getString("correo"));
+                SubjectGUtelefono.add(json.getString("telefono"));
+                SubjectGUfecha.add(json.getString("fecha"));
+                SubjectGUci.add(json.getString("ci"));
 
 
             }
@@ -2743,8 +2756,7 @@ public class NavegacionMenu extends AppCompatActivity
         SubjectNamesTVClong.clear();
         SubjectNamesTVCfoto.clear();
 
-
-        class HTVentCredCobroFunctionClass extends AsyncTask<String,Void,String> {
+        class TVentCredCobroFunctionClass extends AsyncTask<String,Void,String> {
 
             @Override
             protected void onPreExecute() {
@@ -2761,7 +2773,7 @@ public class NavegacionMenu extends AppCompatActivity
                 {
                     JSONArray jsonArray = null;
                     try {
-                        Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                         jsonArray = new JSONArray(FinalJSonObject);
                         JSON_PARSE_DATA_AFTER_WEBCALLTVCGPS(jsonArray);
                     }
@@ -2782,7 +2794,7 @@ public class NavegacionMenu extends AppCompatActivity
                 return finalResult;
             }
         }
-        HTVentCredCobroFunctionClass RegisterFunctionClass = new HTVentCredCobroFunctionClass();
+        TVentCredCobroFunctionClass RegisterFunctionClass = new TVentCredCobroFunctionClass();
         RegisterFunctionClass.execute(Idventa_credito);
     }
 
@@ -2793,11 +2805,12 @@ public class NavegacionMenu extends AppCompatActivity
             JSONObject json = null;
             try {
                 json = array.getJSONObject(i);
-                SubjectNamesTVCfecha.add(json.getString("fecha"));
+                SubjectNamesTVCfoto.add(json.getString("foto"));
                 SubjectNamesTVCcuota.add(json.getString("nro_cuota"));
+                SubjectNamesTVCfecha.add(json.getString("fecha"));
                 SubjectNamesTVClat.add(json.getString("latitud"));
                 SubjectNamesTVClong.add(json.getString("longitud"));
-                SubjectNamesTVCfoto.add(json.getString("foto"));
+
             }
             catch (JSONException e)
             {
@@ -3206,6 +3219,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     public void AbrirMapaVC(View v){
         if (isOnlineNet()) {
+            Toast.makeText(NavegacionMenu.this, Integer.toString(SubjectNamesTVCfecha.size()), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(NavegacionMenu.this, MapsActivity.class);
             intent.putStringArrayListExtra("fechas", SubjectNamesTVCfecha);
             intent.putStringArrayListExtra("cuotas", SubjectNamesTVCcuota);
@@ -3216,6 +3230,7 @@ public class NavegacionMenu extends AppCompatActivity
             Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
         }
     }
+
 
     public void AbrirMapaGUTVC(View v){
 
@@ -3245,6 +3260,24 @@ public class NavegacionMenu extends AppCompatActivity
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void InfoGesUser(View v){
+
+        dialogo2 = new AlertDialog.Builder(this);
+        dialogo2.setTitle(SubjectGUnombre.get(RecyclerViewClickedItemPOSR));
+        dialogo2.setMessage("CI: "+SubjectGUci.get(RecyclerViewClickedItemPOSR) +"\n"+
+                "Telf: "+SubjectGUtelefono.get(RecyclerViewClickedItemPOSR)+"\n"+
+                "Fecha nac:"+SubjectGUfecha.get(RecyclerViewClickedItemPOSR)+"\n"+
+                "Usuario: "+SubjectGUcorreo.get(RecyclerViewClickedItemPOSR));
+        dialogo2.setCancelable(false);
+        dialogo2.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+
+        dialogo2.show();
     }
 
 }
