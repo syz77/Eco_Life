@@ -61,6 +61,7 @@ public class VentaCredList extends AppCompatActivity {
             String nubeid=vc.getString(vc.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID));
             v.NubeId=nubeid;
             v.Nombre=nombre;
+            GetDataAdapter3.setNombre(nombre);
             v.Telefono=telefono;
             v.Zona=zona;
             v.Vendedor=vendedor;

@@ -50,8 +50,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<String> cuotas = (ArrayList<String>) getIntent().getStringArrayListExtra("cuotas");
         mMap = googleMap;
 
-        lati = Double.parseDouble(listlat.get(1));
-        longi = Double.parseDouble(listlong.get(1));
+        lati = Double.parseDouble(listlat.get(0));
+        longi = Double.parseDouble(listlong.get(0));
         LatLng sydney = new LatLng(lati, longi);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,16));
         //int tamanio = fechas.size();

@@ -1307,7 +1307,6 @@ public class NavegacionMenu extends AppCompatActivity
                 final String be=verificacionCrearTalonario();
                 if (be.equals("")) {
                             final String estado = "1";
-                            final Conexion con = new Conexion();
                             final String fecha = txtfecha.getText().toString();
                             Cursor t = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                                     ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
@@ -1322,6 +1321,7 @@ public class NavegacionMenu extends AppCompatActivity
                 }else{
                     Toast.makeText(getApplicationContext(),be,Toast.LENGTH_SHORT).show();
                 }
+
             }
 
 
@@ -1481,6 +1481,7 @@ public class NavegacionMenu extends AppCompatActivity
             @Override
             public void onClick(View v){
                 dialogo1.show();
+                cargarDatosTalo();
             }
         });
 
@@ -1498,6 +1499,7 @@ public class NavegacionMenu extends AppCompatActivity
             val.put(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO,est);
             mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,val,
                     ecolifedb.EcoLifeEntry._TALONARIOID+"=?",args);
+            Toast.makeText(getApplicationContext(),"Talonario modificado exitosamente",Toast.LENGTH_SHORT).show();
 
         }
         c.close();
@@ -1643,6 +1645,8 @@ public class NavegacionMenu extends AppCompatActivity
         GesUserTaloEstado.setVisibility(View.INVISIBLE);
         GesUserTaloVentCred.setVisibility(View.INVISIBLE);
         Foto.setVisibility(View.INVISIBLE);
+        Ventas.removeAllViews();
+
 
         ventaCredList.setVisibility(View.INVISIBLE);
         cobroList.setVisibility(View.INVISIBLE);
@@ -1793,6 +1797,10 @@ public class NavegacionMenu extends AppCompatActivity
             nrotalo.setText("Nro Talonario: " + id);
             fechatalo.setText("Fecha de Creacion: " + fecha);
             nroventas.setText("Creditos actuales:" + Integer.toString(v.getCount()));
+        }else{
+            nrotalo.setText("Nro Talonario: ");
+            fechatalo.setText("Fecha de Creacion: ");
+            nroventas.setText("Creditos actuales:" );
         }
         c.close();
     }
@@ -2196,26 +2204,31 @@ public class NavegacionMenu extends AppCompatActivity
     public void ventCred(View v){
         Cursor s=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
-        if(s.getCount()>0) {
-            s.moveToNext();
-            String a=s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
-            if(a.equals("2")) {
-                Toast.makeText(getApplicationContext(),"No puede realizar ventas",Toast.LENGTH_SHORT);
-            }else{
-                String Sfecha = getCurrentTimeStamp();
-                fotoVC = "";
-                Vcfecha.setText(Sfecha);
-                nombreCVC.setText("");
-                telefonoVC.setText("");
-                direccionVC.setText("");
-                zonaVC.setText("");
-                nombrePVC.setText("");
-                Ventas.setVisibility(View.INVISIBLE);
-                Inicio.setVisibility(View.INVISIBLE);
-                VentaC.setVisibility(View.VISIBLE);
+        Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
+        if(t.getCount()>0) {
+            if (s.getCount() > 0) {
+                s.moveToNext();
+                String a = s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+                if (a.equals("2")) {
+                    Toast.makeText(getApplicationContext(), "No puede realizar ventas", Toast.LENGTH_SHORT);
+                } else {
+                    String Sfecha = getCurrentTimeStamp();
+                    fotoVC = "";
+                    Vcfecha.setText(Sfecha);
+                    nombreCVC.setText("");
+                    telefonoVC.setText("");
+                    direccionVC.setText("");
+                    zonaVC.setText("");
+                    nombrePVC.setText("");
+                    Ventas.setVisibility(View.INVISIBLE);
+                    Inicio.setVisibility(View.INVISIBLE);
+                    VentaC.setVisibility(View.VISIBLE);
+                }
             }
         }
         s.close();
+        t.close();
     }
 
     public void hTVCcatras (View v){
@@ -3198,8 +3211,8 @@ public class NavegacionMenu extends AppCompatActivity
     }
     public void Traer_foto_VC(View v){
         if (isOnlineNet()) {
-            Traer_foto(SubjectNamesTVCfoto.get(RecyclerViewClickedItemPOSR));
-            HTVCinfo.setVisibility(View.INVISIBLE);
+            Traer_foto(SubjectNamesTVCfoto.get(0));
+            cobroList.setVisibility(View.INVISIBLE);
             Foto.setVisibility(View.VISIBLE);
             banderafoto=1;
             //banderafoto=0;
