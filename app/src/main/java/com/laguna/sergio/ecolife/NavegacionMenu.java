@@ -252,7 +252,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
     Button btnCambiarAPasivo;
-    AlertDialog.Builder dialogo1,dialogo2;
+    AlertDialog.Builder dialogo1,dialogo2,dialogo3;
     CheckBox CheckPasivo, CheckExpirado;
     JSONArray jsonArrayGUtalo = null;
     //String FinalJSonObject = "";
@@ -1967,14 +1967,45 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
     public void nuevoEstadoTalonario(View v){
-        if (TextGUTEestado.getText().equals("Estado actual: Activo")){
-            Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+
+        dialogo3 = new AlertDialog.Builder(this);
+        dialogo3.setTitle("Advertencia");
+        dialogo3.setMessage("Esta por cambiar el estado del talonario");
+        dialogo3.setCancelable(false);
+        dialogo3.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                if (TextGUTEestado.getText().equals("Estado actual: Activo")&& personaGU.Estado.equals("0")){
+                    InsertGUTestado(GUTEidtalo,"2");
+                    //Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+                }else if(TextGUTEestado.getText().equals("Estado actual: Pasivo")){
+                    InsertGUTestado(GUTEidtalo,"0");
+                    //TextGUTEestado.setText("Estado actual: Expirado");
+                }else if(TextGUTEestado.getText().equals("Estado actual: Expirado")){
+                    Toast.makeText(NavegacionMenu.this, "El talonario ya expiro", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dialogo3.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                dialogo1.cancel();
+            }
+        });
+
+        dialogo3.show();
+/*
+        if (TextGUTEestado.getText().equals("Estado actual: Activo")&& personaGU.Estado.equals("0")){
+            InsertGUTestado(GUTEidtalo,"2");
+            //Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
         }else if(TextGUTEestado.getText().equals("Estado actual: Pasivo")){
             InsertGUTestado(GUTEidtalo,"0");
             //TextGUTEestado.setText("Estado actual: Expirado");
         }else if(TextGUTEestado.getText().equals("Estado actual: Expirado")){
             Toast.makeText(NavegacionMenu.this, "El talonario ya expiro", Toast.LENGTH_SHORT).show();
-        }
+        }else{
+            Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+        }*/
     }
 
     ////////////////////////////Generamos la lista de talonarios actuales//////////////////
@@ -2813,7 +2844,8 @@ public class NavegacionMenu extends AppCompatActivity
 
     public void JSON_PARSE_DATA_AFTER_WEBCALLTVCGPS(JSONArray array){
 
-        for(int i = 0; i<array.length(); i++) {
+
+        for(int i = 0; i<1; i++) {
 
             JSONObject json = null;
             try {
@@ -3210,14 +3242,18 @@ public class NavegacionMenu extends AppCompatActivity
         }
     }
     public void Traer_foto_VC(View v){
-        if (isOnlineNet()) {
-            Traer_foto(SubjectNamesTVCfoto.get(0));
-            cobroList.setVisibility(View.INVISIBLE);
-            Foto.setVisibility(View.VISIBLE);
-            banderafoto=1;
-            //banderafoto=0;
+        if(SubjectNamesTVCfoto.isEmpty()) {
+            Toast.makeText(NavegacionMenu.this, "No puede ver esta informacion ahora mismo", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+            if (isOnlineNet()) {
+                Traer_foto(SubjectNamesTVCfoto.get(0));
+                cobroList.setVisibility(View.INVISIBLE);
+                Foto.setVisibility(View.VISIBLE);
+                banderafoto = 1;
+                //banderafoto=0;
+            } else {
+                Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -3231,32 +3267,39 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
     public void AbrirMapaVC(View v){
-        if (isOnlineNet()) {
-            Toast.makeText(NavegacionMenu.this, Integer.toString(SubjectNamesTVCfecha.size()), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(NavegacionMenu.this, MapsActivity.class);
-            intent.putStringArrayListExtra("fechas", SubjectNamesTVCfecha);
-            intent.putStringArrayListExtra("cuotas", SubjectNamesTVCcuota);
-            intent.putStringArrayListExtra("latitudes", SubjectNamesTVClat);
-            intent.putStringArrayListExtra("longitudes", SubjectNamesTVClong);
-            startActivity(intent);
-        }else{
-            Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+
+        if (SubjectNamesTVCfecha.isEmpty()) {
+            Toast.makeText(NavegacionMenu.this, "No puede ver esta informacion ahora mismo", Toast.LENGTH_SHORT).show();
+        }else {
+
+            if (isOnlineNet()) {
+                //Toast.makeText(NavegacionMenu.this, Integer.toString(SubjectNamesTVCfecha.size()), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(NavegacionMenu.this, MapsActivity.class);
+                intent.putStringArrayListExtra("fechas", SubjectNamesTVCfecha);
+                intent.putStringArrayListExtra("cuotas", SubjectNamesTVCcuota);
+                intent.putStringArrayListExtra("latitudes", SubjectNamesTVClat);
+                intent.putStringArrayListExtra("longitudes", SubjectNamesTVClong);
+                startActivity(intent);
+            } else {
+                Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
 
     public void AbrirMapaGUTVC(View v){
 
-        if (isOnlineNet()) {
-            Intent intent = new Intent(NavegacionMenu.this, MapsActivity.class);
-            intent.putStringArrayListExtra("fechas", SubjectNamesHTVCfechmapa);
-            intent.putStringArrayListExtra("cuotas", SubjectNamesHTVCcuotas);
-            intent.putStringArrayListExtra("latitudes", SubjectNamesHTVClat);
-            intent.putStringArrayListExtra("longitudes", SubjectNamesHTVClong);
-            startActivity(intent);
-        }else{
-            Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
-        }
+            if (isOnlineNet()) {
+                Intent intent = new Intent(NavegacionMenu.this, MapsActivity.class);
+                intent.putStringArrayListExtra("fechas", SubjectNamesHTVCfechmapa);
+                intent.putStringArrayListExtra("cuotas", SubjectNamesHTVCcuotas);
+                intent.putStringArrayListExtra("latitudes", SubjectNamesHTVClat);
+                intent.putStringArrayListExtra("longitudes", SubjectNamesHTVClong);
+                startActivity(intent);
+            } else {
+                Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+            }
+
     }
 
     public Boolean isOnlineNet() {

@@ -55,7 +55,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(lati, longi);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,16));
         //int tamanio = fechas.size();
-        Toast.makeText(MapsActivity.this, "Nro de cobros: "+ Integer.toString(fechas.size()), Toast.LENGTH_LONG).show();
+        if (fechas.size()==1){
+
+        }else{
+            Toast.makeText(MapsActivity.this, "Nro de cobros: "+ Integer.toString(fechas.size()), Toast.LENGTH_LONG).show();
+        }
         for (int i=0; fechas.size()>i;i++) {
             // Add a marker in Sydney and move the camera
             lati = Double.parseDouble(listlat.get(i));
