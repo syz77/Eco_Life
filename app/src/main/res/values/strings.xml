@@ -79,7 +79,8 @@
     <string name="gutalo_estadonrotalo">Nro de talonario: </string>
     <string name="gutalo_estadofecha">Fecha: </string>
     <string name="gutalo_estadoactual">Estado actual: </string>
-    <string name="gutalo_estadocambiar">Expirar talonario</string>
+    <string name="gutalo_estadocambiar">Cambiar estado</string>
+    <string name="gutalo_estadoinfo">CASO 1: Si el talonario actual esta {Activo} y el usuario esta {Habilitado} o {Vacaciones} no podrá cambiar es estado del talonario. \n\nCASO 2: Si el talonario actual esta {Activo} y el usuario esta {Bloqueado} si podrá realizar el cambio de estado. \n\nCASO 3: Si el talonario actual esta {Pasivo} si podrá realizar el cambio de estado. \n\nCASO 4: Si el talonario actual esta {Expirado} este no cambiara su estado.</string>
 
     <string name="foto_titulo">FOTO DEL DOMICILIO</string>
 

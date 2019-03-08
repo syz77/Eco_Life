@@ -50,12 +50,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<String> cuotas = (ArrayList<String>) getIntent().getStringArrayListExtra("cuotas");
         mMap = googleMap;
 
-        lati = Double.parseDouble(listlat.get(1));
-        longi = Double.parseDouble(listlong.get(1));
+        lati = Double.parseDouble(listlat.get(0));
+        longi = Double.parseDouble(listlong.get(0));
         LatLng sydney = new LatLng(lati, longi);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,16));
         //int tamanio = fechas.size();
-        Toast.makeText(MapsActivity.this, "Nro de cobros: "+ Integer.toString(fechas.size()), Toast.LENGTH_LONG).show();
+        if (fechas.size()==1){
+
+        }else{
+            Toast.makeText(MapsActivity.this, "Nro de cobros: "+ Integer.toString(fechas.size()), Toast.LENGTH_LONG).show();
+        }
         for (int i=0; fechas.size()>i;i++) {
             // Add a marker in Sydney and move the camera
             lati = Double.parseDouble(listlat.get(i));
