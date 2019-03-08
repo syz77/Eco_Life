@@ -626,7 +626,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                                 boolean x=true;
                                 while(x && cantTalo.moveToNext()){
                                     String idnube = cantTalo.getString(cantTalo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
-                                    if (id.equals(idnube)) {
+                                    if (id.equals(idnube) || idnube==null) {
                                         x=false;
                                     }
                                     temp=idnube;

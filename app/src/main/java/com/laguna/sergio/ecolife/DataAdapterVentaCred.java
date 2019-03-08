@@ -2,6 +2,7 @@ package com.laguna.sergio.ecolife;
 
 public class DataAdapterVentaCred {
     String nro;
+    String nombre;
     String fecha;
     String direccion;
     public String getNro() {
@@ -11,6 +12,10 @@ public class DataAdapterVentaCred {
     public void setNro(String nro) {
         this.nro = nro;
     }
+
+    public String getNombre(){return nombre;}
+
+    public void setNombre(String nombre){this.nombre=nombre;}
 
     public String getFecha() {
         return fecha;

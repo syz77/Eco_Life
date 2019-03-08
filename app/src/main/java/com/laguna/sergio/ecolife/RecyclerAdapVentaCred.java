@@ -38,7 +38,7 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
         DataAdapterVentaCred dataAdapter =  dataAdapters.get(position);
 
         viewHolder.TextViewNroVC.setText("Nro de Venta a crédito: "+dataAdapter.getNro());//
-
+        viewHolder.TextViewNombreVC.setText("Nombre Cliente: "+dataAdapter.getNombre());
         viewHolder.TextViewFechaVC.setText("Fecha: "+dataAdapter.getFecha());//
         viewHolder.TextDireccion.setText("Dirección: "+dataAdapter.getDireccion());
 
@@ -58,6 +58,7 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView TextViewNroVC;
+        public TextView TextViewNombreVC;
         public TextView TextViewFechaVC;
         public TextView TextDireccion;
 
@@ -67,6 +68,7 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
             super(itemView);
 
             TextViewNroVC = itemView.findViewById(R.id.nroCredito) ;
+            TextViewNombreVC=itemView.findViewById(R.id.nombreCredito);
             TextViewFechaVC = itemView.findViewById(R.id.fechaCredito) ;
             TextDireccion=itemView.findViewById(R.id.direccionCredito);
 
