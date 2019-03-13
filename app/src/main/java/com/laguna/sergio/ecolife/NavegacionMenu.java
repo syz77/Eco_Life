@@ -223,7 +223,7 @@ public class NavegacionMenu extends AppCompatActivity
     View ChildViewG;
     Button RegUser;
     ContentResolver mContentResolver;
-    TextView nombre,usuario,ci,cargo,telefono;
+    TextView nombre,usuario,ci,cargo,telefono,textfechacrearTalo;
     EditText oldpass,newpass,newphone,txtfecha;
     Button Cpass,Ctelf,CambiarC,CambiarT,CrearTalonario,creartalo;
     Calendar c;
@@ -252,7 +252,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
     Button btnCambiarAPasivo;
-    AlertDialog.Builder dialogo1,dialogo2,dialogo3;
+    AlertDialog.Builder dialogo1,dialogo2,dialogo3,dialogoinfo;
     CheckBox CheckPasivo, CheckExpirado;
     JSONArray jsonArrayGUtalo = null;
     //String FinalJSonObject = "";
@@ -356,6 +356,7 @@ public class NavegacionMenu extends AppCompatActivity
         etpromcontado=findViewById(R.id.vcontvendedor);
         etcantcontado=findViewById(R.id.editCantidad);
         btnCambiarAPasivo=findViewById(R.id.btnpasivo);
+        textfechacrearTalo=findViewById(R.id.textFechaCrearTalo);
         
         TextGUTCidtalo=findViewById(R.id.textGUTCidtalo);
         TextGUTCsupervisor=findViewById(R.id.textGUTCsupervisor);
@@ -1645,7 +1646,8 @@ public class NavegacionMenu extends AppCompatActivity
         GesUserTaloEstado.setVisibility(View.INVISIBLE);
         GesUserTaloVentCred.setVisibility(View.INVISIBLE);
         Foto.setVisibility(View.INVISIBLE);
-        Ventas.removeAllViews();
+        //Ventas.removeAllViews();
+
 
 
         ventaCredList.setVisibility(View.INVISIBLE);
@@ -1671,6 +1673,9 @@ public class NavegacionMenu extends AppCompatActivity
 
 
         } else if (id == R.id.nav_gallery) {
+
+            if (isOnlineNet()) {
+
             Cursor Persona = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                     ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1", null, null);
             Persona.moveToFirst();
@@ -1682,6 +1687,9 @@ public class NavegacionMenu extends AppCompatActivity
             recyclerViewHT.setAdapter(recyclerViewadapterHT);
             EnvioHistorialTalo(idpersona,estado);
             Historial.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
+            }
 
         } else if (id == R.id.nav_slideshow) {
             EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
@@ -1693,30 +1701,37 @@ public class NavegacionMenu extends AppCompatActivity
             ListaT.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_manage) {
-            EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
-            if(!estadoverificacion()){
-                finish();
-                System.exit(0);
-            }
-            Cursor cargo=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
-                    ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
-            cargo.moveToFirst();
-            String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
-            cargo.close();
 
-            if (c.equals("2")) {
-
-                SubjectNames.clear();// = new ArrayList<>();
-                DataAdapterClassList.clear();
-                recyclerView.setAdapter(recyclerViewadapter);
-                JSON_WEB_CALL();
-                GesUsuario.setVisibility(View.VISIBLE);
-            }else{
-                if (c.equals("1")){
-                    cargarperfil();
-                    Perfil.setVisibility(View.VISIBLE);
+            if (isOnlineNet()) {
+                EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
+                if(!estadoverificacion()){
+                    finish();
+                    System.exit(0);
                 }
+                Cursor cargo=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
+                cargo.moveToFirst();
+                String c=cargo.getString(cargo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID));
+                cargo.close();
+
+                if (c.equals("2")) {
+
+                    SubjectNames.clear();// = new ArrayList<>();
+                    DataAdapterClassList.clear();
+                    recyclerView.setAdapter(recyclerViewadapter);
+                    JSON_WEB_CALL();
+                    GesUsuario.setVisibility(View.VISIBLE);
+                }else{
+                    if (c.equals("1")){
+                        cargarperfil();
+                        Perfil.setVisibility(View.VISIBLE);
+                    }
+                }
+            }else {
+                Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
             }
+
+
         } else if (id == R.id.nav_send) {
 
         }
@@ -1780,6 +1795,8 @@ public class NavegacionMenu extends AppCompatActivity
     public void deinicioacreartalo(){
         txtfecha.setText("");
         Inicio.setVisibility(View.INVISIBLE);
+        String Sfecha = getCurrentTimeStamp();
+        textfechacrearTalo.setText("Fecha: "+Sfecha);
         FrameCrearTalonario.setVisibility(View.VISIBLE);
     }
 
@@ -3283,6 +3300,7 @@ public class NavegacionMenu extends AppCompatActivity
             } else {
                 Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
             }
+
         }
     }
 
@@ -3334,6 +3352,36 @@ public class NavegacionMenu extends AppCompatActivity
         });
 
         dialogo2.show();
+    }
+
+    public void GUTaloEstadoInfo(View v){
+
+        dialogoinfo = new AlertDialog.Builder(this);
+        dialogoinfo.setTitle(R.string.gutalo_estadoinfoboton);
+        dialogoinfo.setMessage(R.string.gutalo_estadoinfo);
+        dialogoinfo.setCancelable(false);
+        dialogoinfo.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+
+        dialogoinfo.show();
+    }
+
+    public void GUTaloCrearInfo(View v){
+
+        dialogoinfo = new AlertDialog.Builder(this);
+        dialogoinfo.setTitle(R.string.gutalo_estadoinfoboton);
+        dialogoinfo.setMessage(R.string.crear_taloinfo);
+        dialogoinfo.setCancelable(false);
+        dialogoinfo.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+
+        dialogoinfo.show();
     }
 
 }
