@@ -5,7 +5,7 @@
     android:id="@+id/inicio"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
+    android:visibility="visible"
     tools:context=".NavegacionMenu"
     android:background="@drawable/fondo_color"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
