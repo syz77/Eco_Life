@@ -146,14 +146,17 @@ public class Conexion {
             public void onPostExecute(String httpResponseMsg) {
 
                 super.onPostExecute(httpResponseMsg);
-                String[] args=new String[]{id};
-                ContentValues values=new ContentValues();
-                String nubeid=convert(httpResponseMsg);
-                String online="1";
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID,nubeid);
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE,online);
-                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,values,
-                        ecolifedb.EcoLifeEntry._VENTA_CREDITOID+"=?",args);
+                if(httpResponseMsg.equals("")){
+                }else {
+                    String[] args = new String[]{id};
+                    ContentValues values = new ContentValues();
+                    String nubeid = convert(httpResponseMsg);
+                    String online = "1";
+                    values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID, nubeid);
+                    values.put(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_ONLINE, online);
+                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, values,
+                            ecolifedb.EcoLifeEntry._VENTA_CREDITOID + "=?", args);
+                }
 
 
             }
