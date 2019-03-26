@@ -746,7 +746,7 @@ public class NavegacionMenu extends AppCompatActivity
 
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)){
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
-                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
                     personaGU.IdUsuario=SubjectGUid.get(RecyclerViewClickedItemPOSR);
                     personaGU.Nombre=SubjectGUnombre.get(RecyclerViewClickedItemPOSR);
                     personaGU.Password=SubjectGUpass.get(RecyclerViewClickedItemPOSR);
@@ -795,7 +795,7 @@ public class NavegacionMenu extends AppCompatActivity
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)){
 
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
-                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
                 }
 
                 return false;
@@ -840,7 +840,7 @@ public class NavegacionMenu extends AppCompatActivity
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)){
 
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
-                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
                     if (Integer.parseInt(GUTCestadotalo)!=1) {
                         InsertGUTcambiar(SubjectGUTCIdUser.get(RecyclerViewClickedItemPOSR), GUTCidtalo);
                     }
@@ -891,7 +891,7 @@ public class NavegacionMenu extends AppCompatActivity
                 if(ChildViewG != null && gestureDetectorG.onTouchEvent(motionEvent)){
 
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewG);
-                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
                     //InsertGUTcambiar(SubjectGUTCIdUser.get(RecyclerViewClickedItemPOSR), GUTCidtalo);
                     nombreHTVCinfo.setText("Nombre: "+SubjectGUTvcnombre.get(RecyclerViewClickedItemPOSR));
                     telefonoHTVCinfo.setText("Telefono: "+SubjectGUTvctelf.get(RecyclerViewClickedItemPOSR));
@@ -1111,7 +1111,7 @@ public class NavegacionMenu extends AppCompatActivity
 
                 if(ChildViewHTVC != null && gestureDetectorG.onTouchEvent(motionEvent)) {
                     RecyclerViewClickedItemPOSR = Recyclerview.getChildAdapterPosition(ChildViewHTVC);
-                    Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),Integer.toString(RecyclerViewClickedItemPOSR),Toast.LENGTH_SHORT).show();
                     //DataAdapterClassListHTVC.clear();
                     //recyclerViewHTVC.setAdapter(recyclerViewadapterHTVC);
                     //EnvioHTVentaCredito(i);////////cambiar esto subjIdHT
@@ -1481,8 +1481,15 @@ public class NavegacionMenu extends AppCompatActivity
         btnCambiarAPasivo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                dialogo1.show();
+                Cursor c=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
+                        ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
+                if (c.getCount()>0) {
+                    dialogo1.show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"No hay un talonario activo",Toast.LENGTH_SHORT).show();
+                }
                 cargarDatosTalo();
+
             }
         });
 
@@ -1608,20 +1615,7 @@ public class NavegacionMenu extends AppCompatActivity
 
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -1731,8 +1725,6 @@ public class NavegacionMenu extends AppCompatActivity
                 Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
             }
 
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -2255,6 +2247,7 @@ public class NavegacionMenu extends AppCompatActivity
         Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
         if(t.getCount()>0) {
+
             if (s.getCount() > 0) {
                 s.moveToNext();
                 String a = s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
@@ -2274,7 +2267,12 @@ public class NavegacionMenu extends AppCompatActivity
                     VentaC.setVisibility(View.VISIBLE);
                 }
             }
+
+        }else{
+            Toast.makeText(getApplicationContext(),"No hay talonario activo",Toast.LENGTH_SHORT).show();
         }
+
+
         s.close();
         t.close();
     }
@@ -2632,7 +2630,7 @@ public class NavegacionMenu extends AppCompatActivity
                     JSONArray jsonArray = null;
 
                     try {
-                        Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
                         jsonArray = new JSONArray(FinalJSonObject);
                         JSON_PARSE_DATA_AFTER_WEBCALLHTVC(jsonArray);
 
@@ -2737,7 +2735,7 @@ public class NavegacionMenu extends AppCompatActivity
                     JSONArray jsonArray = null;
 
                     try {
-                        Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
                         jsonArray = new JSONArray(FinalJSonObject);
                         JSON_PARSE_DATA_AFTER_WEBCALLHTVCcobro(jsonArray);
 
@@ -2834,7 +2832,7 @@ public class NavegacionMenu extends AppCompatActivity
                 {
                     JSONArray jsonArray = null;
                     try {
-                        Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                         jsonArray = new JSONArray(FinalJSonObject);
                         JSON_PARSE_DATA_AFTER_WEBCALLTVCGPS(jsonArray);
                     }
@@ -2907,7 +2905,7 @@ public class NavegacionMenu extends AppCompatActivity
                 super.onPostExecute(httpResponseMsg);
                 //progressDialog.dismiss();
 
-                Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                 FinalJSonObject = httpResponseMsg ;
 
                 if(FinalJSonObject != null)
@@ -3057,7 +3055,7 @@ public class NavegacionMenu extends AppCompatActivity
                 super.onPostExecute(httpResponseMsg);
                 //progressDialog.dismiss();
 
-                Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                 if (httpResponseMsg.equals("Se cambio correctamente")){
                     TextGUTCsupervisor.setText("Nuevo encargado: "+GUTCnombreuser);
                 }
@@ -3096,7 +3094,7 @@ public class NavegacionMenu extends AppCompatActivity
                 super.onPostExecute(httpResponseMsg);
                 //progressDialog.dismiss();
 
-                Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                 if (httpResponseMsg.equals("Se cambio correctamente")){
                     TextGUTEestado.setText("Nuevo estado: Expirado");
                 }else if (httpResponseMsg.equals("Error no se pudo cambiar")){
@@ -3154,7 +3152,7 @@ public class NavegacionMenu extends AppCompatActivity
                 super.onPostExecute(httpResponseMsg);
                 //progressDialog.dismiss();
 
-                Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                 FinalJSonObject = httpResponseMsg ;
 
                 if(FinalJSonObject != null)
@@ -3162,7 +3160,7 @@ public class NavegacionMenu extends AppCompatActivity
                     JSONArray jsonArray = null;
 
                     try {
-                        Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
                         jsonArray = new JSONArray(FinalJSonObject);
                         JSON_PARSE_DATA_AFTER_WEBCALLGUTvc(jsonArray);
                         //JSONObject jsonObject;

@@ -21,7 +21,7 @@
     <string name="lateral_com">Compartir</string>
     <string name="lateral_option">Telf EcoLife: 75522112 </string>
     <string name="lateral_info">Imformacion</string>
-    <string name="lateral_emp">Empresa</string>
+    <string name="lateral_emp">Version 1.0</string>
 
     <string name="ini_ventacont">VENTA AL CONTADO</string>
     <string name="ini_ventacred">VENTA AL CREDITO</string>
@@ -87,7 +87,7 @@
     <string name="foto_titulo">FOTO DEL DOMICILIO</string>
 
     <string name="nav_header_ecolife">ECOLIFE S.R.L.</string>
-    <string name="nav_header_telfverde">Calle Aroma Esq. Charcas</string>
+    <string name="nav_header_telfverde">Version 1.0</string>
 
 
 
