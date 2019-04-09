@@ -5,6 +5,8 @@ public class DataAdapterTalo {
     String NroTalo;
     String FechaTalo;
     String Estado;
+    String NroVentas;
+    String NroVentasCompletadas;
 
 
 
@@ -33,6 +35,22 @@ public class DataAdapterTalo {
     public void setEstado(String estado){
         this.Estado=estado;
     }
+    public String getNroVentas() {
+        return NroVentas;
+    }
+
+    public void setNroVentas(String nroVentas) {
+        NroVentas = nroVentas;
+    }
+    public String getNroVentasCompletadas() {
+        return NroVentasCompletadas;
+    }
+
+    public void setNroVentasCompletadas(String nroVentasCompletadas) {
+        NroVentasCompletadas = nroVentasCompletadas;
+    }
+
+
 
 
 }

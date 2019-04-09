@@ -43,6 +43,8 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
 
         viewHolder.TextViewFecha.setText("Fecha: "+dataAdapter.getFechaTalo());//gym
         viewHolder.TextEstado.setText("Estado: "+dataAdapter.getEstado());
+        viewHolder.TextNroVentas.setText("Nro de ventas: "+dataAdapter.getNroVentas());
+        viewHolder.TextNroVentasCompletadas.setText("Nro de ventas completadas: "+dataAdapter.getNroVentasCompletadas());
 
     }
 
@@ -62,6 +64,8 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
         public TextView TextViewNroTalo;
         public TextView TextViewFecha;
         public TextView TextEstado;
+        public TextView TextNroVentas;
+        public TextView TextNroVentasCompletadas;
 
 
         public ViewHolder(View itemView) {
@@ -71,6 +75,8 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
             TextViewNroTalo = itemView.findViewById(R.id.nroTalonario) ;
             TextViewFecha = itemView.findViewById(R.id.fechaTalonario) ;
             TextEstado=itemView.findViewById(R.id.estadoTalonario);
+            TextNroVentas=itemView.findViewById(R.id.NroVentas);
+            TextNroVentasCompletadas=itemView.findViewById(R.id.NroVentasCompletadas);
 
 
         }

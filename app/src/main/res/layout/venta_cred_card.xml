@@ -6,7 +6,8 @@
     card_view:cardCornerRadius="2dp"
     card_view:cardBackgroundColor="#FFFFFF"
     card_view:cardElevation="1dp"
-    card_view:cardUseCompatPadding="true">
+    card_view:cardUseCompatPadding="true"
+    android:id="@+id/ventaCard">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,14 +56,13 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/direccionCredito"
+                android:id="@+id/saldoCredito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp" />
-
 
         </LinearLayout>
     </RelativeLayout>
