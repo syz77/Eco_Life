@@ -22,7 +22,6 @@ public class VentaCredList extends AppCompatActivity {
     RecyclerView.Adapter recyclerViewadapterR;
     RecyclerView.LayoutManager recyclerViewlayoutManagerR;
     ArrayList<venta_credito> VentaCList;
-    CardView ventacard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +32,6 @@ public class VentaCredList extends AppCompatActivity {
         recyclerViewR.setHasFixedSize(true);
         recyclerViewlayoutManagerR = new LinearLayoutManager(this);
         recyclerViewR.setLayoutManager(recyclerViewlayoutManagerR);
-        ventacard=findViewById(R.id.ventaCard);
         //generar();
     }
 
@@ -41,7 +39,6 @@ public class VentaCredList extends AppCompatActivity {
         DataAdapterClassListR = new ArrayList<>();
         DataAdapterClassListR.clear();
         VentaCList = new ArrayList<>();
-        //ventacard=findViewById(R.id.ventaCard);
         //recyclerViewR.setAdapter(recyclerViewadapterR);
         String[] args = new String[]{idtalo};
         Cursor vc = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
@@ -80,9 +77,9 @@ public class VentaCredList extends AppCompatActivity {
                 saldo=140-subtotal;
             }
             GetDataAdapter3.setSaldo(Integer.toString(saldo));
-            if(saldo==0){
-                //ventacard.setBackgroundColor(Color.GREEN);
-            }
+            /*if(saldo==0){
+                ventacard.setBackgroundColor(Color.GREEN);
+            }*/
             VentaSaldo.close();
             DataAdapterClassListR.add(GetDataAdapter3);
             VentaCList.add(v);
