@@ -12,7 +12,28 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/relativeCrear"
+        android:background="@drawable/fondo_color">
+
+        <TextView
+            android:id="@+id/textFechaCrearTalo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lineavc1"
+            android:text="TextView"
+            android:textColor="@color/colorBlanco"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageCrearInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lineavc1"
+            android:clickable="true"
+            android:onClick="GUTaloCrearInfo"
+            android:layout_alignParentRight="true"
+            app:srcCompat="@android:drawable/ic_dialog_info" />
 
         <TextView
             android:id="@+id/textView9"
@@ -23,6 +44,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="3dp"
             android:text="Nuevo Talonario"
+            android:textColor="@color/colorBlanco"
             android:textSize="36sp"
             android:textStyle="bold" />
         <View
@@ -39,20 +61,30 @@
             android:id="@+id/editTextDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/lineavc1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:clickable="true"
             android:ems="10"
             android:focusable="false"
-            android:layout_marginTop="60dp"
-            android:clickable="true"
+            android:textColorHint="@color/colorBlanco"
+            android:gravity="center"
             android:hint="yyyy-mm-dd"
-            android:inputType="date" />
+            android:inputType="date"
+            android:textColor="@color/colorBlanco"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/btncrear_talo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_below="@id/editTextDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorBlanco"
             android:onClick="pass"
-            android:text="Crear Talonario" />
+            android:text="Crear Talonario"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 </FrameLayout>

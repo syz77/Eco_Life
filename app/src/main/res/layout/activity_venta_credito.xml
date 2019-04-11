@@ -179,14 +179,18 @@
                 android:background="@color/colorPrimaryDark">
 
             </View>
+
             <Button
                 android:id="@+id/vcsacarfoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/lineavcI"
+                android:layout_below="@id/lineavct"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/side_nav_bar"
                 android:contentDescription="@string/app_name"
                 android:onClick="tomarfoto"
-                android:text="@string/vc_sacarfoto" />
+                android:text="@string/vc_sacarfoto"
+                android:textColor="@color/colorBlanco" />
             <Button
                 android:id="@+id/vcconfirmar2"
                 android:layout_width="match_parent"

@@ -5,6 +5,16 @@ public class DataAdapterGesUTalo {
     String NroTalo;
     String FechaTalo;
     String Estado;
+    String Creditos;
+    String Saldos;
+
+    public String getCreditos() { return Creditos; }
+
+    public void setCreditos(String creditos) { Creditos = creditos; }
+
+    public String getSaldos() { return Saldos; }
+
+    public void setSaldos(String saldos) { Saldos = saldos; }
 
     public String getNroTalo() {
         return NroTalo;

@@ -82,8 +82,8 @@
         </service>
         <service
             android:name=".Datos.Sync.EcoLifeSyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:exported="true">
+            <!--android:process=":sync" -->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

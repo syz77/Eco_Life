@@ -117,11 +117,16 @@
                     android:orientation="vertical"
                     android:layoutDirection="rtl"
                     android:gravity="bottom">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cambiar a pasivo"
-                    android:id="@+id/btnpasivo" />
+
+                    <Button
+                        android:id="@+id/btnpasivo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_launcher_background"
+                        android:text="Cambiar a \n pasivo"
+                        android:layout_above="@+id/linea_ini_tres"
+                        android:textColor="@color/colorBlanco"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
 
