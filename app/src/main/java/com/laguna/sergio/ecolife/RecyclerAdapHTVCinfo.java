@@ -42,21 +42,9 @@ public class RecyclerAdapHTVCinfo extends RecyclerView.Adapter<RecyclerAdapHTVCi
 
         viewHolder.TextViewFecha.setText("Fecha: "+dataAdapter.getFecha());//gym
         //viewHolder.TextViewCargo.setText("Cargo: "+dataAdapter.getCargo());//raidlvl
-        if (dataAdapter.getCuota().equals("1")){
-            viewHolder.ImaViewCuota.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.smiley));
-            viewHolder.TextViewCuota.setText("Cuota: "+dataAdapter.getCuota());//raidlvl
-        }else if (dataAdapter.getCuota().equals("2")){
-            viewHolder.ImaViewCuota.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.candado));
-            viewHolder.TextViewCuota.setText("Cuota: "+dataAdapter.getCuota());//raidlvl
-        }else if (dataAdapter.getCuota().equals("3")){
-            viewHolder.ImaViewCuota.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.candado));
-            viewHolder.TextViewCuota.setText("Cuota: "+dataAdapter.getCuota());//raidlvl
-        }else if (dataAdapter.getCuota().equals("4")){
-            viewHolder.ImaViewCuota.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.candado));
-            viewHolder.TextViewCuota.setText("Cuota: "+dataAdapter.getCuota());//raidlvl
-        }
-        viewHolder.TextViewMonto.setText("monto: "+dataAdapter.getMonto());//gym
-        viewHolder.TextViewSubtotal.setText("subtotal: "+dataAdapter.getSubtotal());//gym
+        viewHolder.TextViewCuota.setText("Cuota: "+dataAdapter.getCuota());
+        viewHolder.TextViewMonto.setText("monto: "+dataAdapter.getMonto());
+        viewHolder.TextViewSubtotal.setText("subtotal: "+dataAdapter.getSubtotal());
 
     }
 
@@ -77,8 +65,6 @@ public class RecyclerAdapHTVCinfo extends RecyclerView.Adapter<RecyclerAdapHTVCi
         public TextView TextViewCuota;
         public TextView TextViewMonto;
         public TextView TextViewSubtotal;
-        public ImageView ImaViewCuota;
-
 
         public ViewHolder(View itemView) {
 
@@ -88,7 +74,7 @@ public class RecyclerAdapHTVCinfo extends RecyclerView.Adapter<RecyclerAdapHTVCi
             TextViewCuota = itemView.findViewById(R.id.cuotahtvcinfo) ;
             TextViewMonto = itemView.findViewById(R.id.montohtvcinfo) ;
             TextViewSubtotal = itemView.findViewById(R.id.subtotalhtvcinfo) ;
-            ImaViewCuota = itemView.findViewById(R.id.imagehtvcinfo) ;
+
         }
     }
 }
