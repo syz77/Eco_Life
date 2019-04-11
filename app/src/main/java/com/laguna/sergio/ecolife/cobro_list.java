@@ -51,6 +51,7 @@ public class cobro_list extends AppCompatActivity {
             GetDataAdapter3.setFechaCobro(fechac);
             DataAdapterClassListR.add(GetDataAdapter3);
         }
+        vc.close();
 
 
         return DataAdapterClassListR;

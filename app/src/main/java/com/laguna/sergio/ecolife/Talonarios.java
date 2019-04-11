@@ -58,9 +58,35 @@ public class Talonarios extends AppCompatActivity {
             t.Estado=te;
             String tid=talo.getString(talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
             t.Id=tid;
+            String[] args2=new String[]{tid};
+            Cursor nrovent= mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,
+                    ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_TALONARIOPID+"=?",args2,null);
+            String nroVentas=Integer.toString(nrovent.getCount());
+            GetDataAdapter3.setNroVentas(nroVentas);
+            int i=0;
+            if(nrovent.getCount()!=0) {
+                while(nrovent.moveToNext()) {
+                    String idvent=nrovent.getString(nrovent.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._VENTA_CREDITOID));
+                    String[] args3=new String[]{idvent};
+                    Cursor nroventComp = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
+                            ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID+"=?", args3,null);
+                    if(nroventComp.getCount()!=0){
+                        nroventComp.moveToLast();
+                        String n=nroventComp.getString(nroventComp.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL));
+                        int subtotal=Integer.parseInt(n);
+                        if(subtotal==140){
+                            i++;
+                        }
+                    }
+                    nroventComp.close();
+                }
+            }
+            GetDataAdapter3.setNroVentasCompletadas(Integer.toString(i));
             DataAdapterClassListR.add(GetDataAdapter3);
+            nrovent.close();
             TaloList.add(t);
         }
+        talo.close();
 
         return DataAdapterClassListR;
         //recyclerViewadapterR = new RecyclerAdapTalo(DataAdapterClassListR, this);

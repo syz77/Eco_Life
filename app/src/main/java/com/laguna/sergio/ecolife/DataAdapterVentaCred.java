@@ -5,6 +5,7 @@ public class DataAdapterVentaCred {
     String nombre;
     String fecha;
     String direccion;
+    String Saldo;
     public String getNro() {
         return nro;
     }
@@ -31,6 +32,13 @@ public class DataAdapterVentaCred {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+    public String getSaldo() {
+        return Saldo;
+    }
+
+    public void setSaldo(String saldo) {
+        Saldo = saldo;
     }
 
 
