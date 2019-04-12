@@ -59,7 +59,6 @@ public class persona implements Serializable {
         r.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,values);
     }
     public void login(String s,ContentResolver r){
-        String cad="";
         try {
             JSONArray json = new JSONArray(s);
             //for (int i = 0; i < json.length(); i++) {
@@ -78,16 +77,7 @@ public class persona implements Serializable {
             //}
 
         }catch( final JSONException e){
-                /*Log.e(TAG, "Json parsing error: " + e.getMessage());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Json parsing error: " + e.getMessage(),
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });*/
+
         }
 
     }

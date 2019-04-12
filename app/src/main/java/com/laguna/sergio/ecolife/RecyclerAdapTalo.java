@@ -1,6 +1,8 @@
 package com.laguna.sergio.ecolife;
 
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.talonariocard, parent, false);
-
         ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
@@ -38,7 +39,6 @@ public class RecyclerAdapTalo extends RecyclerView.Adapter<RecyclerAdapTalo.View
     public void onBindViewHolder(RecyclerAdapTalo.ViewHolder viewHolder, int position) {
 
         DataAdapterTalo dataAdapter =  dataAdapters.get(position);
-
         viewHolder.TextViewNroTalo.setText("Nro de talonario: "+dataAdapter.getNroTalo());//raidlvl
 
         viewHolder.TextViewFecha.setText("Fecha: "+dataAdapter.getFechaTalo());//gym
