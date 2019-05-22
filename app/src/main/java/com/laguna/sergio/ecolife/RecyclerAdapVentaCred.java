@@ -44,7 +44,7 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
         viewHolder.TextViewFechaVC.setText("Fecha: "+dataAdapter.getFecha());//
         viewHolder.TextSaldo.setText("Saldo: "+dataAdapter.getSaldo());
         if(dataAdapter.getSaldo().equals("0")){
-            viewHolder.card.setBackgroundColor(Color.GREEN);
+            viewHolder.card.setCardBackgroundColor(Color.GREEN);
         }
 
     }

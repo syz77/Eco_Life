@@ -376,6 +376,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
         String token;
         String email="";
         String password="";
+        String imei="";
         String y;
         String idl="";
         Cursor pers = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
@@ -384,13 +385,36 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             pers.moveToNext();
             email = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
             password = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+            imei=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_IMEI));
             idl = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
+            String est=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
 
             Conexion con = new Conexion();
-            y = con.login(email, password);
+            y = con.login(email, password,imei);
             if (con.objJson(y)>0) {
                 b=true;
+                Log.d(LOG_TAG, "Token verification successfull");
+                try {
+                    JSONArray json = new JSONArray(y);
+                    //for (int i = 0; i < json.length(); i++) {
+                    JSONObject c = json.getJSONObject(0);
+                    String estado=c.getString("estado");
+                    //}
+                    if(estado.equals(est)){
+                        Log.d(LOG_TAG, "No es necesario cambiar estado");
+                    }else{
+                        ContentValues v=new ContentValues();
+                        String where=ecolifedb.EcoLifeEntry._PERSONAID+"=?";
+                        String[] args=new String[]{idl};
+                        v.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO,estado);
+                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, v, where, args);
+                        Log.d(LOG_TAG, "Estado cambiado a vacaciones");
+                    }
+                }catch( final JSONException e){
+
+                }
             }else{
+                Log.d(LOG_TAG, "Token verification failed");
                 token = null;
                 String where = ecolifedb.EcoLifeEntry._PERSONAID + "=?";
                 String[] args = new String[]{idl};

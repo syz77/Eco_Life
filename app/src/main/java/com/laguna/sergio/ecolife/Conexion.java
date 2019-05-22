@@ -29,12 +29,12 @@ public class Conexion {
     HttpParse httpParse = new HttpParse();
     String s;
 
-    public String login(String user, String pass){
+    public String login(String user, String pass,String imei){
         String parametros="email="+user+"&pass="+pass;
         HttpURLConnection connection;
         String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass+"&imei="+imei);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));

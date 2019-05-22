@@ -1,14 +1,18 @@
 package com.laguna.sergio.ecolife;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +35,7 @@ public class Login extends AppCompatActivity {
     EditText txtUser, txtPass;
     TextView btnIngresar;
     ContentResolver mContentResolver;
-    String email,pass;
+    String email,pass,imei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,12 @@ public class Login extends AppCompatActivity {
         txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
         mContentResolver=this.getContentResolver();
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            TelephonyManager telemamanger = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String getSimSerialNumber = telemamanger.getSimSerialNumber();
+            imei = getSimSerialNumber;
+        }
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
              public void onClick(View v){
@@ -51,7 +61,7 @@ public class Login extends AppCompatActivity {
                 final Conexion con=new Conexion();
                 email=txtUser.getText().toString();
                 pass=txtPass.getText().toString();
-                final String res= con.login(email,pass);
+                final String res= con.login(email,pass,imei);
                 final String tal=con.todoTalonario(email,pass);
                 final String vc=con.todoVentaCredito(email,pass);
                 final String c=con.todoCobro(email,pass);

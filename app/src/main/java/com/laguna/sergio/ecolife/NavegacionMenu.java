@@ -530,6 +530,10 @@ public class NavegacionMenu extends AppCompatActivity
                 dialogo1.cancel();
             }
         });
+        dialogo2 = new AlertDialog.Builder(this);
+        dialogo2.setTitle("IMPORTANTE");
+        dialogo2.setMessage("¿ Esta seguro de adicionar este cobro?");
+        dialogo2.setCancelable(false);
         ///////////////////Dialogo para ver la informacion del usuario//////////////////////////////
 
 
@@ -571,38 +575,34 @@ public class NavegacionMenu extends AppCompatActivity
 
         vcConfirmar.setOnClickListener(new View.OnClickListener(){
                                             @Override
-                                            public void onClick(View v){
+                                            public void onClick(View v) {
                                                 //vcCamara.setImageResource(android.R.color.transparent);
+                                                    if (TextUtils.isEmpty(imageFileName)) {
+                                                        Toast.makeText(getApplicationContext(), "debe tomar una foto", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        fotoVC = convertirImgString(imagen);
+                                                        final VentaCredito vc = new VentaCredito();
+                                                        fechaVC = getCurrentTimeStamp();
 
-                                                if (TextUtils.isEmpty(imageFileName)) {
-                                                    Toast.makeText(getApplicationContext(), "debe tomar una foto", Toast.LENGTH_SHORT).show();
-                                                }
-                                                else{
-                                                    fotoVC = convertirImgString(imagen);
-                                                    final VentaCredito vc = new VentaCredito();
-                                                    fechaVC = getCurrentTimeStamp();
+                                                        Cursor Talo = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
+                                                                ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + "=1", null, null);
+                                                        Talo.moveToFirst();
+                                                        talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
+                                                        talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
 
-                                                    Cursor Talo = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null,
-                                                            ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO + "=1", null, null);
-                                                    Talo.moveToFirst();
-                                                    talolocal = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._TALONARIOID));
-                                                    talonube = Talo.getString(Talo.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_NUBEID));
-
-                                                            if(nombreCVC.getText().toString().equals("")||telefonoVC.getText().toString().equals("")||direccionVC.getText().toString().equals("")||zonaVC.getText().toString().equals("")||fechaVC.equals("")||nombrePVC.getText().toString().equals("")
-                                                                    ||vcontprod.equals("")||talolocal.equals("")/*||talonube.equals("")*/)
-                                                            {
-                                                                Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                venta_credito vcred= new venta_credito(nombreCVC.getText().toString(),telefonoVC.getText().toString(),zonaVC.getText().toString(),nombrePVC.getText().toString(),direccionVC.getText().toString(),
-                                                                        fechaVC,vcontprod,talolocal,talonube,fotoVC,imageFileName);
-                                                                vcred.insert(vcred,mContentResolver);
-                                                                Toast.makeText(getApplicationContext(),"Venta creada exitosamente",Toast.LENGTH_SHORT).show();
-                                                                denuevaventaacobro();
-                                                                }
-                                                                Talo.close();
-                                                            }
-                                                //vcCamara.setImageResource(android.R.color.transparent);
-
+                                                        if (nombreCVC.getText().toString().equals("") || telefonoVC.getText().toString().equals("") || direccionVC.getText().toString().equals("") || zonaVC.getText().toString().equals("") || fechaVC.equals("") || nombrePVC.getText().toString().equals("")
+                                                                || vcontprod.equals("") || talolocal.equals("")/*||talonube.equals("")*/) {
+                                                            Toast.makeText(getApplicationContext(), "Todos los datos son necesarios", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            venta_credito vcred = new venta_credito(nombreCVC.getText().toString(), telefonoVC.getText().toString(), zonaVC.getText().toString(), nombrePVC.getText().toString(), direccionVC.getText().toString(),
+                                                                    fechaVC, vcontprod, talolocal, talonube, fotoVC, imageFileName);
+                                                            vcred.insert(vcred, mContentResolver);
+                                                            Toast.makeText(getApplicationContext(), "Venta creada exitosamente", Toast.LENGTH_SHORT).show();
+                                                            denuevaventaacobro();
+                                                        }
+                                                        Talo.close();
+                                                    }
+                                                    //vcCamara.setImageResource(android.R.color.transparent);
                                             }
 
         });
@@ -1331,9 +1331,8 @@ public class NavegacionMenu extends AppCompatActivity
 
 
     });
-        btnNuevoCobro.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
+        dialogo2.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
                 Cursor s=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,null,
                         ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1",null,null);
                 if(s.getCount()>0) {
@@ -1408,6 +1407,26 @@ public class NavegacionMenu extends AppCompatActivity
                 }
                 s.close();
             }
+        });
+        dialogo2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                dialogo1.cancel();
+            }
+        });
+        btnNuevoCobro.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Cursor c = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                        ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+                c.moveToNext();
+                String est = c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+                if (est.equals("1")) {
+                    dialogo2.show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"No puede realizar ventas en vacaciones", Toast.LENGTH_SHORT).show();
+                }
+                c.close();
+            }
 
         });
         etsubcontado=findViewById(R.id.editSub);
@@ -1445,7 +1464,7 @@ public class NavegacionMenu extends AppCompatActivity
                         etzonacontado.getText().toString().equals("")||etpromcontado.getText().toString().equals("")||
                         etcantcontado.getText().toString().equals("")||etsubcontado.getText().toString().equals("") ||
                         ettelefcontado.getText().toString().equals("")) {
-                        Toast.makeText(getApplicationContext(),"Rellene todos los campos",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Rellene todos los campos",Toast.LENGTH_SHORT).show();
                 }else {
                     Cursor p = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                             ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
@@ -2245,11 +2264,21 @@ public class NavegacionMenu extends AppCompatActivity
     }
 
     public void ventCont(View v){
-        String Sfecha = getCurrentTimeStamp();
-        Vcontfecha.setText(Sfecha);
-        VentaC.setVisibility(View.INVISIBLE);
-        Inicio.setVisibility(View.INVISIBLE);
-        Ventas.setVisibility(View.VISIBLE);
+        Cursor c = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1", null, null);
+        c.moveToNext();
+        String est = c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
+        if (est.equals("1")) {
+            String Sfecha = getCurrentTimeStamp();
+            Vcontfecha.setText(Sfecha);
+            VentaC.setVisibility(View.INVISIBLE);
+            Inicio.setVisibility(View.INVISIBLE);
+            Ventas.setVisibility(View.VISIBLE);
+        }else{
+            Toast.makeText(getApplicationContext(),"No puede realizar ventas en vacaciones", Toast.LENGTH_SHORT).show();
+        }
+        c.close();
+
     }
 
     public void ventCred(View v){
@@ -2265,7 +2294,7 @@ public class NavegacionMenu extends AppCompatActivity
                 s.moveToNext();
                 String a = s.getString(s.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
                 if (a.equals("2")) {
-                    Toast.makeText(getApplicationContext(), "No puede realizar ventas", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "No puede realizar ventas en vacaciones", Toast.LENGTH_SHORT).show();
                 } else {
                     String Sfecha = getCurrentTimeStamp();
                     fotoVC = "";

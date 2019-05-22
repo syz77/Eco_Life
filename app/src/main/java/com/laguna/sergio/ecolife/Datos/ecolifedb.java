@@ -101,6 +101,7 @@ public class ecolifedb {
         public final static String COLUMN_PERSONA_NUBEID="personanube_id";
         public final static String COLUMN_PERSONA_ONLINE="persona_online";
         public final static String COLUMN_PERSONA_TOKEN="persona_token";
+        public final static String COLUMN_PERSONA_IMEI="persona_imei";
 
         //COLUMNS FOR TALONARIO
         public final static String COLUMN_TALONARIO_ESTADO = "estado";
