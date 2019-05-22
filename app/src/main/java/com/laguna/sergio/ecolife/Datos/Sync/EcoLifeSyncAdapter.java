@@ -376,6 +376,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
         String token;
         String email="";
         String password="";
+        String imei="";
         String y;
         String idl="";
         Cursor pers = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
@@ -384,10 +385,11 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             pers.moveToNext();
             email = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
             password = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
+            imei=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_IMEI));
             idl = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
 
             Conexion con = new Conexion();
-            y = con.login(email, password);
+            y = con.login(email, password,imei);
             if (con.objJson(y)>0) {
                 b=true;
             }else{

@@ -60,7 +60,8 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID + " INTEGER NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + " TEXT," +
-                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + " TEXT" + ");";
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE + " TEXT," +
+                ecolifedb.EcoLifeEntry.COLUMN_PERSONA_IMEI + " TEXT" + ");";
 
         final String SQL_CREATE_TALONARIO_TABLE = "CREATE TABLE " + ecolifedb.EcoLifeEntry.TALONARIO_TABLE + " (" +
                 ecolifedb.EcoLifeEntry._TALONARIOID + " INTEGER PRIMARY KEY AUTOINCREMENT," +

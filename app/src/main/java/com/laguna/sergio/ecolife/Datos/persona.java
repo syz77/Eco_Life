@@ -41,7 +41,7 @@ public class persona implements Serializable {
     }
 
     public void insertar(String id,String nombre,String correo, String password, String telefono, String fecha
-            ,String id_rol,String ci,String estado,ContentResolver r){
+            ,String id_rol,String ci,String estado,String imei,ContentResolver r){
         String online="1";
         String token="1";
         ContentValues values=new ContentValues();
@@ -56,6 +56,7 @@ public class persona implements Serializable {
         values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ROLID,id_rol);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ONLINE,online);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN,token);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_IMEI,imei);
         r.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA,values);
     }
     public void login(String s,ContentResolver r){
@@ -74,7 +75,8 @@ public class persona implements Serializable {
                 String id_rol=c.getString("id_rol");
                 String ci=c.getString("ci");
                 String estado=c.getString("estado");
-                insertar(id,nombre,correo,password,telefono,fecha,id_rol,ci,estado,r);
+                String imei=c.getString("imei");
+                insertar(id,nombre,correo,password,telefono,fecha,id_rol,ci,estado,imei,r);
             //}
 
         }catch( final JSONException e){
