@@ -47,13 +47,13 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="134dp"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/editPass"
                 android:text="@string/login_ini"
                 android:textSize="24sp"
-                tools:layout_editor_absoluteX="160dp"
-                tools:layout_editor_absoluteY="310dp" />
+                 />
 
             <ImageView
                 android:id="@+id/imageView3"

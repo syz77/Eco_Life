@@ -54,6 +54,7 @@ public class Login extends AppCompatActivity {
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
              public void onClick(View v){
+                Toast.makeText(getApplicationContext(),"Cargando...",Toast.LENGTH_SHORT).show();
              Thread tr=new Thread(){
                 @Override
                 public void run() {

@@ -49,6 +49,8 @@ public class RecyclerAdapGesUtalo extends RecyclerView.Adapter<RecyclerAdapGesUt
         }else if (dataAdapter.getEstado().equals("2")) {
             viewHolder.TextViewHEstado.setText("Estado: Pasivo");
         }
+        viewHolder.TextViewHCantVC.setText("Nro creditos: " + dataAdapter.getCreditos());
+        viewHolder.TextViewHCantP.setText("Saldos: ");
 
     }
 
@@ -68,6 +70,8 @@ public class RecyclerAdapGesUtalo extends RecyclerView.Adapter<RecyclerAdapGesUt
         public TextView TextViewNroHTalo;
         public TextView TextViewHFecha;
         public TextView TextViewHEstado;
+        public TextView TextViewHCantVC;
+        public TextView TextViewHCantP;
 
         public ViewHolder(View itemView) {
 
@@ -76,7 +80,8 @@ public class RecyclerAdapGesUtalo extends RecyclerView.Adapter<RecyclerAdapGesUt
             TextViewNroHTalo = itemView.findViewById(R.id.nroGUtalo);
             TextViewHFecha = itemView.findViewById(R.id.fechaGUtalo);
             TextViewHEstado = itemView.findViewById(R.id.estadoGUtalo);
-
+            TextViewHCantVC = itemView.findViewById(R.id.cantvcGUtalo);
+            TextViewHCantP = itemView.findViewById(R.id.cantPagadosGUtalo);
         }
     }
 }

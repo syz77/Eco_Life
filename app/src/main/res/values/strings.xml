@@ -21,7 +21,7 @@
     <string name="lateral_com">Compartir</string>
     <string name="lateral_option">Telf EcoLife: 75522112 </string>
     <string name="lateral_info">Imformacion</string>
-    <string name="lateral_emp">Empresa</string>
+    <string name="lateral_emp">Version 1.0</string>
 
     <string name="ini_ventacont">VENTA AL CONTADO</string>
     <string name="ini_ventacred">VENTA AL CREDITO</string>
@@ -80,12 +80,14 @@
     <string name="gutalo_estadofecha">Fecha: </string>
     <string name="gutalo_estadoactual">Estado actual: </string>
     <string name="gutalo_estadocambiar">Cambiar estado</string>
+    <string name="gutalo_estadoinfoboton">Importante!</string>
     <string name="gutalo_estadoinfo">CASO 1: Si el talonario actual esta {Activo} y el usuario esta {Habilitado} o {Vacaciones} no podrá cambiar es estado del talonario. \n\nCASO 2: Si el talonario actual esta {Activo} y el usuario esta {Bloqueado} si podrá realizar el cambio de estado. \n\nCASO 3: Si el talonario actual esta {Pasivo} si podrá realizar el cambio de estado. \n\nCASO 4: Si el talonario actual esta {Expirado} este no cambiara su estado.</string>
+    <string name="crear_taloinfo">Para crear un nuevo talonario seleccione la fecha actual correctamente.</string>
 
     <string name="foto_titulo">FOTO DEL DOMICILIO</string>
 
     <string name="nav_header_ecolife">ECOLIFE S.R.L.</string>
-    <string name="nav_header_telfverde">Calle Aroma Esq. Charcas</string>
+    <string name="nav_header_telfverde">Version 1.0</string>
 
 
 

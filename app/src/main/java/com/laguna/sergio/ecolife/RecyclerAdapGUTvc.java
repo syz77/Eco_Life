@@ -1,10 +1,12 @@
 package com.laguna.sergio.ecolife;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,8 +42,12 @@ public class RecyclerAdapGUTvc extends RecyclerView.Adapter<RecyclerAdapGUTvc.Vi
 
         viewHolder.TextViewNombreVC.setText("Cliente: " +dataAdapter.getNombre());//raidlvl
 
-        viewHolder.TextViewCuotaVC.setText("Cuotas: " + dataAdapter.getCuota()+"      Total: "+dataAdapter.getSubtotal());//gym
+        int saldo = 140- Integer.parseInt(dataAdapter.getSubtotal());
 
+        viewHolder.TextViewCuotaVC.setText("Cuotas: " + dataAdapter.getCuota()+"      Saldo: "+ saldo);//gym
+        if (Integer.parseInt(dataAdapter.getSubtotal())==140){
+            viewHolder.linearLayout.setBackgroundColor(Color.parseColor("#33FF99"));
+        }
         //viewHolder.TextViewSubtotal.setText("Total: " + dataAdapter.getSubtotal());//gym
 
         viewHolder.TextViewFechaVC.setText("Fecha: " + dataAdapter.getGUTvcFecha());//gym
@@ -66,6 +72,7 @@ public class RecyclerAdapGUTvc extends RecyclerView.Adapter<RecyclerAdapGUTvc.Vi
         public TextView TextViewCuotaVC;
         //public TextView TextViewSubtotal;
         public TextView TextViewFechaVC;
+        public LinearLayout linearLayout;
 
         public ViewHolder(View itemView) {
 
@@ -75,6 +82,7 @@ public class RecyclerAdapGUTvc extends RecyclerView.Adapter<RecyclerAdapGUTvc.Vi
             TextViewCuotaVC = itemView.findViewById(R.id.cuotaGUTvc);
             //TextViewSubtotal = itemView.findViewById(R.id.subtotalGUTvc);
             TextViewFechaVC = itemView.findViewById(R.id.fechaGUTvc);
+            linearLayout = itemView.findViewById(R.id.Linear_gutalovc);
 
         }
     }

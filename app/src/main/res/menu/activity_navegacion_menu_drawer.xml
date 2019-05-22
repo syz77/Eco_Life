@@ -22,14 +22,4 @@
             android:title="@string/lateral_usu" />
     </group>
 
-    <item android:title="@string/lateral_emp">
-        <menu>
-
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@android:drawable/ic_menu_view"
-                android:title="@string/lateral_info" />
-        </menu>
-    </item>
-
 </menu>
