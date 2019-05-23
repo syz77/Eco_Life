@@ -45,12 +45,12 @@ public class Login extends AppCompatActivity {
         txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
         mContentResolver=this.getContentResolver();
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
+        //if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+        //        != PackageManager.PERMISSION_GRANTED) {
             TelephonyManager telemamanger = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String getSimSerialNumber = telemamanger.getSimSerialNumber();
             imei = getSimSerialNumber;
-        }
+        //}
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
              public void onClick(View v){

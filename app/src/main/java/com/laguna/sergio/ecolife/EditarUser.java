@@ -1,12 +1,17 @@
 package com.laguna.sergio.ecolife;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +35,7 @@ import java.util.HashMap;
 public class EditarUser extends AppCompatActivity {
 
     Spinner SEstado;
-    String txtCargo, txtEstado,IDusuario;
+    String txtCargo, txtEstado,IDusuario,imei;
     ContentResolver mContentResolver;
     Button btnEditUser,btnEditImei;
     //DataAdapterGesU dataAdapterGesU;
@@ -100,11 +105,11 @@ public class EditarUser extends AppCompatActivity {
             //String estado = conver(txtEstado);
             EnviarEditUser(IDusuario, pass, estado);
             }
+
     }
 
     public void buttonEditarImei(View v){
-            EnviarEditImei(IDusuario);
-
+        EnviarEditImei(IDusuario);
     }
 
     public boolean verif(){
