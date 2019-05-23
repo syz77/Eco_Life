@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -46,7 +45,8 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
         viewHolder.TextSaldo.setText("Saldo: "+dataAdapter.getSaldo());
         if(dataAdapter.getSaldo().equals("0")){
             //viewHolder.linearLayout.setBackgroundColor(Color.GREEN);
-            viewHolder.linearLayout.setBackgroundColor(Color.parseColor("#33FF99"));
+            //viewHolder.linearLayout.setBackgroundColor(Color.parseColor("#33FF99"));
+            viewHolder.card.setCardBackgroundColor(Color.GREEN);
         }
 
     }
@@ -68,8 +68,8 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
         public TextView TextViewNombreVC;
         public TextView TextViewFechaVC;
         public TextView TextSaldo;
-        //public CardView card;
-        public LinearLayout linearLayout;
+        public CardView card;
+
 
         public ViewHolder(View itemView) {
 
@@ -79,8 +79,8 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
             TextViewNombreVC=itemView.findViewById(R.id.nombreCredito);
             TextViewFechaVC = itemView.findViewById(R.id.fechaCredito) ;
             TextSaldo=itemView.findViewById(R.id.saldoCredito);
-            //card=itemView.findViewById(R.id.ventaCard);
-            linearLayout = itemView.findViewById(R.id.ventaCardLocal);
+            card=itemView.findViewById(R.id.ventaCard);
+
         }
     }
 }
