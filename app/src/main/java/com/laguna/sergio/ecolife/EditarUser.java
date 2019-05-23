@@ -41,7 +41,7 @@ public class EditarUser extends AppCompatActivity {
     HttpParse httpParse = new HttpParse();
     String finalResult;
     String HttpURLGUEdit = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarUsuario.php";// Verificacion de Imei en la nube
-    String HttpURLIMEI = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarUsuario.php";
+    String HttpURLIMEI = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarImei.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
