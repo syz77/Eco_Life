@@ -1513,6 +1513,9 @@ public class NavegacionMenu extends AppCompatActivity
             mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,val,
                     ecolifedb.EcoLifeEntry._TALONARIOID+"=?",args);
             Toast.makeText(getApplicationContext(),"Talonario modificado exitosamente",Toast.LENGTH_SHORT).show();
+            nrotalo.setText("Nro Talonario: ");
+            fechatalo.setText("Fecha de Creacion: ");
+            nroventas.setText("Creditos actuales:" );
         }
         c.close();
         EcoLifeSyncAdapter.syncImmediately(getApplicationContext());

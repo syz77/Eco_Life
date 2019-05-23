@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:clickable="true"
+            android:id="@+id/ventaCardLocal"
             android:onClick="ventas_cobro">
 
             <View

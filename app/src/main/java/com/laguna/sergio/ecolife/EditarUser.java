@@ -32,7 +32,7 @@ public class EditarUser extends AppCompatActivity {
     Spinner SEstado;
     String txtCargo, txtEstado,IDusuario;
     ContentResolver mContentResolver;
-    Button btnEditUser;
+    Button btnEditUser,btnEditImei;
     //DataAdapterGesU dataAdapterGesU;
     EditText edituser,editpass;
     TextView TextEstado;
@@ -41,12 +41,14 @@ public class EditarUser extends AppCompatActivity {
     HttpParse httpParse = new HttpParse();
     String finalResult;
     String HttpURLGUEdit = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarUsuario.php";// Verificacion de Imei en la nube
+    String HttpURLIMEI = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarGUEditarUsuario.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_user);
         mContentResolver=getContentResolver();
         btnEditUser=findViewById(R.id.btnEdituser);
+        btnEditImei= findViewById(R.id.btnEditImei);
         edituser=findViewById(R.id.editUsuario);
         editpass=findViewById(R.id.editContrase);
         DataAdapterGesU dataAdapterGu=new DataAdapterGesU();
@@ -100,6 +102,11 @@ public class EditarUser extends AppCompatActivity {
             }
     }
 
+    public void buttonEditarImei(View v){
+            EnviarEditImei(IDusuario);
+
+    }
+
     public boolean verif(){
         boolean b=false;
         if(edituser.getText().toString().isEmpty()==false &&editpass.getText().toString().isEmpty()==false){
@@ -138,12 +145,7 @@ public class EditarUser extends AppCompatActivity {
             public void onPostExecute(String httpResponseMsg) {
 
                 super.onPostExecute(httpResponseMsg);
-                //progressDialog.dismiss();
-                if (httpResponseMsg.toString().equals("Registration Successfully")) {
-                }
                 Toast.makeText(EditarUser.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
-
-
             }
 
             @Override
@@ -161,5 +163,37 @@ public class EditarUser extends AppCompatActivity {
         }
         HTVentCredCobroFunctionClass RegisterFunctionClass = new HTVentCredCobroFunctionClass();
         RegisterFunctionClass.execute(Id,Password,Estado);
+    }
+
+    public void EnviarEditImei(final String Id){
+
+        class HTVentCredCobroFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+                Toast.makeText(EditarUser.this, httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("id",params[0]);
+
+                finalResult = httpParse.postRequest(hashMap, HttpURLIMEI);
+
+                return finalResult;
+            }
+        }
+        HTVentCredCobroFunctionClass RegisterFunctionClass = new HTVentCredCobroFunctionClass();
+        RegisterFunctionClass.execute(Id);
     }
 }
