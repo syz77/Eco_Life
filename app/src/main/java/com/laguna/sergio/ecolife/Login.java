@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -37,6 +38,7 @@ public class Login extends AppCompatActivity {
     ContentResolver mContentResolver;
     String email,pass,imei;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,8 @@ public class Login extends AppCompatActivity {
         txtPass=(EditText)findViewById(R.id.editPass);
         btnIngresar=(TextView)findViewById(R.id.textView2);
         mContentResolver=this.getContentResolver();
+
+
         //if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
         //        != PackageManager.PERMISSION_GRANTED) {
             TelephonyManager telemamanger = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -61,17 +65,28 @@ public class Login extends AppCompatActivity {
                 final Conexion con=new Conexion();
                 email=txtUser.getText().toString();
                 pass=txtPass.getText().toString();
-                final String res= con.login(email,pass,imei);
+
+                //final String res= con.login(email,pass,imei);
+                con.loginpost(email,pass,imei,mContentResolver);
                 final String tal=con.todoTalonario(email,pass);
                 final String vc=con.todoVentaCredito(email,pass);
                 final String c=con.todoCobro(email,pass);
                 runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                int r=con.objJson(res);
-                if (r>0){
-                    persona p=new persona();
-                    p.login(res,mContentResolver);
+                //int r=con.objJson(res);
+                    //persona p=new persona();
+                    //p.login(res,mContentResolver);
+
+                    Cursor ck = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
+                           ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
+                    ck.moveToNext();
+                    final String User = ck.getString(ck.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
+                    int r=con.objJson(User);
+                    if ((User != null) && (!User.equals(""))){
+                //if (r>0){
+                    //persona p=new persona();
+                    //p.login(res,mContentResolver);
                     Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,null,
                             null,null);
                     Cursor vcred=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,null,
@@ -190,6 +205,7 @@ public class Login extends AppCompatActivity {
 
         }
     }
+
     public void SincroGPS(String s){
         String online="1";
         try {

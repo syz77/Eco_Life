@@ -3,11 +3,17 @@ package com.laguna.sergio.ecolife;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
+import com.laguna.sergio.ecolife.Datos.persona;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,16 +29,20 @@ import java.util.Scanner;
 public class Conexion {
 
     String HttpURL = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarVentaCreditoFoto.php";
+    String HttpURLCobro = "http://u209922277.hostingerapp.com/servicios_ecolife/InsertarCobroPost.php";
+    String HTTP_SERVER_URLlogin ="http://u209922277.hostingerapp.com/servicios_ecolife/loginpost.php";
     String finalResult;
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
     String s;
+    String respuesta="";
+    String FinalJSonObject= "";
 
     public String login(String user, String pass,String imei){
         String parametros="email="+user+"&pass="+pass;
         HttpURLConnection connection;
-        String respuesta="";
+        //String respuesta="";
         try{
             URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass+"&imei="+imei);
             connection=(HttpURLConnection)url.openConnection();
@@ -50,8 +60,113 @@ public class Conexion {
             }
             connection.disconnect();
         }catch(Exception e){ }
+
         return respuesta;
     }
+
+    public void logindos(String user, String pass,String imei){
+        //loginpost(user,pass,imei);
+        //return respuesta;
+    }
+
+
+    public void loginpost(final String email,final String pass, final String imei,final ContentResolver mContentResolver){
+
+        class GUTCFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                //progressDialog = ProgressDialog.show(NavegacionMenu.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+
+                super.onPostExecute(httpResponseMsg);
+                //progressDialog.dismiss();
+                //FinalJSonObject = httpResponseMsg ;
+                //respuesta = httpResponseMsg;
+                //Pararespuesta (FinalJSonObject);
+
+                persona p=new persona();
+                p.login(httpResponseMsg,mContentResolver);
+
+
+                /*if(FinalJSonObject != null)
+                {
+                    JSONArray jsonArray = null;
+
+                    try {
+                        //Toast.makeText(NavegacionMenu.this, FinalJSonObject, Toast.LENGTH_LONG).show();
+                        jsonArray = new JSONArray(FinalJSonObject);
+
+                        //respuesta = jsonArray.toString();
+                        //JSON_PARSE_DATA_AFTER_WEBCALLGUtalo(jsonArray);
+                        //JSONObject jsonObject;
+
+                    }
+                    catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        //JSON_PARSE_DATA_AFTER_WEBCALLRLU(jsonArray);
+                        //ReCargarLista(jsonArray);
+                        e.printStackTrace();
+                    }
+                }*/
+                //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //if (httpResponseMsg.equals("Se cambio correctamente")){
+                //Toast.makeText(Login.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                    //respuesta = httpResponseMsg;
+
+                //}else if (httpResponseMsg.equals("Error no se pudo cambiar")){
+                    //Toast.makeText(NavegacionMenu.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                //}
+                //FinalJSonObject = httpResponseMsg ;
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("email",params[0]);
+
+                hashMap.put("pass",params[1]);
+
+                hashMap.put("imei",params[2]);
+
+                finalResult = httpParse.postRequest(hashMap, HTTP_SERVER_URLlogin);
+
+                return finalResult;
+            }
+        }
+
+        GUTCFunctionClass RegisterFunctionClass = new GUTCFunctionClass();
+        RegisterFunctionClass.execute(email,pass,imei);
+
+    }
+
+    public void JSON_PARSE_DATA_AFTER_WEBCALLGUtalo(JSONArray array){
+
+        //for(int i = 0; i<array.length(); i++) {
+
+            //DataAdapterGesUTalo GetDataAdapter3 = new DataAdapterGesUTalo();
+
+            JSONObject json = null;
+            try {
+
+                json = array.getJSONObject(0);
+                respuesta = json.toString();
+                //GetDataAdapter3.setNroTalo(json.getString("id"));
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        //}
+    }
+
     public String InsertRegistro(String nombre, String email,String pass,String telefono, String fecha, String rolid, String ci
             ,String estado){
         String parametros="nombre="+nombre+"&email="+email+"&pass="+pass+"&telefono="+telefono+"&fecha="+fecha+"&cargo="+rolid+"&ci="+ci;
@@ -208,6 +323,79 @@ public class Conexion {
         userRegisterFunctionClass.execute(nombre,telefono,direccion,zona,fecha,vendedor,fotonombre,foto,id_prod,id_talonario);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //String monto, String nro_cuota,String subtotal, String fecha, String id_credito, String id_gps
+    //Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id
+    public void InsertarCobroPost(final String monto,final String nro_cuota,final String subtotal,final String fecha,final String id_credito,
+                                         final String id_gps, final String id_cobro, final ContentResolver mContentResolver){
+        class SolicitudFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                //progressDialog = ProgressDialog.show(Menu_principal.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            public void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                if(httpResponseMsg.equals("")){
+                }else {
+                    String[] args = new String[]{id_cobro};
+                    ContentValues values = new ContentValues();
+                    String nubeid = convert(httpResponseMsg);
+                    String online = "1";
+                    values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, nubeid);
+                    values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
+
+                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values,
+                            ecolifedb.EcoLifeEntry._COBROID + "=?", args);
+                }
+
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("monto",params[0]);
+
+                hashMap.put("nro_cuota",params[1]);
+
+                hashMap.put("subtotal",params[2]);
+
+                hashMap.put("fecha",params[3]);
+
+                hashMap.put("id_credito",params[4]);
+
+                hashMap.put("id_gps",params[5]);
+
+                finalResult = httpParse.postRequest(hashMap, HttpURLCobro);
+
+                return finalResult;
+            }
+            public String convert(String s){
+                String id="";
+                try {
+                    JSONArray json = new JSONArray(s);
+                    //for (int i = 0; i < json.length(); i++) {
+                    JSONObject c = json.getJSONObject(0);
+
+                    id = c.getString("MAX(id)");
+                    //}
+
+                }catch( final JSONException e){
+
+                }
+                return id;
+            }
+        }
+        SolicitudFunctionClass userRegisterFunctionClass = new SolicitudFunctionClass();
+        userRegisterFunctionClass.execute(monto,nro_cuota,subtotal,fecha,id_credito,id_gps);
+    }
+
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
                                        String vendedor, String id_sup){

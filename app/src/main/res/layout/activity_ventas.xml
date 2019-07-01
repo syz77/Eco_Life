@@ -99,56 +99,25 @@
                 android:hint="@string/vc_direccion"
                 android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/vcontzona"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="0dp"
-                android:text="@string/vc_zona"
-                android:textSize="24sp" />
-            <View
-                android:id="@+id/lineavcontd4"
-                android:layout_width="wrap_content"
-                android:layout_height="7dp"
-                android:layout_alignTop="@+id/vcontvendedor"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="0dp"
-                android:background="@color/colorPrimaryDark"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
                 <EditText
                     android:id="@+id/vcontnrozona"
-                    android:layout_width="70dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/vcontdireccion"
                     android:layout_toEndOf="@+id/vcontzona"
                     android:ems="10"
                     android:hint="zona"
                     android:inputType="number" />
-                <View
-                    android:id="@+id/lineavcontd3"
-                    android:layout_width="7dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:background="@color/colorPrimaryDark"/>
 
-                <EditText
-                    android:id="@+id/vcontvendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:ems="10"
-                    android:hint="@string/vc_vendedor"
-                    android:inputType="textPersonName" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/vcontvendedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vcontnrozona"
+                android:layout_alignParentStart="true"
+                android:ems="10"
+                android:hint="@string/vc_vendedor"
+                android:inputType="textPersonName" />
 
             <View
                 android:id="@+id/lineavcontd"

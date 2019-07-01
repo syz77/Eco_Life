@@ -85,27 +85,14 @@
                 android:hint="@string/vc_direccion"
                 android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/vczona"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="1dp"
-                android:layout_below="@id/vcdireccion"
-                android:layout_marginTop="181dp"
-                android:text="@string/vc_zona"
-                android:textSize="24sp" />
-
             <EditText
                 android:id="@+id/vcnrozona"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/vcdireccion"
-                android:layout_toRightOf="@id/vczona"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="-8dp"
+                android:layout_alignParentStart="true"
                 android:ems="10"
+                android:hint="@string/vc_zona"
                 android:inputType="text" />
 
             <EditText

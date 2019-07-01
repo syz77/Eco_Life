@@ -317,7 +317,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 break;
             case "cobro":
-                String Cid, Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id, Cgpsnube_id;
+                String Cid, Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id, Cgpsnube_id,Cidnube;
                 where=ecolifedb.EcoLifeEntry._COBROID+"=?";
                 Log.d(LOG_TAG, "Starting sync cobro");
                 while (c.moveToNext()){
@@ -328,10 +328,18 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     Cfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA));
                     Ccreditonube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID));
                     Cgpsnube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID));
+
                     Log.d(LOG_TAG, "Cobro sync: id: " +Cid+" monto: "+Cmonto+" nrocuota: "+Cnro_cuota+" subtotal: "+
                     Csubtotal+" fecha: "+Cfecha+" creditonube: "+Ccreditonube_id+" gpsnube: "+Cgpsnube_id);
+
                     if (Ccreditonube_id != null && Cgpsnube_id!=null){
-                        respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
+                        /////////////////////////-----------------------------------------////////////////////////////////////////
+                        //respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
+                        con.InsertarCobroPost(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id,Cid,mContentResolver);
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        Log.d(LOG_TAG, "Venta credito sync successfull");
+
+                        /*
                         if(respuesta.equals("")) {
                             Log.d(LOG_TAG, "Cobro Error de conexion: " + respuesta + "cant: " + Integer.toString(c.getCount()));
                         }else {
@@ -340,8 +348,9 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                             content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, sing);
                             content.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
                             mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, content, where, args);
+
                             Log.d(LOG_TAG, "Cobro sync successfull " + sing + "cant: " + Integer.toString(c.getCount()));
-                        }
+                        }*/
                     }else{
                         String creditoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID));
                         String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));

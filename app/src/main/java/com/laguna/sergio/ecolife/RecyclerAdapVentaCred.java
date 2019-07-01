@@ -46,7 +46,7 @@ public class RecyclerAdapVentaCred extends RecyclerView.Adapter<RecyclerAdapVent
         if(dataAdapter.getSaldo().equals("0")){
             //viewHolder.linearLayout.setBackgroundColor(Color.GREEN);
             //viewHolder.linearLayout.setBackgroundColor(Color.parseColor("#33FF99"));
-            viewHolder.card.setCardBackgroundColor(Color.GREEN);
+            viewHolder.card.setCardBackgroundColor(Color.parseColor("#33FF99"));
         }
 
     }

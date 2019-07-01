@@ -252,7 +252,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     ///////////////////////////////////Gestionar usuario talonario//////////////////////////////////////////
     Button btnCambiarAPasivo;
-    AlertDialog.Builder dialogo1,dialogo2,dialogo3,dialogoinfo;
+    AlertDialog.Builder dialogo1,dialogo2,dialogo3,dialogoinfo,dialogouser,dialogoGPS;
     CheckBox CheckPasivo, CheckExpirado;
     JSONArray jsonArrayGUtalo = null;
     //String FinalJSonObject = "";
@@ -530,13 +530,23 @@ public class NavegacionMenu extends AppCompatActivity
                 dialogo1.cancel();
             }
         });
+
+        ////////////////////////////////Dialogo para activar el GPS///////////////////////////////////
+        dialogoGPS = new AlertDialog.Builder(this);
+        dialogoGPS.setTitle("Importante");
+        dialogoGPS.setMessage("Active el GPS");
+        dialogoGPS.setCancelable(false);
+        dialogoGPS.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+
         dialogo2 = new AlertDialog.Builder(this);
         dialogo2.setTitle("IMPORTANTE");
         dialogo2.setMessage("¿ Esta seguro de adicionar este cobro?");
         dialogo2.setCancelable(false);
         ///////////////////Dialogo para ver la informacion del usuario//////////////////////////////
-
-
 
 
         //////////////////////////////Para cargar usuarios en cambiar talonario/////////////////////////////////////////
@@ -571,7 +581,6 @@ public class NavegacionMenu extends AppCompatActivity
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
         }
-
 
         vcConfirmar.setOnClickListener(new View.OnClickListener(){
                                             @Override
@@ -1409,10 +1418,11 @@ public class NavegacionMenu extends AppCompatActivity
             }
         });
         dialogo2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogo1, int id) {
-                dialogo1.cancel();
+            public void onClick(DialogInterface dialogo2, int id) {
+                dialogo2.cancel();
             }
         });
+
         btnNuevoCobro.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -1421,7 +1431,12 @@ public class NavegacionMenu extends AppCompatActivity
                 c.moveToNext();
                 String est = c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
                 if (est.equals("1")) {
-                    dialogo2.show();
+                    if (checkIfLocationOpened()==true){
+                        dialogo2.show();
+                    }else{
+                        dialogoGPS.show();
+                    }
+                    //dialogo2.show();
                 }else{
                     Toast.makeText(getApplicationContext(),"No puede realizar ventas en vacaciones", Toast.LENGTH_SHORT).show();
                 }
@@ -1450,7 +1465,7 @@ public class NavegacionMenu extends AppCompatActivity
                     detalle.add(transform(vcontprod));
                     detalle.add(cantidad);
                     contador++;
-                    subtotal = subtotal + (Integer.parseInt(cantidad) * 140);
+                    subtotal = subtotal + (Integer.parseInt(cantidad) * 120);
                     etsubcontado.setText(Integer.toString(subtotal));
                     adapterDetalle.add(cad);
                     lvdetallevc.setAdapter(adapterDetalle);
@@ -1700,7 +1715,7 @@ public class NavegacionMenu extends AppCompatActivity
 
 
         } else if (id == R.id.nav_gallery) {
-
+/*
             if (isOnlineNet()) {
 
             Cursor Persona = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
@@ -1717,7 +1732,7 @@ public class NavegacionMenu extends AppCompatActivity
             } else {
                 Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
             }
-
+*/
         } else if (id == R.id.nav_slideshow) {
             EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
@@ -2025,7 +2040,12 @@ public class NavegacionMenu extends AppCompatActivity
                 }else if(TextGUTEestado.getText().equals("Estado actual: Expirado")){
                     Toast.makeText(NavegacionMenu.this, "El talonario ya expiro", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+                    if (TextGUTEestado.getText().equals("Estado actual: Activo")&& personaGU.Estado.equals("1")){
+                        Toast.makeText(NavegacionMenu.this, "La persona sigue habilitada", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(NavegacionMenu.this, "El talonario sigue activo", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
@@ -2203,7 +2223,7 @@ public class NavegacionMenu extends AppCompatActivity
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                vcTitulo.setText(imageFileName);
+                //vcTitulo.setText(imageFileName);
             } catch (IOException ex) {
                 // Error occurred while creating the File
             }
@@ -2340,6 +2360,10 @@ public class NavegacionMenu extends AppCompatActivity
                // gpsVC = locationStringFromLocation(location);
                 latitud=Double.toString(location.getLatitude());
                 longitud=Double.toString(location.getLongitude());
+                //if (latitud.equals("") & longitud.equals("")){
+                //    latitud = "-17.783312";
+                 //   longitud = "-63.182126";
+                //}
 
             } catch (Exception e){
                 e.printStackTrace();
@@ -3385,20 +3409,20 @@ public class NavegacionMenu extends AppCompatActivity
 
     public void InfoGesUser(View v){
 
-        dialogo2 = new AlertDialog.Builder(this);
-        dialogo2.setTitle(SubjectGUnombre.get(RecyclerViewClickedItemPOSR));
-        dialogo2.setMessage("CI: "+SubjectGUci.get(RecyclerViewClickedItemPOSR) +"\n"+
+        dialogouser = new AlertDialog.Builder(this);
+        dialogouser.setTitle(SubjectGUnombre.get(RecyclerViewClickedItemPOSR));
+        dialogouser.setMessage("CI: "+SubjectGUci.get(RecyclerViewClickedItemPOSR) +"\n"+
                 "Telf: "+SubjectGUtelefono.get(RecyclerViewClickedItemPOSR)+"\n"+
                 "Fecha nac:"+SubjectGUfecha.get(RecyclerViewClickedItemPOSR)+"\n"+
                 "Usuario: "+SubjectGUcorreo.get(RecyclerViewClickedItemPOSR));
-        dialogo2.setCancelable(false);
-        dialogo2.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogo1, int id) {
+        dialogouser.setCancelable(false);
+        dialogouser.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogouser, int id) {
 
             }
         });
 
-        dialogo2.show();
+        dialogouser.show();
     }
 
     public void GUTaloEstadoInfo(View v){
@@ -3429,6 +3453,15 @@ public class NavegacionMenu extends AppCompatActivity
         });
 
         dialogoinfo.show();
+    }
+
+    public boolean checkIfLocationOpened(){
+        String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        System.out.println("Provider contains=> "+ provider);
+        if (provider.contains("gps")||provider.contains("network")){
+            return true;
+        }
+        return false;
     }
 
 }

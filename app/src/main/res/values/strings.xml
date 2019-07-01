@@ -60,7 +60,7 @@
     <string name="vc_hf">FECHA:</string>
     <string name="vc_nombre">Nombre del cliente</string>
     <string name="vc_direccion">Dirección</string>
-    <string name="vc_zona">Zona: </string>
+    <string name="vc_zona">Zona</string>
     <string name="vc_telf">Telefono</string>
     <string name="vc_prod">Producto:</string>
     <string name="vc_vendedor">Nombre del promotor</string>
@@ -87,7 +87,7 @@
     <string name="foto_titulo">FOTO DEL DOMICILIO</string>
 
     <string name="nav_header_ecolife">ECOLIFE S.R.L.</string>
-    <string name="nav_header_telfverde">Version 1.0</string>
+    <string name="nav_header_telfverde">Version 1.2</string>
 
 
 
