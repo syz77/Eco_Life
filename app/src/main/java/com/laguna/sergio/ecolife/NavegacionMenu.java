@@ -144,6 +144,7 @@ public class NavegacionMenu extends AppCompatActivity
         RecognitionListener {
 
     EditText mmmmmmm;
+    EditText mmmmmm2;
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
     GesUserTaloCambiar,GesUserTaloEstado,GesUserTaloVentCred,Foto;
