@@ -62,8 +62,8 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE + "=0", null, null);
                 Cursor detallecontado = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_DETALLE_CONTADO, null,
                         ecolifedb.EcoLifeEntry.COLUMN_DETALLEC_ONLINE + "=0", null, null);
-                Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
-                        ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE + "=0", null, null);
+                //Cursor gps = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                //        ecolifedb.EcoLifeEntry.COLUMN_GPS_ONLINE + "=0", null, null);
                 Cursor cobro = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null,
                         ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE + "=0", null, null);
                 Cursor people = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
@@ -80,9 +80,9 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (people.getCount()>0) {
                     insertData(people, "persona");
                 }
-                if (gps.getCount()>0) {
-                    insertData(gps, "gps");
-                }
+                //if (gps.getCount()>0) {
+                //    insertData(gps, "gps");
+                //}
                 if (ventacontado.getCount()>0) {
                     insertData(ventacontado, "venta_contado");
                 }
@@ -106,7 +106,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
                 cantTalo.close();
                 people.close();
-                gps.close();
+                //gps.close();
                 ventacontado.close();
                 detallecontado.close();
                 talonario.close();
@@ -317,7 +317,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 break;
             case "cobro":
-                String Cid, Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id, Cgpsnube_id,Cidnube;
+                String Cid, Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,latitud,longitud;
                 where=ecolifedb.EcoLifeEntry._COBROID+"=?";
                 Log.d(LOG_TAG, "Starting sync cobro");
                 while (c.moveToNext()){
@@ -327,18 +327,18 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     Csubtotal=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL));
                     Cfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA));
                     Ccreditonube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID));
-                    Cgpsnube_id=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID));
+                    latitud=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LATITUD));
+                    longitud=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LONGITUD));
 
                     Log.d(LOG_TAG, "Cobro sync: id: " +Cid+" monto: "+Cmonto+" nrocuota: "+Cnro_cuota+" subtotal: "+
-                    Csubtotal+" fecha: "+Cfecha+" creditonube: "+Ccreditonube_id+" gpsnube: "+Cgpsnube_id);
+                            Csubtotal+" fecha: "+Cfecha+" creditonube: "+Ccreditonube_id+" latitud: "+latitud+" longitud:"+longitud);
 
-                    if (Ccreditonube_id != null && Cgpsnube_id!=null){
+                    if (Ccreditonube_id != null){
                         /////////////////////////-----------------------------------------////////////////////////////////////////
                         //respuesta=con.InsertarCobro(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id);
-                        con.InsertarCobroPost(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id,Cid,mContentResolver);
+                        con.InsertarCobroPost(Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,latitud,longitud,Cid,mContentResolver);
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        Log.d(LOG_TAG, "Venta credito sync successfull");
-
+                        Log.d(LOG_TAG, "Cobro sync successfull");
                         /*
                         if(respuesta.equals("")) {
                             Log.d(LOG_TAG, "Cobro Error de conexion: " + respuesta + "cant: " + Integer.toString(c.getCount()));
@@ -353,25 +353,25 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                         }*/
                     }else{
                         String creditoid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID));
-                        String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));
+                        //String gpsid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID));
                         ContentValues content2=new ContentValues();
                         args=new String[]{Cid};
                         String[] args2=new String[]{creditoid};
-                        String[] args3=new String[]{gpsid};
+                        //String[] args3=new String[]{gpsid};
                         Cursor credito = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
                                 ecolifedb.EcoLifeEntry._VENTA_CREDITOID +"=?", args2, null);
-                        Cursor gps2 = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
-                                ecolifedb.EcoLifeEntry._GPSID +"=?", args3, null);
+                        //Cursor gps2 = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS, null,
+                        //        ecolifedb.EcoLifeEntry._GPSID +"=?", args3, null);
                         credito.moveToNext();
-                        gps2.moveToNext();
+                        //gps2.moveToNext();
                         String creditonubeid=credito.getString(credito.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID));
-                        String gpsnubeid=gps2.getString(gps2.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                        //String gpsnubeid=gps2.getString(gps2.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
                         content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,creditonubeid);
-                        content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,gpsnubeid);
+                        //content2.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,gpsnubeid);
                         mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,content2,where,args);
-                        Log.d(LOG_TAG,"Cobro sync posposed, changing ids:"+creditonubeid+"gpsnubeid:"+gpsnubeid);
+                        Log.d(LOG_TAG,"Cobro sync posposed, changing ids:"+creditonubeid);
                         credito.close();
-                        gps2.close();
+                        //gps2.close();
                     }
                 }
                 break;
@@ -539,7 +539,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
     public void SincroC(String s){
-        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,idgpsnube,idcreditolocal,idgpslocal;
+        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,latitud,idcreditolocal,longitud;
         String online="1";
         try {
             JSONArray json = new JSONArray(s);
@@ -552,7 +552,8 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 subtotal=c.getString("subtotal");
                 fecha=c.getString("fecha");
                 idcreditonube=c.getString("id_credito");
-                idgpsnube=c.getString("id_gps");
+                latitud=c.getString("latitud");
+                longitud=c.getString("latitud");
                 String[] args= new String[]{idcreditonube};
                 Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
                         ecolifedb.EcoLifeEntry.COLUMN_VENTACRED_NUBEID + "=?", args, null);
@@ -570,7 +571,8 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL,subtotal);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA,fecha);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,idcreditonube);
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,idgpsnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LATITUD,latitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LONGITUD,longitud);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,idcreditolocal);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE,online);
                 mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values);

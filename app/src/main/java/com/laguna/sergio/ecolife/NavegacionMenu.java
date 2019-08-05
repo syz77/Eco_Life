@@ -1487,19 +1487,19 @@ public class NavegacionMenu extends AppCompatActivity
                                     fechaVC = getCurrentTimeStamp();
                                     subtotal=subtotal+Integer.parseInt(nuevomonto);
                                     ConseguirGPS();
-                                    gps g=new gps(latitud,longitud);
-                                    g.insert(g,mContentResolver);
+                                    //gps g=new gps(latitud,longitud);
+                                    //g.insert(g,mContentResolver);
                                     //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
-                                    Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
-                                            null,null,null);
-                                    gs.moveToLast();
-                                    String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
-                                    String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                                    //Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
+                                    //        null,null,null);
+                                    //gs.moveToLast();
+                                    //String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                                    //String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
                                     cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
-                                            ventacfinal.NubeId,idgps,idgpsnube);
+                                            ventacfinal.NubeId,latitud,longitud);
                                     co.insert(co,mContentResolver);
                                     Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
-                                    gs.close();
+                                    //gs.close();
                                 }else{
                                     Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
                                 }
@@ -1509,19 +1509,19 @@ public class NavegacionMenu extends AppCompatActivity
                                     subtotal=Integer.parseInt(nuevomonto);
                                     fechaVC = getCurrentTimeStamp();
                                     ConseguirGPS();
-                                    gps g=new gps(latitud,longitud);
-                                    g.insert(g,mContentResolver);
+                                    //gps g=new gps(latitud,longitud);
+                                    //g.insert(g,mContentResolver);
                                     //String[] max=new String[]{"MAX("+ecolifedb.EcoLifeEntry._GPSID+")"};
-                                    Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
-                                            null,null,null);
-                                    gs.moveToLast();
-                                    String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
-                                    String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
+                                    //Cursor gs=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_GPS,null,
+                                    //        null,null,null);
+                                    //gs.moveToLast();
+                                    //String idgps=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._GPSID));
+                                    //String idgpsnube=gs.getString(gs.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_GPS_NUBEID));
                                     cobro co=new cobro(nuevomonto,Integer.toString(nrocuota),Integer.toString(subtotal),fechaVC,ventacfinal.Id,
-                                            ventacfinal.NubeId,idgps,idgpsnube);
+                                            ventacfinal.NubeId,latitud,longitud);
                                     co.insert(co,mContentResolver);
                                     Toast.makeText(getApplicationContext(),"Cobro agregado exitosamente",Toast.LENGTH_SHORT).show();
-                                    gs.close();
+                                    //gs.close();
                                 }else{
                                     Toast.makeText(getApplicationContext(),"Monto invalido",Toast.LENGTH_SHORT).show();
                                 }

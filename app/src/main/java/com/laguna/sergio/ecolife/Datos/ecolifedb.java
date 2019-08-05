@@ -84,8 +84,8 @@ public class ecolifedb {
         public final static String COLUMN_COBRO_SUBTOTAL = "subtotal";
         public final static String COLUMN_COBRO_CREDITOID = "id_credito";
         public final static String COLUMN_COBRO_CREDITONUBEID="creditonube_id";
-        public final static String COLUMN_COBRO_GPSID = "id_gps";
-        public final static String COLUMN_COBRO_GPSNUBEID="gpsnube_id";
+        public final static String COLUMN_COBRO_LATITUD = "latitud";
+        public final static String COLUMN_COBRO_LONGITUD="longitud";
         public final static String COLUMN_COBRO_NUBEID="cobronube_id";
         public final static String COLUMN_COBRO_ONLINE="cobro_online";
 

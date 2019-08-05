@@ -4,24 +4,24 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 
 public class cobro {
-    private String Monto,Nro_cuota,Subtotal,Fecha,Creditoid,Creditonubeid,Gpsid,Gpsnubeid,Online;
+    private String Monto,Nro_cuota,Subtotal,Fecha,Creditoid,Creditonubeid,Latitud,Longitud,Online;
 
     public cobro(){
-        Monto=null;Nro_cuota=null;Subtotal=null;Fecha=null;Creditoid=null;Creditonubeid=null;Gpsid=null;Gpsnubeid=null;
+        Monto=null;Nro_cuota=null;Subtotal=null;Fecha=null;Creditoid=null;Creditonubeid=null;Latitud=null;Longitud=null;
         Online="0";
     }
     public cobro(String monto, String nro_cuota,String subtotal,String fecha, String creditoid, String creditonubeid
-                    ,String gpsid, String gpsnubeid){
+            ,String latitud, String longitud){
         Monto=monto;Nro_cuota=nro_cuota;Subtotal=subtotal;Fecha=fecha;Creditoid=creditoid;Creditonubeid=creditonubeid;
-        Gpsid=gpsid;Gpsnubeid=gpsnubeid; Online="0";
+        Latitud=latitud;Longitud=longitud; Online="0";
     }
 
     public void insert(cobro c, ContentResolver r){
         ContentValues values=new ContentValues();
         values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_MONTO,c.Monto);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NRO_CUOTA,c.Nro_cuota);
-        values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID,c.Gpsid);
-        values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,c.Gpsnubeid);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LATITUD,c.Latitud);
+        values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LONGITUD,c.Longitud);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL,c.Subtotal);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA,c.Fecha);
         values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,c.Creditoid);

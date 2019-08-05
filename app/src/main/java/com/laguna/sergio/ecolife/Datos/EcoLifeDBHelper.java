@@ -43,8 +43,8 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA + " DATE NOT NULL, " +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID + " INTEGER, " +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID +" INTEGER," +
-                ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSID + " INTEGER," +
-                ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID + " INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_COBRO_LATITUD + " TEXT," +
+                ecolifedb.EcoLifeEntry.COLUMN_COBRO_LONGITUD + " TEXT," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE + " TEXT" + ");";
 

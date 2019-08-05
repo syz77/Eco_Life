@@ -227,7 +227,7 @@ public class Login extends AppCompatActivity {
         }
     }
     public void SincroC(String s){
-        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,idgpsnube,idcreditolocal,idgpslocal;
+        String idnube,monto,nro_cuota,subtotal,fecha,idcreditonube,latitud,idcreditolocal,longitud;
         String online="1";
         try {
             JSONArray json = new JSONArray(s);
@@ -239,7 +239,8 @@ public class Login extends AppCompatActivity {
                 subtotal=c.getString("subtotal");
                 fecha=c.getString("fecha");
                 idcreditonube=c.getString("id_credito");
-                idgpsnube=c.getString("id_gps");
+                latitud=c.getString("latitud");
+                longitud=c.getString("longitud");
                 String[] args= new String[]{idcreditonube};
                 //String[] args2=new String[]{idgpsnube};
                 Cursor v = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null,
@@ -257,7 +258,8 @@ public class Login extends AppCompatActivity {
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_SUBTOTAL,subtotal);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_FECHA,fecha);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITONUBEID,idcreditonube);
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_GPSNUBEID,idgpsnube);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LATITUD,latitud);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_LONGITUD,longitud);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_CREDITOID,idcreditolocal);
                 values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE,online);
                 mContentResolver.insert(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values);

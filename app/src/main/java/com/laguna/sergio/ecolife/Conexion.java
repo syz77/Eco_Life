@@ -325,76 +325,78 @@ public class Conexion {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //String monto, String nro_cuota,String subtotal, String fecha, String id_credito, String id_gps
     //Cmonto,Cnro_cuota,Csubtotal,Cfecha,Ccreditonube_id,Cgpsnube_id
-    public void InsertarCobroPost(final String monto,final String nro_cuota,final String subtotal,final String fecha,final String id_credito,
-                                         final String id_gps, final String id_cobro, final ContentResolver mContentResolver){
-        class SolicitudFunctionClass extends AsyncTask<String,Void,String> {
+public void InsertarCobroPost(final String monto,final String nro_cuota,final String subtotal,final String fecha,final String id_credito,
+                              final String latitud,final String longitud, final String id_cobro, final ContentResolver mContentResolver){
+    class SolicitudFunctionClass extends AsyncTask<String,Void,String> {
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-                //progressDialog = ProgressDialog.show(Menu_principal.this,"Loading Data",null,true,true);
-            }
-
-            @Override
-            public void onPostExecute(String httpResponseMsg) {
-
-                super.onPostExecute(httpResponseMsg);
-
-                if(httpResponseMsg.equals("")){
-                }else {
-                    String[] args = new String[]{id_cobro};
-                    ContentValues values = new ContentValues();
-                    String nubeid = convert(httpResponseMsg);
-                    String online = "1";
-                    values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, nubeid);
-                    values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
-
-                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values,
-                            ecolifedb.EcoLifeEntry._COBROID + "=?", args);
-                }
-
-
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                hashMap.put("monto",params[0]);
-
-                hashMap.put("nro_cuota",params[1]);
-
-                hashMap.put("subtotal",params[2]);
-
-                hashMap.put("fecha",params[3]);
-
-                hashMap.put("id_credito",params[4]);
-
-                hashMap.put("id_gps",params[5]);
-
-                finalResult = httpParse.postRequest(hashMap, HttpURLCobro);
-
-                return finalResult;
-            }
-            public String convert(String s){
-                String id="";
-                try {
-                    JSONArray json = new JSONArray(s);
-                    //for (int i = 0; i < json.length(); i++) {
-                    JSONObject c = json.getJSONObject(0);
-
-                    id = c.getString("MAX(id)");
-                    //}
-
-                }catch( final JSONException e){
-
-                }
-                return id;
-            }
+            //progressDialog = ProgressDialog.show(Menu_principal.this,"Loading Data",null,true,true);
         }
-        SolicitudFunctionClass userRegisterFunctionClass = new SolicitudFunctionClass();
-        userRegisterFunctionClass.execute(monto,nro_cuota,subtotal,fecha,id_credito,id_gps);
+
+        @Override
+        public void onPostExecute(String httpResponseMsg) {
+
+            super.onPostExecute(httpResponseMsg);
+
+            if(httpResponseMsg.equals("")){
+            }else {
+                String[] args = new String[]{id_cobro};
+                ContentValues values = new ContentValues();
+                String nubeid = convert(httpResponseMsg);
+                String online = "1";
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_NUBEID, nubeid);
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_COBRO_ONLINE, online);
+
+                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, values,
+                        ecolifedb.EcoLifeEntry._COBROID + "=?", args);
+            }
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            hashMap.put("monto",params[0]);
+
+            hashMap.put("nro_cuota",params[1]);
+
+            hashMap.put("subtotal",params[2]);
+
+            hashMap.put("fecha",params[3]);
+
+            hashMap.put("id_credito",params[4]);
+
+            hashMap.put("latitud",params[5]);
+
+            hashMap.put("longitud",params[6]);
+
+            finalResult = httpParse.postRequest(hashMap, HttpURLCobro);
+
+            return finalResult;
+        }
+        public String convert(String s){
+            String id="";
+            try {
+                JSONArray json = new JSONArray(s);
+                //for (int i = 0; i < json.length(); i++) {
+                JSONObject c = json.getJSONObject(0);
+
+                id = c.getString("MAX(id)");
+                //}
+
+            }catch( final JSONException e){
+
+            }
+            return id;
+        }
     }
+    SolicitudFunctionClass userRegisterFunctionClass = new SolicitudFunctionClass();
+    userRegisterFunctionClass.execute(monto,nro_cuota,subtotal,fecha,id_credito,latitud,longitud);
+}
 
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
