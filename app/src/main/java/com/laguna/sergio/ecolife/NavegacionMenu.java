@@ -142,7 +142,7 @@ import static java.security.AccessController.getContext;
 public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
         RecognitionListener {
-
+    String mmmm2345;
 
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
