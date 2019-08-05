@@ -18,6 +18,8 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaScannerConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +27,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.speech.RecognitionListener;
+import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -58,6 +62,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -68,6 +73,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
@@ -88,6 +95,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.services.language.v1.CloudNaturalLanguage;
+import com.google.api.services.language.v1.CloudNaturalLanguageRequestInitializer;
+import com.google.api.services.language.v1.model.AnnotateTextRequest;
+import com.google.api.services.language.v1.model.AnnotateTextResponse;
+import com.google.api.services.language.v1.model.Document;
+import com.google.api.services.language.v1.model.Entity;
+import com.google.api.services.language.v1.model.Features;
+import com.google.api.services.language.v1.model.Sentiment;
 import com.laguna.sergio.ecolife.Datos.ecolifedb;
 import com.laguna.sergio.ecolife.Datos.persona;
 import com.laguna.sergio.ecolife.Datos.talonario;
@@ -99,9 +117,21 @@ import com.laguna.sergio.ecolife.Datos.detalle_contado;
 import com.laguna.sergio.ecolife.Datos.Sync.EcoLifeSyncAdapter;
 import com.squareup.picasso.Picasso;
 
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
 import static android.Manifest.permission.CAMERA;
@@ -110,13 +140,15 @@ import static android.support.v4.content.FileProvider.getUriForFile;
 import static java.security.AccessController.getContext;
 
 public class NavegacionMenu extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+        RecognitionListener {
 
 
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
     GesUserTaloCambiar,GesUserTaloEstado,GesUserTaloVentCred,Foto;
 
+    String palabraSpeechT;
     ////////////////////Para historial talonarios///////////////////////////////
     List<DataAdapterTalo> DataAdapterClassListT;
     RecyclerView recyclerViewT;
@@ -301,12 +333,98 @@ public class NavegacionMenu extends AppCompatActivity
     //////////////////////////////////ARRAY LIST//////////////////////////////////////////////////
     ArrayList<String> SubjectIdHT;
     String subjIdHT;
+    /////////////////////////////////////Para speech to text
+    public static final String API_KEY = "AIzaSyDkQaOJcMgjXUuEBuQ8iqdacOVUjzzV6Ms";
+
+
+
+    EntityListAdapter entityListAdapter;
+    private List<Entity> entityList;
+
+    private CloudNaturalLanguage naturalLanguageService;
+    private Document document;
+    public TextView nombrez;
+    private Features features;
+
+    ///////////////////////////////Para speech to text///////////////////////////////////////////////
+    private static final int REQUEST_RECORD_PERMISSION = 100;
+    private TextView returnedText;
+    private ToggleButton toggleButton;
+    private ProgressBar progressBartext;
+    private SpeechRecognizer speech = null;
+    private Intent recognizerIntent;
+    private String LOG_TAG = "VoiceRecognitionActivity";
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navegacion_menu);
+        toggleButton=findViewById(R.id.toggleButton1);
 
+        //progressBartext.setVisibility(View.INVISIBLE);
+        speech = SpeechRecognizer.createSpeechRecognizer(this);
+        Log.i(LOG_TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
+        speech.setRecognitionListener(this);
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
+                "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    //progressBartext.setVisibility(View.VISIBLE);
+                    //progressBartext.setIndeterminate(true);
+                    ActivityCompat.requestPermissions
+                            (NavegacionMenu.this,
+                                    new String[]{Manifest.permission.RECORD_AUDIO},
+                                    REQUEST_RECORD_PERMISSION);
+                } else {
+                    //progressBartext.setIndeterminate(false);
+                    //progressBartext.setVisibility(View.INVISIBLE);
+                    speech.stopListening();
+                }
+            }
+        });
+
+        ///////////////////////////////////////para speech to text////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        //nombrez = findViewById(R.id.nombre);
+        naturalLanguageService = new CloudNaturalLanguage.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(),
+                null
+        ).setCloudNaturalLanguageRequestInitializer(
+                new CloudNaturalLanguageRequestInitializer(API_KEY)
+        ).build();
+
+        document = new Document();
+        document.setType("PLAIN_TEXT");
+        document.setLanguage("es-ES");
+
+        features = new Features();
+        features.setExtractEntities(true);
+        features.setExtractSyntax(true);
+        features.setExtractDocumentSentiment(true);
+
+        final AnnotateTextRequest request = new AnnotateTextRequest();
+        request.setDocument(document);
+        request.setFeatures(features);
+
+        entityList = new ArrayList<>();
+        entityListAdapter = new EntityListAdapter(entityList);
+        //entities.setAdapter(entityListAdapter);
+        //entities.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         nrotalo=findViewById(R.id.textView6);
         nroventas=findViewById(R.id.textView7);
@@ -1532,8 +1650,62 @@ public class NavegacionMenu extends AppCompatActivity
             }
         });
 
+        /*analyze.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String text = docText.getText().toString().trim();
+                if (!TextUtils.isEmpty(text)) {
+                    document.setContent(text);
 
+                    final AnnotateTextRequest request = new AnnotateTextRequest();
+                    request.setDocument(document);
+                    request.setFeatures(features);
+
+                    new AsyncTask<Object, Void, AnnotateTextResponse>() {
+                        @Override
+                        protected AnnotateTextResponse doInBackground(Object... params) {
+                            AnnotateTextResponse response = null;
+                            try {
+                                response = naturalLanguageService.documents().annotateText(request).execute();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return response;
+                        }
+
+                        @Override
+                        protected void onPostExecute(AnnotateTextResponse response) {
+                            super.onPostExecute(response);
+                            if (response != null) {
+                                Sentiment sent = response.getDocumentSentiment();
+                                entityList.addAll(response.getEntities());
+                                int longitud = entityList.size();
+                                int count = 0;
+                                //Entity et = entityList.get(count);
+                                while (count<longitud) {
+                                    Entity et = entityList.get(count);
+                                    //String valor = entityList.ge
+                                    if (et.getType().equals("PERSON")) {
+                                        nombreCVC.setText(et.getName());
+                                        count = count + 1;
+                                    } else {
+                                        count = count + 1;
+                                    }
+                                }
+                                //entityListAdapter.notifyDataSetChanged();
+                                //sentiment.setText("Score : " + sent.getScore() + " Magnitude : " + sent.getMagnitude());
+                            }
+                        }
+                    }.execute();
+                }
+            }
+        });*/
     }
+
+
+
+
     public void cambiarActivo(){
         Cursor c=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,
                 ecolifedb.EcoLifeEntry.COLUMN_TALONARIO_ESTADO+"=1",null,null);
@@ -1702,6 +1874,7 @@ public class NavegacionMenu extends AppCompatActivity
             System.exit(0);
         }
 
+
         if (id == R.id.nav_camera) {
             EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
@@ -1715,8 +1888,10 @@ public class NavegacionMenu extends AppCompatActivity
 
 
         } else if (id == R.id.nav_gallery) {
-/*
-            if (isOnlineNet()) {
+
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
 
             Cursor Persona = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                     ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN+"=1", null, null);
@@ -1732,7 +1907,7 @@ public class NavegacionMenu extends AppCompatActivity
             } else {
                 Toast.makeText(NavegacionMenu.this, "No tiene acceso a internet: ", Toast.LENGTH_LONG).show();
             }
-*/
+
         } else if (id == R.id.nav_slideshow) {
             EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
@@ -1744,7 +1919,9 @@ public class NavegacionMenu extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-            if (isOnlineNet()) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
                 EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
                 if(!estadoverificacion()){
                     finish();
@@ -2332,6 +2509,9 @@ public class NavegacionMenu extends AppCompatActivity
                     VentaC.setVisibility(View.VISIBLE);
                 }
             }
+
+            //String text = direccionVC.getText().toString().trim();
+
 
         }else{
             Toast.makeText(getApplicationContext(),"No hay talonario activo",Toast.LENGTH_SHORT).show();
@@ -3463,5 +3643,203 @@ public class NavegacionMenu extends AppCompatActivity
         }
         return false;
     }
+
+
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            switch (requestCode) {
+                case REQUEST_RECORD_PERMISSION:
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        speech.startListening(recognizerIntent);
+                    } else {
+                        Toast.makeText(NavegacionMenu.this, "Permission Denied!", Toast
+                                .LENGTH_SHORT).show();
+                    }
+            }
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+        }
+
+        @Override
+        protected void onPause() {
+            super.onPause();
+
+        }
+
+        @Override
+        protected void onStop() {
+            super.onStop();
+            if (speech != null) {
+                speech.destroy();
+                Log.i(LOG_TAG, "destroy");
+            }
+        }
+
+
+        @Override
+        public void onBeginningOfSpeech() {
+            Log.i(LOG_TAG, "onBeginningOfSpeech");
+            //progressBar.setIndeterminate(false);
+            //progressBar.setMax(10);
+        }
+
+        @Override
+        public void onBufferReceived(byte[] buffer) {
+            Log.i(LOG_TAG, "onBufferReceived: " + buffer);
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+            Log.i(LOG_TAG, "onEndOfSpeech");
+            //progressBar.setIndeterminate(true);
+            toggleButton.setChecked(false);
+        }
+
+        @Override
+        public void onError(int errorCode) {
+            String errorMessage = getErrorText(errorCode);
+            Log.d(LOG_TAG, "FAILED " + errorMessage);
+            returnedText.setText(errorMessage);
+            toggleButton.setChecked(false);
+        }
+
+        @Override
+        public void onEvent(int arg0, Bundle arg1) {
+            Log.i(LOG_TAG, "onEvent");
+        }
+
+        @Override
+        public void onPartialResults(Bundle arg0) {
+            Log.i(LOG_TAG, "onPartialResults");
+        }
+
+        @Override
+        public void onReadyForSpeech(Bundle arg0) {
+            Log.i(LOG_TAG, "onReadyForSpeech");
+        }
+
+        @Override
+        public void onResults(Bundle results) {
+            Log.i(LOG_TAG, "onResults");
+            ArrayList<String> matches = results
+                    .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+            String text = "";
+            palabraSpeechT=matches.get(0);
+            /*
+            for (String result : matches)
+                text += result + "\n";
+            */
+            //returnedText.setText(text);
+            //String text = palabraSpeechT;
+
+
+            if (!TextUtils.isEmpty(palabraSpeechT)) {
+                document.setContent(palabraSpeechT);
+
+                final AnnotateTextRequest request = new AnnotateTextRequest();
+                request.setDocument(document);
+                request.setFeatures(features);
+
+                new AsyncTask<Object, Void, AnnotateTextResponse>() {
+                    @Override
+                    protected AnnotateTextResponse doInBackground(Object... params) {
+                        AnnotateTextResponse response = null;
+                        try {
+                            response = naturalLanguageService.documents().annotateText(request).execute();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return response;
+                    }
+
+                    @Override
+                    protected void onPostExecute(AnnotateTextResponse response) {
+                        super.onPostExecute(response);
+                        if (response != null) {
+                            Sentiment sent = response.getDocumentSentiment();
+                            entityList.addAll(response.getEntities());
+                            int longitud = entityList.size();
+                            int count = 0;
+                            //Entity et = entityList.get(count);
+                            while (count<longitud) {
+                                Entity et = entityList.get(count);
+                                //String valor = entityList.ge
+                                if (et.getType().equals("PERSON")) {
+                                    nombreCVC.setText(et.getName());
+                                    count = count + 1;
+
+                                //if (et.getType().equals(""))
+                                }else if (et.getType().equals("NUMBER")){
+                                    telefonoVC.setText(et.getName());
+                                    count = count + 1;
+
+                                }else if (et.getType().equals("LOCATION")){
+                                    direccionVC.setText(et.getName());
+                                    count = count + 1;
+                                }
+
+                                else {
+                                    count = count + 1;
+                                }
+                            }
+                            //entityListAdapter.notifyDataSetChanged();
+                            //sentiment.setText("Score : " + sent.getScore() + " Magnitude : " + sent.getMagnitude());
+                        }
+                    }
+                }.execute();
+            }
+        }
+
+        @Override
+        public void onRmsChanged(float rmsdB) {
+            Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+            //progressBar.setProgress((int) rmsdB);
+        }
+
+        public String getErrorText(int errorCode) {
+            String message;
+            switch (errorCode) {
+                case SpeechRecognizer.ERROR_AUDIO:
+                    message = "Audio recording error";
+                    break;
+                case SpeechRecognizer.ERROR_CLIENT:
+                    message = "Client side error";
+                    break;
+                case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                    message = "Insufficient permissions";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK:
+                    message = "Network error";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                    message = "Network timeout";
+                    break;
+                case SpeechRecognizer.ERROR_NO_MATCH:
+                    message = "No match";
+                    break;
+                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                    message = "RecognitionService busy";
+                    break;
+                case SpeechRecognizer.ERROR_SERVER:
+                    message = "error from server";
+                    break;
+                case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                    message = "No speech input";
+                    break;
+                default:
+                    message = "Didn't understand, please try again.";
+                    break;
+            }
+            return message;
+        }
+
+
+
 
 }

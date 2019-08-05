@@ -50,7 +50,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
         //verificacion de token, que el usuario no haya sido eliminado del servidor
-        if(tokenverification()==true) {
+        //if(tokenverification()==true) {
 
 
             try {
@@ -121,7 +121,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
             }
-        }
+        //}
     }
 
     private void insertData(Cursor c, String b){
@@ -400,7 +400,15 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
 
             Conexion con = new Conexion();
             y = con.login(email, password,imei);
-            if (con.objJson(y)>0) {
+            if (y.equals("error")) {
+                Log.d(LOG_TAG, "Token verification failed");
+                token = null;
+                String where = ecolifedb.EcoLifeEntry._PERSONAID + "=?";
+                String[] args = new String[]{idl};
+                ContentValues values = new ContentValues();
+                values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN, token);
+                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, values, where, args);
+            }else{
                 b=true;
                 Log.d(LOG_TAG, "Token verification successfull");
                 try {
@@ -422,14 +430,6 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 }catch( final JSONException e){
 
                 }
-            }else{
-                Log.d(LOG_TAG, "Token verification failed");
-                token = null;
-                String where = ecolifedb.EcoLifeEntry._PERSONAID + "=?";
-                String[] args = new String[]{idl};
-                ContentValues values = new ContentValues();
-                values.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN, token);
-                mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, values, where, args);
             }
         }
         pers.close();

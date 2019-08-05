@@ -30,6 +30,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     api 'net.gotev:uploadservice:3.0'
     api'com.mcxiaoke.volley:library:1.0.19'
+
+    implementation group: 'com.google.apis', name: 'google-api-services-language', version: 'v1-rev388-1.22.0' exclude module: 'httpclient'
+    implementation group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0' exclude module: 'httpclient'
+
+    implementation 'com.jakewharton:butterknife:8.7.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

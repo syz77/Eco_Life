@@ -20,7 +20,6 @@
 
         <RelativeLayout
             android:id="@+id/relvent"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -82,7 +81,8 @@
                 android:layout_below="@+id/vctelefono"
                 android:layout_alignParentStart="true"
                 android:ems="10"
-                android:hint="@string/vc_direccion"
+                android:text="@string/vcreditoprueba"
+
                 android:inputType="textPersonName" />
 
             <EditText
@@ -172,12 +172,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lineavct"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/side_nav_bar"
                 android:contentDescription="@string/app_name"
                 android:onClick="tomarfoto"
                 android:text="@string/vc_sacarfoto"
                 android:textColor="@color/colorBlanco" />
+
+            <ToggleButton
+                android:id="@+id/toggleButton1"
+                style="@style/Base.TextAppearance.AppCompat.Button"
+
+                android:layout_width="wrap_content"
+
+
+                android:layout_height="wrap_content"
+                android:layout_below="@id/vcsacarfoto"
+                android:text="ToggleButton"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                android:textColor="@color/colorPrimaryDark"
+                android:textOff="OFF"
+                android:textOn="ON"
+                tools:text="VOZ" />
+
             <Button
                 android:id="@+id/vcconfirmar2"
                 android:layout_width="match_parent"
@@ -198,5 +215,7 @@
 
 
         </RelativeLayout>
+
+
     </ScrollView>
 </FrameLayout>
