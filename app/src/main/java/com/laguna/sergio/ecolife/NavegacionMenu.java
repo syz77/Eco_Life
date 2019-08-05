@@ -145,6 +145,7 @@ public class NavegacionMenu extends AppCompatActivity
 
     EditText mmmmmmm;
     EditText mmmmmm2;
+    EditText d222222;
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
     GesUserTaloCambiar,GesUserTaloEstado,GesUserTaloVentCred,Foto;
