@@ -143,7 +143,7 @@ public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
         RecognitionListener {
 
-
+    EditText mmmmmmm;
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
     GesUserTaloCambiar,GesUserTaloEstado,GesUserTaloVentCred,Foto;
