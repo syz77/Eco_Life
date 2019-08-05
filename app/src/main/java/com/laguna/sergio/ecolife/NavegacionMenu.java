@@ -1878,7 +1878,7 @@ public class NavegacionMenu extends AppCompatActivity
         if (id == R.id.nav_camera) {
             EcoLifeSyncAdapter.syncImmediately(getApplicationContext());
             if(!estadoverificacion()){
-                finish();
+                //finish();
                 System.exit(0);
             }
             String Sfecha = getCurrentTimeStamp();

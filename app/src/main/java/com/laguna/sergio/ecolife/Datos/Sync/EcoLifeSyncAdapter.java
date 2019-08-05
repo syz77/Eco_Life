@@ -50,7 +50,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
         //verificacion de token, que el usuario no haya sido eliminado del servidor
-        //if(tokenverification()==true) {
+        if(tokenverification()==true) {
 
 
             try {
@@ -121,7 +121,7 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
             }
-        //}
+        }
     }
 
     private void insertData(Cursor c, String b){
@@ -394,12 +394,11 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             pers.moveToNext();
             email = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_CORREO));
             password = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_PASSWORD));
-            imei=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_IMEI));
             idl = pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry._PERSONAID));
             String est=pers.getString(pers.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO));
 
             Conexion con = new Conexion();
-            y = con.login(email, password,imei);
+            y = con.login(email, password);
             if (y.equals("error")) {
                 Log.d(LOG_TAG, "Token verification failed");
                 token = null;
@@ -411,24 +410,13 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
             }else{
                 b=true;
                 Log.d(LOG_TAG, "Token verification successfull");
-                try {
-                    JSONArray json = new JSONArray(y);
-                    //for (int i = 0; i < json.length(); i++) {
-                    JSONObject c = json.getJSONObject(0);
-                    String estado=c.getString("estado");
-                    //}
-                    if(estado.equals(est)){
-                        Log.d(LOG_TAG, "No es necesario cambiar estado");
-                    }else{
-                        ContentValues v=new ContentValues();
-                        String where=ecolifedb.EcoLifeEntry._PERSONAID+"=?";
-                        String[] args=new String[]{idl};
-                        v.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO,estado);
-                        mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, v, where, args);
-                        Log.d(LOG_TAG, "Estado cambiado a vacaciones");
-                    }
-                }catch( final JSONException e){
-
+                if(!y.equals(est) && !y.equals("")){
+                    Log.d(LOG_TAG, "actualizando estado");
+                    ContentValues v=new ContentValues();
+                    String where=ecolifedb.EcoLifeEntry._PERSONAID+"=?";
+                    String[] args=new String[]{idl};
+                    v.put(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_ESTADO,y);
+                    mContentResolver.update(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, v, where, args);
                 }
             }
         }
