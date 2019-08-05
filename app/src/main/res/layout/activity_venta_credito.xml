@@ -79,10 +79,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/vctelefono"
+                android:hint="@string/vc_direccion"
                 android:layout_alignParentStart="true"
                 android:ems="10"
-                android:text="@string/vcreditoprueba"
-
+                android:hint="@string/vc_direccion"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -97,7 +97,7 @@
 
             <EditText
                 android:id="@+id/vcvendedor"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
@@ -193,6 +193,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textOff="OFF"
                 android:textOn="ON"
+                android:visibility="invisible"
                 tools:text="VOZ" />
 
             <Button
