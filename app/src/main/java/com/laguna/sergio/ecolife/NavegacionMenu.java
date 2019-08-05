@@ -249,7 +249,7 @@ public class NavegacionMenu extends AppCompatActivity
     TextView Vcontfecha,Vcfecha;
     Button btnAgregarDetalle,btnAgregarVContado;
     EditText etclientecontado,etdireccioncontado,etzonacontado,etpromcontado,etcantcontado,etsubcontado,ettelefcontado;
-    String vcontprod,fechacontado,vcontprodcont;
+    String vcontprod,fechacontado,vcontaprod;
     ArrayList<String> detalle;
     int subtotal,contador;
     ArrayAdapter<String>adapterDetalle;
@@ -762,7 +762,7 @@ public class NavegacionMenu extends AppCompatActivity
             {
                 //Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
                 String c= adapterView.getItemAtPosition(position).toString();//adapterView.getItemAtPosition(position);
-                vcontprodcont=c;
+                vcontaprod=c;
                 /*if(c.equals("MEGA JUNIOR")){
                     vcontprod="1";
                 }else if(c.equals("NONI ENERGY")){
@@ -777,7 +777,7 @@ public class NavegacionMenu extends AppCompatActivity
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                vcontprodcont="MEGA JUNIOR";
+                vcontaprod="MEGA JUNIOR";
 
             }
         });
@@ -1581,8 +1581,8 @@ public class NavegacionMenu extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Introducir una cantidad",Toast.LENGTH_SHORT).show();
                 }else {
                     String cantidad = etcantcontado.getText().toString();
-                    String cad = vcontprodcont + " x " + cantidad;
-                    detalle.add(transform(vcontprodcont));
+                    String cad = vcontaprod + " x " + cantidad;
+                    detalle.add(transform(vcontaprod));
                     detalle.add(cantidad);
                     contador++;
                     subtotal = subtotal + (Integer.parseInt(cantidad) * 120);
@@ -2085,6 +2085,12 @@ public class NavegacionMenu extends AppCompatActivity
                                                 ventaCredList.setVisibility(VISIBLE);
                                             }else{
                                                 if(Ventas.getVisibility()==View.VISIBLE){
+                                                    contador = 0;
+                                                    subtotal=0;
+                                                    detalle.clear();
+                                                    adapterDetalle.clear();
+                                                    cleanventacontado();
+
                                                     Ventas.setVisibility(View.INVISIBLE);
                                                     Inicio.setVisibility(View.VISIBLE);
                                             }else{

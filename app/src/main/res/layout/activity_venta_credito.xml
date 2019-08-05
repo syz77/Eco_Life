@@ -82,6 +82,7 @@
                 android:hint="@string/vc_direccion"
                 android:layout_alignParentStart="true"
                 android:ems="10"
+                android:hint="@string/vc_direccion"
                 android:inputType="textPersonName" />
 
             <EditText
