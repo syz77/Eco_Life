@@ -247,7 +247,7 @@ public class NavegacionMenu extends AppCompatActivity
     TextView Vcontfecha,Vcfecha;
     Button btnAgregarDetalle,btnAgregarVContado;
     EditText etclientecontado,etdireccioncontado,etzonacontado,etpromcontado,etcantcontado,etsubcontado,ettelefcontado;
-    String vcontprod,fechacontado;
+    String vcontprod,fechacontado,vcontprodcont;
     ArrayList<String> detalle;
     int subtotal,contador;
     ArrayAdapter<String>adapterDetalle;
@@ -760,7 +760,7 @@ public class NavegacionMenu extends AppCompatActivity
             {
                 //Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
                 String c= adapterView.getItemAtPosition(position).toString();//adapterView.getItemAtPosition(position);
-                vcontprod=c;
+                vcontprodcont=c;
                 /*if(c.equals("MEGA JUNIOR")){
                     vcontprod="1";
                 }else if(c.equals("NONI ENERGY")){
@@ -769,13 +769,13 @@ public class NavegacionMenu extends AppCompatActivity
                         vcontprod="3";
                         }else if(c.equals("MEGA FAMILY")){
                             vcontprod="4";
-                }*/
+                }*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                vcontprod="1";
+                vcontprodcont="MEGA JUNIOR";
 
             }
         });
@@ -1579,8 +1579,8 @@ public class NavegacionMenu extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Introducir una cantidad",Toast.LENGTH_SHORT).show();
                 }else {
                     String cantidad = etcantcontado.getText().toString();
-                    String cad = vcontprod + " x " + cantidad;
-                    detalle.add(transform(vcontprod));
+                    String cad = vcontprodcont + " x " + cantidad;
+                    detalle.add(transform(vcontprodcont));
                     detalle.add(cantidad);
                     contador++;
                     subtotal = subtotal + (Integer.parseInt(cantidad) * 120);
