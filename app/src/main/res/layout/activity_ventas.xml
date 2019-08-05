@@ -107,7 +107,7 @@
                     android:layout_toEndOf="@+id/vcontzona"
                     android:ems="10"
                     android:hint="zona"
-                    android:inputType="number" />
+                    android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/vcontvendedor"
