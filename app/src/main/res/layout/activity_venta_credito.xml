@@ -79,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/vctelefono"
+                android:hint="@string/vc_direccion"
                 android:layout_alignParentStart="true"
                 android:ems="10"
                 android:hint="@string/vc_direccion"
@@ -192,6 +193,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textOff="OFF"
                 android:textOn="ON"
+                android:visibility="invisible"
                 tools:text="VOZ" />
 
             <Button

@@ -143,7 +143,9 @@ public class NavegacionMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
         RecognitionListener {
 
-
+    EditText mmmmmmm;
+    EditText mmmmmm2;
+    EditText d222222;
 
     FrameLayout Inicio,VentaC,Historial,GesUsuario,Ventas,Perfil,CambiarPass,CambiarTelf,FrameCrearTalonario,HTVentasCredito,HTVCinfo,GesUsuarioTalo,ListaT,
     GesUserTaloCambiar,GesUserTaloEstado,GesUserTaloVentCred,Foto;
@@ -769,7 +771,7 @@ public class NavegacionMenu extends AppCompatActivity
                         vcontprod="3";
                         }else if(c.equals("MEGA FAMILY")){
                             vcontprod="4";
-                }*/
+                }*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
 
             @Override
