@@ -39,12 +39,12 @@ public class Conexion {
     String respuesta="";
     String FinalJSonObject= "";
 
-    public String login(String user, String pass,String imei){
+    public String login(String user, String pass){
         String parametros="email="+user+"&pass="+pass;
         HttpURLConnection connection;
         //String respuesta="";
         try{
-            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass+"&imei="+imei);
+            URL url=new URL("http://u209922277.hostingerapp.com/servicios_ecolife/login.php?email="+user+"&pass="+pass);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
