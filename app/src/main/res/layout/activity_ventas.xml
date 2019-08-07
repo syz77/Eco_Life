@@ -132,51 +132,19 @@
 
             <TextView
                 android:id="@+id/vcontprod"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lineavcontd"
                 android:layout_alignParentStart="true"
                 android:text="@string/vc_prod"
                 android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/linearvcont"
+            <Spinner
+                android:id="@+id/spinnervcont"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/vcontprod"
-                android:layout_marginTop="0dp"
-                android:background="@drawable/fondo_color"
-                android:orientation="horizontal">
+                android:layout_alignParentRight="@+id/vcontprod"
+                android:layout_marginTop="14dp" />
 
-                <Spinner
-                    android:id="@+id/spinnervcont"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="@+id/editCantidad"
-                    android:layout_marginTop="14dp" />
-
-                <EditText
-                    android:id="@+id/editCantidad"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="@+id/btnagregardetalle"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/spinnervcont"
-                    android:hint="0"
-                    android:inputType="number" />
-
-                <Button
-                    android:id="@+id/btnagregardetalle"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="5dp"
-                    android:background="@android:color/transparent"
-                    android:text="@string/vcont_agregar"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorBlanco"
-                    android:textSize="18sp" />
-            </LinearLayout>
 
             <View
                 android:id="@+id/lineavcontt"
@@ -184,23 +152,6 @@
                 android:layout_height="7dp"
                 android:layout_marginTop="0dp"
                 android:background="@color/colorPrimaryDark"></View>
-
-            <ListView
-                android:id="@+id/listviewVCont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical" />
-            <EditText
-                android:id="@+id/editSub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:clickable="false"
-                android:focusable="false"
-                android:hint="0"
-                android:inputType="number" />
 
             <Button
                 android:id="@+id/vcontconfirmar"

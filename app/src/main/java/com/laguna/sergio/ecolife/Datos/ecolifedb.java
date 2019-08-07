@@ -127,6 +127,7 @@ public class ecolifedb {
         public final static String COLUMN_VENTACONT_SUPID = "id_sup";
         public final static String COLUMN_VENTACONT_SUPNUBEID="supervisornube_id";
         public final static String COLUMN_VENTACONT_NUBEID="ventacontnube_id";
+        public final static String COLUMN_VENTACONT_PRODID="prod_id";
         public final static String COLUMN_VENTACONT_ONLINE="ventacont_online";
 
         //COLUMNS FOR DETALLE_CONTADO

@@ -400,9 +400,9 @@ public void InsertarCobroPost(final String monto,final String nro_cuota,final St
 
 
     public String InsertarVentaContado(String nombre, String telefono,String direccion, String zona, String fecha,
-                                       String vendedor, String id_sup){
+                                       String vendedor, String id_sup,String id_prod){
         String parametros="nombre="+nombre+"&telefono="+telefono+"&direccion="+direccion+"&zona="+zona+
-                "&fecha="+fecha+"&vendedor="+vendedor+"&id_sup="+id_sup;
+                "&fecha="+fecha+"&vendedor="+vendedor+"&id_sup="+id_sup+"&id_prod="+id_prod;
         HttpURLConnection connection=null;
         String respuesta="";
         try{

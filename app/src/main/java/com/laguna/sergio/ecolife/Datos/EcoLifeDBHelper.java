@@ -89,6 +89,7 @@ public class EcoLifeDBHelper extends SQLiteOpenHelper {
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_FECHA + " DATE NOT NULL," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID + " INTEGER," +
+                ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_PRODID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_NUBEID + " INTEGER," +
                 ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_ONLINE + " TEXT" + ");";
 
