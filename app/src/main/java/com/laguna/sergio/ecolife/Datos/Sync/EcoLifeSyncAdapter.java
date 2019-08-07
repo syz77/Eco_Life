@@ -218,7 +218,8 @@ public class EcoLifeSyncAdapter extends AbstractThreadedSyncAdapter {
                     VCTdireccion=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_DIRECCION));
                     VCTfecha=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_FECHA));
                     VCTsupidnube=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_SUPNUBEID));
-                    respuesta=con.InsertarVentaContado(VCTnombre,VCTtelefono,VCTdireccion,VCTzona,VCTfecha,VCTvendedor,VCTsupidnube);
+                    VCTprodid=c.getString(c.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_VENTACONT_PRODID));
+                    respuesta=con.InsertarVentaContado(VCTnombre,VCTtelefono,VCTdireccion,VCTzona,VCTfecha,VCTvendedor,VCTsupidnube,VCTprodid);
                     if(respuesta.equals("")) {
                         Log.d(LOG_TAG,"Venta contado sync fail");
                     } else{
