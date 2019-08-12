@@ -80,39 +80,41 @@ public class Login extends AppCompatActivity {
 
                     Cursor ck = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_PERSONA, null,
                            ecolifedb.EcoLifeEntry.COLUMN_PERSONA_TOKEN + "=1", null, null);
-                    ck.moveToNext();
+                    if(ck!=null && ck.getCount()>0){
+                    ck.moveToFirst();
                     final String User = ck.getString(ck.getColumnIndexOrThrow(ecolifedb.EcoLifeEntry.COLUMN_PERSONA_NUBEID));
                     int r=con.objJson(User);
-                    if ((User != null) && (!User.equals(""))){
-                //if (r>0){
-                    //persona p=new persona();
-                    //p.login(res,mContentResolver);
-                    Cursor t=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO,null,null,
-                            null,null);
-                    Cursor vcred=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO,null,null,
-                            null,null);
-                    Cursor cob=mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO,null,null,
-                            null,null);
-                    if (t.getCount()==0) {
-                        if (con.objJson(tal) > 0) {
-                            SincroT(tal);
+                    if ((User != null) && (!User.equals(""))) {
+                        //if (r>0){
+                        //persona p=new persona();
+                        //p.login(res,mContentResolver);
+                        Cursor t = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_TALONARIO, null, null,
+                                null, null);
+                        Cursor vcred = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_VENTA_CREDITO, null, null,
+                                null, null);
+                        Cursor cob = mContentResolver.query(ecolifedb.EcoLifeEntry.CONTENT_URI_COBRO, null, null,
+                                null, null);
+                        if (t.getCount() == 0) {
+                            if (con.objJson(tal) > 0) {
+                                SincroT(tal);
+                            }
                         }
-                    }
-                    if(vcred.getCount()==0) {
-                        if (con.objJson(vc) > 0) {
-                            SincroVC(vc);
+                        if (vcred.getCount() == 0) {
+                            if (con.objJson(vc) > 0) {
+                                SincroVC(vc);
+                            }
                         }
-                    }
-                    if(cob.getCount()==0) {
-                        if (con.objJson(c) > 0) {
-                            SincroC(c);
+                        if (cob.getCount() == 0) {
+                            if (con.objJson(c) > 0) {
+                                SincroC(c);
+                            }
                         }
+                        t.close();
+                        vcred.close();
+                        cob.close();
+                        Intent i = new Intent(Login.this, NavegacionMenu.class);
+                        startActivity(i);
                     }
-                    t.close();
-                    vcred.close();
-                    cob.close();
-                    Intent i= new Intent(Login.this,NavegacionMenu.class);
-                    startActivity(i);
                     //Toast.makeText(getApplicationContext(),Integer.toString(x), Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getApplicationContext(),"Usuario o password incorrectos", Toast.LENGTH_SHORT).show();
